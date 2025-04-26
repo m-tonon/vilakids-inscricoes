@@ -55,7 +55,7 @@ export class RegistrationComponent {
     preletor: {
       name: 'Marcus Nati',
       description:
-        'Teólogo, pregador, presbítero, desenhista, designer e criador do perfil @brother_bíblia',
+        'Teólogo, pregador, presbítero, desenhista, designer e criador do perfil <a href="https://www.instagram.com/brother_biblia" target="_blank">@brother_biblia</a>',
     },
     contacts: [
       { name: 'Secretaria IPVO', phone: '(44) 3226-4473' },
@@ -85,11 +85,11 @@ export class RegistrationComponent {
       churchMembership: [''],
       churchName: [''],
       healthInsurance: [''],
-      responsibleName: ['', Validators.required],
-      phoneNumber: ['', Validators.required],
       medications: [''],
       allergies: [''],
       specialNeeds: [''],
+      responsibleName: ['', Validators.required],
+      phoneNumber: ['', Validators.required],
       emergencyContact: this.fb.group({
         name: ['', Validators.required],
         phone: ['', Validators.required],

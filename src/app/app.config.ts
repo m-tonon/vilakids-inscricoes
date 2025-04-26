@@ -2,12 +2,12 @@ import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideClientHydration } from '@angular/platform-browser';
 import { routes } from './app.routes';
-import { 
-  NbThemeModule, 
-  NbDatepickerModule, 
-  NbDialogModule, 
+import {
+  NbThemeModule,
+  NbDatepickerModule,
+  NbDialogModule,
   NbIconModule,
-  NbStepperModule 
+  NbStepperModule,
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 
@@ -22,6 +22,6 @@ export const appConfig: ApplicationConfig = {
       NbIconModule,
       NbEvaIconsModule,
       NbStepperModule
-    )
-  ]
+    ),
+  ],
 };

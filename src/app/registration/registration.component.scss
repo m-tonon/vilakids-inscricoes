@@ -146,6 +146,18 @@ nb-card-header {
 .preletor {
   @extend .info-card;
   border-left-color: nb-theme(color-primary-500);
+
+  a {
+    color: nb-theme(color-primary-500);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: nb-theme(color-primary-600);
+      text-decoration: underline;
+    }
+  }
 }
 
 .payment-info {

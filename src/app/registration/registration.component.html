@@ -33,7 +33,7 @@
               <p>
                 <strong>{{ campInfo.preletor.name }}</strong>
               </p>
-              <p>{{ campInfo.preletor.description }}</p>
+              <p [innerHTML]="campInfo.preletor.description"></p>
             </div>
 
             <div class="payment-info">
@@ -182,6 +182,28 @@
 
             <div class="form-row">
               <nb-form-field>
+                <label>Nome do Responsável *</label>
+                <input
+                  nbInput
+                  fullWidth
+                  formControlName="responsibleName"
+                  placeholder="Nome completo do responsável"
+                />
+              </nb-form-field>
+
+              <nb-form-field>
+                <label>Telefone do Responsável *</label>
+                <input
+                  nbInput
+                  fullWidth
+                  formControlName="phoneNumber"
+                  placeholder="(00) 00000-0000"
+                />
+              </nb-form-field>
+            </div>
+
+            <div class="form-row">
+              <nb-form-field>
                 <label>Plano de Saúde</label>
                 <input
                   nbInput
@@ -194,6 +216,42 @@
                   não sendo possível contatar o responsável, será levado no
                   posto de saúde mais próximo
                 </p>
+              </nb-form-field>
+            </div>
+
+            <div class="form-row">
+              <nb-form-field>
+                <label>Medicamentos</label>
+                <textarea
+                  nbInput
+                  fullWidth
+                  formControlName="medications"
+                  placeholder="Liste os medicamentos que a criança toma regularmente (se houver)"
+                ></textarea>
+              </nb-form-field>
+            </div>
+
+            <div class="form-row">
+              <nb-form-field>
+                <label>Alergias</label>
+                <textarea
+                  nbInput
+                  fullWidth
+                  formControlName="allergies"
+                  placeholder="Liste todas as alergias (alimentos, medicamentos, etc)"
+                ></textarea>
+              </nb-form-field>
+            </div>
+
+            <div class="form-row">
+              <nb-form-field>
+                <label>Necessidades Especiais</label>
+                <textarea
+                  nbInput
+                  fullWidth
+                  formControlName="specialNeeds"
+                  placeholder="Descreva qualquer necessidade especial que a criança tenha"
+                ></textarea>
               </nb-form-field>
             </div>
 
@@ -232,11 +290,14 @@
               </div>
             </div>
 
-            <!-- <div class="parental-authorization">
+            <div class="parental-authorization">
               <nb-checkbox formControlName="parentalAuthorization">
-                Autorizo o menor citado acima a participar do evento ACAMPS VILA KIDS (NÁRNIA) no Maanaim 1240, Estr. Arns, 1516, Mandaguaçu - PR, 87160-000, no período de 04 a 06 de outubro de 2024. Esta autorização está de acordo com o ECA (lei 8.069/90).
+                Autorizo o menor citado acima a participar do evento ACAMPS VILA
+                KIDS (NÁRNIA) no Maanaim 1240, Estr. Arns, 1516, Mandaguaçu -
+                PR, 87160-000, no período de 04 a 06 de outubro de 2024. Esta
+                autorização está de acordo com o ECA (lei 8.069/90).
               </nb-checkbox>
-            </div> -->
+            </div>
 
             <div class="button-row">
               <button nbButton status="basic" nbStepperPrevious>Voltar</button>
