@@ -1,28 +1,44 @@
-.content-container {
-    padding: 2rem;
+.registration-container {
+  padding: 1rem;
 }
 
-h1 {
-    margin-bottom: 2rem;
-    color: #333;
+.text-center {
+  text-align: center;
 }
 
-h3 {
-    margin: 1.5rem 0 1rem;
-    color: #444;
+nb-card {
+  max-width: 800px;
+  margin: 2rem auto;
 }
 
-.button-group {
-    margin-top: 2rem;
-}
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 
-.clr-row {
-    margin-bottom: 1rem;
-}
+  .emergency-contact {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid nb-theme(border-basic-color-3);
 
-clr-textarea-container {
-    width: 100%;
-    textarea {
-        min-height: 100px;
+    h3 {
+      margin-bottom: 1rem;
+      color: nb-theme(text-basic-color);
     }
+  }
+}
+
+nb-form-field {
+  width: 100%;
+}
+
+.error {
+  color: nb-theme(color-danger-default);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+button[type="submit"] {
+  margin-top: 1.5rem;
+  align-self: flex-start;
 }

@@ -1,33 +1,36 @@
-import { Component, PLATFORM_ID, inject, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, PLATFORM_ID, inject } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { ClarityModule } from '@clr/angular';
+import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { 
+  NbCardModule, 
+  NbInputModule, 
+  NbSelectModule, 
+  NbButtonModule,
+  NbFormFieldModule,
+  NbDatepickerModule
+} from '@nebular/theme';
 
 @Component({
   selector: 'app-registration',
   standalone: true,
-  imports: [CommonModule, FormsModule, ClarityModule],
+  imports: [
+    CommonModule, 
+    ReactiveFormsModule, 
+    NbCardModule,
+    NbInputModule,
+    NbSelectModule,
+    NbButtonModule,
+    NbFormFieldModule,
+    NbDatepickerModule
+  ],
   templateUrl: './registration.component.html',
-  styleUrl: './registration.component.scss',
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  styleUrl: './registration.component.scss'
 })
 export class RegistrationComponent {
   private readonly platformId = inject(PLATFORM_ID);
+  private fb = inject(FormBuilder);
 
-  registrationData = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    birthDate: '',
-    phoneNumber: '',
-    campSession: '',
-    specialNeeds: '',
-    emergencyContact: {
-      name: '',
-      phone: '',
-      relation: ''
-    }
-  };
+  registrationForm: FormGroup;
 
   campSessions = [
     { id: 1, name: 'Summer Session 1 (June 1-15)' },
@@ -36,9 +39,26 @@ export class RegistrationComponent {
     { id: 4, name: 'Summer Session 4 (July 16-31)' }
   ];
 
+  constructor() {
+    this.registrationForm = this.fb.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      birthDate: ['', Validators.required],
+      phoneNumber: ['', Validators.required],
+      campSession: ['', Validators.required],
+      specialNeeds: [''],
+      emergencyContact: this.fb.group({
+        name: ['', Validators.required],
+        phone: ['', Validators.required],
+        relation: ['', Validators.required]
+      })
+    });
+  }
+
   onSubmit() {
-    if (isPlatformBrowser(this.platformId)) {
-      console.log('Form submitted:', this.registrationData);
+    if (isPlatformBrowser(this.platformId) && this.registrationForm.valid) {
+      console.log('Form submitted:', this.registrationForm.value);
     }
     // Add your form submission logic here
   }

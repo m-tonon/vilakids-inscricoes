@@ -1,17 +1,23 @@
-import { Component, PLATFORM_ID, inject, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { isPlatformBrowser } from '@angular/common';
-import { ClarityModule } from '@clr/angular';
+import { NbThemeModule, NbLayoutModule } from '@nebular/theme';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, ClarityModule],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  imports: [RouterOutlet, NbLayoutModule],
+  template: `
+    <nb-layout>
+      <nb-layout-header fixed>
+        <h1>IPVO Summer Camp</h1>
+      </nb-layout-header>
+      <nb-layout-column>
+        <router-outlet></router-outlet>
+      </nb-layout-column>
+    </nb-layout>
+  `,
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  private readonly platformId = inject(PLATFORM_ID);
   title = 'Summer Camp Registration';
 }

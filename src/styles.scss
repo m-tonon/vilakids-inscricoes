@@ -1,10 +1,26 @@
-/* You can add global styles to this file, and also import other style files */
-@import '@cds/core/global.min.css';
-@import '@cds/core/styles/theme.dark.min.css';
-@import '@clr/ui/clr-ui.min.css';
+@use '@nebular/theme/styles/theming' as *;
+@use '@nebular/theme/styles/themes/default';
 
-/* Global styles */
+// Global styles
+@use '@nebular/theme/styles/globals' as *;
+
+@include nb-install() {
+  @include nb-theme-global();
+}
+
+/* Reset margins and basic styles */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
 body {
   margin: 0;
-  font-family: var(--clr-font);
+  font-family: var(--text-paragraph-font-family);
+  background: var(--background-basic-color-1);
 }
