@@ -3,7 +3,7 @@
     <nb-card-header>
       <h1>{{ campInfo.name }}</h1>
     </nb-card-header>
-    <nb-card-body>
+    <nb-card-body style="padding: 1rem">
       <nb-stepper orientation="horizontal" #stepper>
         <!-- Step 1: Camp Information and Acknowledgment -->
         <nb-step [stepControl]="acknowledgmentForm" label="Informações">
@@ -315,48 +315,34 @@
 
         <!-- Step 3: Payment Information -->
         <nb-step [stepControl]="paymentForm" label="Pagamento">
-          <form [formGroup]="paymentForm" class="payment-form">
-            <div class="form-row">
-              <nb-form-field>
-                <label>Forma de Pagamento *</label>
-                <nb-select fullWidth formControlName="paymentMethod">
-                  @for (method of campInfo.paymentOptions.methods; track method)
-                  {
-                  <nb-option [value]="method">
-                    {{ method }}
-                  </nb-option>
-                  }
-                </nb-select>
-              </nb-form-field>
-
-              @if (paymentForm.get('paymentMethod')?.value === 'Cartão de
-              Crédito') {
-              <nb-form-field>
-                <label>Parcelas</label>
-                <nb-select fullWidth formControlName="installments">
-                  @for (i of [1,2,3,4,5,6,7]; track i) {
-                  <nb-option [value]="i">
-                    {{ i }}x de R$
-                    {{ calculateInstallments(campInfo.price, i).toFixed(2) }}
-                  </nb-option>
-                  }
-                </nb-select>
-              </nb-form-field>
-              }
+          <div class="payment-step">
+            <div class="payment-info-box">
+              <h3>Valor do Investimento</h3>
+              <div class="payment-amount">R$ {{ campInfo.price.toFixed(2) }}</div>
+              <div class="payment-details">
+                <p>Formas de pagamento: {{ campInfo.paymentOptions.methods.join(" ou ") }}</p>
+                @if (campInfo.paymentOptions.maxInstallments > 1) {
+                  <p>Parcelamento em até {{ campInfo.paymentOptions.maxInstallments }}x no cartão</p>
+                }
+              </div>
             </div>
 
-            <div class="button-row">
-              <button nbButton status="basic" nbStepperPrevious>Voltar</button>
-              <button
-                nbButton
-                status="success"
-                (click)="onSubmit()"
-                [disabled]="!paymentForm.valid"
-              >
-                Finalizar Inscrição
-              </button>
-            </div>
-          </form>
+            <nb-card>
+              <nb-card-header>
+                <h3>Pagamento via PagSeguro</h3>
+              </nb-card-header>
+              <nb-card-body>
+                <p>Você será redirecionado para a página de pagamento do PagSeguro em uma nova janela.</p>
+                <p>Após concluir o pagamento, você pode fechar a janela do PagSeguro e retornar para esta página.</p>
+                <div class="button-container">
+                  <button nbButton status="primary" (click)="openPayment()">
+                    <nb-icon icon="credit-card-outline"></nb-icon>
+                    Ir para pagamento
+                  </button>
+                </div>
+              </nb-card-body>
+            </nb-card>
+          </div>
         </nb-step>
 
         <!-- Step 4: Confirmation -->
@@ -380,3 +366,28 @@
     </nb-card-body>
   </nb-card>
 </div>
+
+
+<ng-template #pagSeguroModal>
+  <nb-card class="modal">
+    <nb-card-header class="modal-header">
+      <h3>Confirmação de Pagamento</h3>
+      <button nbButton ghost (click)="dismiss()">
+        <nb-icon icon="close-outline"></nb-icon>
+      </button>
+    </nb-card-header>
+    <nb-card-body class="modal-body">
+      <p>O pagamento foi realizado com sucesso?</p>
+      <div class="button-container">
+        <button nbButton status="success" (click)="confirmPayment(true)">
+          <nb-icon icon="checkmark-outline"></nb-icon>
+          Sim, pagamento realizado
+        </button>
+        <button nbButton status="danger" (click)="confirmPayment(false)">
+          <nb-icon icon="close-outline"></nb-icon>
+          Não, houve um problema
+        </button>
+      </div>
+    </nb-card-body>
+  </nb-card>
+</ng-template>

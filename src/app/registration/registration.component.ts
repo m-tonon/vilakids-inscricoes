@@ -1,4 +1,4 @@
-import { Component, PLATFORM_ID, inject } from '@angular/core';
+import { Component, PLATFORM_ID, inject, ViewChild } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import {
   ReactiveFormsModule,
@@ -16,6 +16,9 @@ import {
   NbIconModule,
   NbStepperModule,
   NbCheckboxModule,
+  NbDialogService,
+  NbDialogModule,
+  NbDialogRef,
 } from '@nebular/theme';
 
 @Component({
@@ -33,17 +36,28 @@ import {
     NbIconModule,
     NbStepperModule,
     NbCheckboxModule,
+    NbDialogModule,
   ],
   templateUrl: './registration.component.html',
   styleUrl: './registration.component.scss',
 })
 export class RegistrationComponent {
+  @ViewChild('stepper') stepper: any;
+  @ViewChild('pagSeguroModal') pagSeguroModal: any;
+
   private readonly platformId = inject(PLATFORM_ID);
   private fb = inject(FormBuilder);
+  private dialogService = inject(NbDialogService);
 
   registrationForm: FormGroup;
   acknowledgmentForm: FormGroup;
   paymentForm: FormGroup;
+
+  paymentConfirmed = false;
+  private dialogRef: NbDialogRef<any> | null = null; // Store dialog reference
+
+  // PagSeguro payment URL
+  private readonly pagSeguroUrl = 'https://pag.ae/7_B7ktZ7G';
 
   campInfo = {
     name: '5º Acampa Kids',
@@ -99,8 +113,8 @@ export class RegistrationComponent {
     });
 
     this.paymentForm = this.fb.group({
-      paymentMethod: ['', Validators.required],
-      installments: [1],
+      paymentMethod: ['PagSeguro', Validators.required],
+      paymentConfirmed: [false, Validators.requiredTrue],
     });
   }
 
@@ -125,7 +139,41 @@ export class RegistrationComponent {
         acknowledgment: this.acknowledgmentForm.value,
       };
       console.log('Form submitted:', formData);
-      // TODO: Implement payment integration
+    }
+  }
+
+  openPayment() {
+    if (isPlatformBrowser(this.platformId)) {
+      // Open PagSeguro in a new window
+      window.open(this.pagSeguroUrl, '_blank');
+
+      // Open confirmation modal and store the dialog reference
+      this.dialogRef = this.dialogService.open(this.pagSeguroModal, {
+        hasBackdrop: true,
+        closeOnBackdropClick: false,
+      });
+
+      // Handle dialog close
+      this.dialogRef.onClose.subscribe((success: boolean) => {
+        if (success) {
+          this.paymentForm.patchValue({ paymentConfirmed: true });
+          this.stepper.next(); // Move to confirmation step
+        }
+        this.dialogRef = null; // Clear reference
+      });
+    }
+  }
+
+  confirmPayment(success: boolean) {
+    this.paymentConfirmed = success;
+    if (this.dialogRef) {
+      this.dialogRef.close(success); // Close dialog with success status
+    }
+  }
+
+  dismiss() {
+    if (this.dialogRef) {
+      this.dialogRef.close(false); // Close dialog without confirming payment
     }
   }
 
