@@ -1,0 +1,96 @@
+<div class="content-container">
+    <div class="content-area">
+        <div class="clr-row">
+            <div class="clr-col-lg-8 clr-col-md-10 clr-col-12">
+                <h1>Camp Registration</h1>
+                <form clrForm (ngSubmit)="onSubmit()">
+                    <h3>Personal Information</h3>
+                    <div class="clr-row">
+                        <div class="clr-col-6">
+                            <clr-input-container>
+                                <label>First Name</label>
+                                <input clrInput type="text" [(ngModel)]="registrationData.firstName" name="firstName" required>
+                            </clr-input-container>
+                        </div>
+                        <div class="clr-col-6">
+                            <clr-input-container>
+                                <label>Last Name</label>
+                                <input clrInput type="text" [(ngModel)]="registrationData.lastName" name="lastName" required>
+                            </clr-input-container>
+                        </div>
+                    </div>
+
+                    <div class="clr-row">
+                        <div class="clr-col-6">
+                            <clr-input-container>
+                                <label>Email</label>
+                                <input clrInput type="email" [(ngModel)]="registrationData.email" name="email" required>
+                            </clr-input-container>
+                        </div>
+                        <div class="clr-col-6">
+                            <clr-input-container>
+                                <label>Phone Number</label>
+                                <input clrInput type="tel" [(ngModel)]="registrationData.phoneNumber" name="phoneNumber" required>
+                            </clr-input-container>
+                        </div>
+                    </div>
+
+                    <div class="clr-row">
+                        <div class="clr-col-6">
+                            <clr-date-container>
+                                <label>Birth Date</label>
+                                <input type="date" clrDate [(ngModel)]="registrationData.birthDate" name="birthDate" required>
+                            </clr-date-container>
+                        </div>
+                        <div class="clr-col-6">
+                            <clr-select-container>
+                                <label>Camp Session</label>
+                                <select clrSelect [(ngModel)]="registrationData.campSession" name="campSession" required>
+                                    <option value="">Select a session</option>
+                                    <option *ngFor="let session of campSessions" [value]="session.id">
+                                        {{session.name}}
+                                    </option>
+                                </select>
+                            </clr-select-container>
+                        </div>
+                    </div>
+
+                    <h3>Emergency Contact</h3>
+                    <div class="clr-row">
+                        <div class="clr-col-6">
+                            <clr-input-container>
+                                <label>Contact Name</label>
+                                <input clrInput type="text" [(ngModel)]="registrationData.emergencyContact.name" name="emergencyName" required>
+                            </clr-input-container>
+                        </div>
+                        <div class="clr-col-6">
+                            <clr-input-container>
+                                <label>Contact Phone</label>
+                                <input clrInput type="tel" [(ngModel)]="registrationData.emergencyContact.phone" name="emergencyPhone" required>
+                            </clr-input-container>
+                        </div>
+                    </div>
+
+                    <div class="clr-row">
+                        <div class="clr-col-6">
+                            <clr-input-container>
+                                <label>Relation to Camper</label>
+                                <input clrInput type="text" [(ngModel)]="registrationData.emergencyContact.relation" name="emergencyRelation" required>
+                            </clr-input-container>
+                        </div>
+                    </div>
+
+                    <h3>Additional Information</h3>
+                    <clr-textarea-container>
+                        <label>Special Needs or Requirements</label>
+                        <textarea clrTextarea [(ngModel)]="registrationData.specialNeeds" name="specialNeeds"></textarea>
+                    </clr-textarea-container>
+
+                    <div class="button-group">
+                        <button type="submit" class="btn btn-primary">Submit Registration</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
