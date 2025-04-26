@@ -1,7 +1,17 @@
+@use "@nebular/theme/styles/theming" as *;
+@include nb-install-component();
+
 .registration-container {
-  max-width: 1200px;
-  margin: 2rem auto;
-  padding: 0 1rem;
+  max-width: 800px;
+  margin: 0.5rem auto;
+  padding: 0 0.75rem;
+
+  nb-card {
+    margin-bottom: 1rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+  }
 }
 
 nb-card-header {
@@ -9,233 +19,346 @@ nb-card-header {
   justify-content: space-between;
   align-items: center;
   background: nb-theme(color-primary-500);
-  padding: 1.5rem;
-  
+  padding: 1.25rem;
+
   h1 {
     margin: 0;
-    color: rgb(15, 15, 15);
-    font-size: 2rem;
-    font-weight: bold;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+}
+
+::ng-deep nb-stepper {
+  .header {
+    margin: 0;
+    padding: 0.75rem;
+    background: nb-theme(background-basic-color-1);
+    border-bottom: 1px solid nb-theme(color-primary-200);
+    overflow-x: auto;
+    white-space: nowrap;
+
+    .step {
+      padding: 0.5rem;
+      min-height: 44px; // Minimum touch target size
+
+      &.selected {
+        .label {
+          color: nb-theme(color-primary-600);
+          font-weight: 600;
+        }
+
+        .index {
+          background: nb-theme(color-primary-500);
+        }
+      }
+
+      .label {
+        color: nb-theme(text-basic-color);
+        font-size: 0.9rem;
+      }
+
+      .index {
+        height: 2rem;
+        width: 2rem;
+        line-height: 2rem;
+        font-size: 1rem;
+        border-radius: 50%;
+      }
+    }
   }
 
-  .price {
-    font-size: 1.8rem;
-    color: rgb(0, 0, 0);
-    margin: 0;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
+  .step-content {
+    padding: 1rem;
   }
 }
 
 .camp-info {
-  margin-bottom: 2rem;
-  
+  margin-bottom: 1.5rem;
+
   .description {
-    font-size: 1.25rem;
-    line-height: 1.6;
-    margin: 1.5rem 0 2rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin: 1rem auto;
     color: nb-theme(text-basic-color);
-    text-align: center;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
+    text-align: left;
   }
 
   .info-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-    margin: 2rem 0;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    margin: 1.5rem 0;
 
     .info-item {
       display: flex;
       align-items: center;
-      gap: 1rem;
-      padding: 1.25rem;
+      gap: 0.75rem;
+      padding: 1rem;
       background: nb-theme(background-basic-color-2);
-      border-radius: 1rem;
-      transition: transform 0.2s, box-shadow 0.2s;
-      
-      &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      }
+      border-radius: 0.75rem;
+      min-height: 44px;
 
       nb-icon {
-        font-size: 1.5rem;
+        font-size: 1.25rem;
         color: nb-theme(color-primary-500);
-        padding: 0.75rem;
-        background: nb-theme(background-basic-color-1);
-        border-radius: 0.75rem;
       }
 
       span {
-        font-size: 1.1rem;
+        font-size: 0.95rem;
         color: nb-theme(text-basic-color);
-      }
-    }
-  }
-
-  .info-card {
-    margin: 1.5rem 0;
-    padding: 1.5rem;
-    background: nb-theme(background-basic-color-2);
-    border-radius: 1rem;
-    transition: transform 0.2s, box-shadow 0.2s;
-
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    }
-
-    h3 {
-      margin-top: 0;
-      margin-bottom: 1rem;
-      color: nb-theme(text-primary-color);
-      font-size: 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    p {
-      margin: 0.5rem 0;
-      font-size: 1.1rem;
-      line-height: 1.5;
-      color: nb-theme(text-basic-color);
-    }
-  }
-
-  .preletor {
-    @extend .info-card;
-    border-left: 4px solid nb-theme(color-primary-500);
-  }
-
-  .payment-info {
-    @extend .info-card;
-    border-left: 4px solid nb-theme(color-success-500);
-
-    .installment-info {
-      margin-top: 1rem;
-      padding-top: 1rem;
-      border-top: 1px solid nb-theme(border-basic-color-3);
-      font-weight: 500;
-    }
-  }
-
-  .contacts {
-    @extend .info-card;
-    border-left: 4px solid nb-theme(color-info-500);
-
-    .contact-item {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin: 0.75rem 0;
-
-      nb-icon {
-        color: nb-theme(color-info-500);
       }
     }
   }
 }
 
-.registration-form {
-  margin-top: 2rem;
-  
+.info-card {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: nb-theme(background-basic-color-2);
+  border-radius: 0.75rem;
+  border-left: 3px solid transparent;
+
   h3 {
+    margin: 0 0 1rem 0;
     color: nb-theme(text-primary-color);
-    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    nb-icon {
+      color: nb-theme(color-primary-500);
+      font-size: 1.25rem;
+    }
   }
 
+  p {
+    margin: 0.5rem 0;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    color: nb-theme(text-basic-color);
+  }
+}
+
+// Extending base styles with specific colors
+.preletor {
+  @extend .info-card;
+  border-left-color: nb-theme(color-primary-500);
+}
+
+.payment-info {
+  @extend .info-card;
+  border-left-color: nb-theme(color-success-500);
+}
+
+.contacts {
+  @extend .info-card;
+  border-left-color: nb-theme(color-info-500);
+
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0.75rem 0;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 0.75rem;
+    min-height: 44px;
+
+    nb-icon {
+      color: nb-theme(color-info-500);
+      font-size: 1.25rem;
+    }
+  }
+}
+
+.registration-form,
+.payment-form {
   .form-row {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: 1fr;
     gap: 1rem;
     margin-bottom: 1rem;
 
     nb-form-field {
       width: 100%;
-    }
-  }
 
-  .emergency-contact {
-    margin: 1.5rem 0;
-    padding: 1.5rem;
-    background: nb-theme(background-basic-color-2);
-    border-radius: 0.5rem;
-
-    h4 {
-      margin-top: 0;
-      margin-bottom: 1rem;
-      color: nb-theme(text-primary-color);
-    }
-  }
-
-  .payment-section {
-    margin: 1.5rem 0;
-  }
-
-  .important-notes {
-    margin: 1.5rem 0;
-    padding: 1.5rem;
-    background: linear-gradient(135deg, nb-theme(color-warning-100) 0%, nb-theme(color-warning-200) 100%);
-    border-radius: 1rem;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-    border-left: 4px solid nb-theme(color-warning-600);
-    transition: transform 0.2s, box-shadow 0.2s;
-    
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-    }
-    
-    p {
-      margin: 0.75rem 0;
-      color: nb-theme(text-warning-color);
-      font-size: 1.1rem;
-      line-height: 1.5;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      
-      &:first-child {
-        margin-top: 0;
-      }
-      
-      &:last-child {
-        margin-bottom: 0;
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: nb-theme(text-basic-color);
+        font-weight: 500;
+        font-size: 0.95rem;
       }
 
-      .icon {
-        font-size: 1.5rem;
-        flex-shrink: 0;
-        background: nb-theme(background-basic-color-1);
-        padding: 0.5rem;
+      input,
+      textarea,
+      nb-select {
+        width: 100%;
         border-radius: 0.75rem;
-        color: nb-theme(color-warning-600);
+        min-height: 44px;
+        font-size: 0.95rem;
+      }
+
+      textarea {
+        min-height: 88px;
+        resize: vertical;
       }
     }
-  }
-
-  button[type="submit"] {
-    margin-top: 1.5rem;
-    width: 100%;
-    max-width: 300px;
   }
 }
 
-// Responsive adjustments
-@media (max-width: 768px) {
-  .form-row {
-    grid-template-columns: 1fr !important;
+.emergency-contact {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: nb-theme(background-basic-color-2);
+  border-radius: 0.75rem;
+  border-left: 3px solid nb-theme(color-warning-500);
+
+  h4 {
+    margin: 0 0 1rem 0;
+    color: nb-theme(text-basic-color);
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+}
+
+.health-insurance-note {
+  margin: 0.75rem 0;
+  padding: 0.75rem;
+  background: rgba(nb-theme(color-warning-500), 0.1);
+  border-radius: 0.75rem;
+  font-size: 0.9rem;
+  text-align: left;
+  border-left: 3px solid nb-theme(color-warning-500);
+}
+
+.acknowledgment-form {
+  margin: 1.5rem auto;
+  padding: 1rem;
+  background: nb-theme(background-basic-color-2);
+  border-radius: 0.75rem;
+
+  .checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    ::ng-deep nb-checkbox {
+      .text {
+        font-size: 0.95rem;
+        line-height: 1.4;
+      }
+
+      .native-input {
+        min-height: 44px;
+        min-width: 44px;
+      }
+    }
+  }
+}
+
+.button-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+
+  button {
+    width: 100%;
+    min-height: 44px;
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 0.75rem;
+
+    &[nbStepperNext] {
+      background: nb-theme(color-primary-500);
+      color: white;
+      order: -1;
+    }
+
+    &[nbStepperPrevious] {
+      background: nb-theme(background-basic-color-2);
+    }
+  }
+}
+
+.confirmation-message {
+  text-align: center;
+  padding: 2rem 1rem;
+  margin: 0 auto;
+
+  nb-icon {
+    font-size: 3rem;
+    color: nb-theme(color-success-500);
+    margin-bottom: 1rem;
   }
 
-  nb-card-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
+  h2 {
+    color: nb-theme(color-success-600);
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  p {
+    margin: 0.75rem 0;
+    font-size: 1rem;
+    color: nb-theme(text-basic-color);
+  }
+}
+
+.parental-authorization {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: nb-theme(background-basic-color-2);
+  border-radius: 0.75rem;
+  border-left: 3px solid nb-theme(color-info-500);
+
+  ::ng-deep nb-checkbox {
+    .text {
+      font-size: 0.9rem;
+      line-height: 1.4;
+      color: nb-theme(text-basic-color);
+      padding: 0.5rem;
+    }
+
+    .native-input {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  }
+}
+
+// Tablet and desktop adjustments
+@media (min-width: 768px) {
+  .registration-container {
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+  }
+
+  .camp-info .info-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+
+  .form-row {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
+  }
+
+  .button-row {
+    grid-template-columns: auto auto;
+    justify-content: space-between;
+
+    button {
+      width: auto;
+      min-width: 120px;
+
+      &[nbStepperNext] {
+        order: 0;
+      }
+    }
   }
 }

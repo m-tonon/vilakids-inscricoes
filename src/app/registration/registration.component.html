@@ -4,180 +4,318 @@
       <h1>{{ campInfo.name }}</h1>
     </nb-card-header>
     <nb-card-body>
-      <div class="camp-info">
-        <p class="description">{{ campInfo.description }}</p>
-        
-        <div class="info-grid">
-          <div class="info-item">
-            <nb-icon icon="calendar-outline"></nb-icon>
-            <span>Data: {{ campInfo.dates }}</span>
-          </div>
-          <div class="info-item">
-            <nb-icon icon="pin-outline"></nb-icon>
-            <span>Local: {{ campInfo.location }}</span>
-          </div>
-          <div class="info-item">
-            <nb-icon icon="people-outline"></nb-icon>
-            <span>Idade: {{ campInfo.minAge }} a {{ campInfo.maxAge }} anos</span>
-          </div>
-        </div>
+      <nb-stepper orientation="horizontal" #stepper>
+        <!-- Step 1: Camp Information and Acknowledgment -->
+        <nb-step [stepControl]="acknowledgmentForm" label="Informações">
+          <div class="camp-info">
+            <p class="description">{{ campInfo.description }}</p>
 
-        <div class="preletor">
-          <h3><nb-icon icon="mic-outline"></nb-icon> Preletor</h3>
-          <p><strong>{{ campInfo.preletor.name }}</strong></p>
-          <p>{{ campInfo.preletor.description }}</p>
-        </div>
-
-        <div class="payment-info">
-          <h3><nb-icon icon="credit-card-outline"></nb-icon> Investimento</h3>
-          <p><strong>R$ {{ campInfo.price.toFixed(2) }}</strong></p>
-          <p>Formas de pagamento: {{ campInfo.paymentOptions.methods.join(' ou ') }}</p>
-          @if (campInfo.paymentOptions.maxInstallments > 1) {
-            <p class="installment-info">
-              Parcelamento em até {{ campInfo.paymentOptions.maxInstallments }}x no cartão
-            </p>
-          }
-        </div>
-
-        <div class="contacts">
-          <h3><nb-icon icon="phone-outline"></nb-icon> Contatos</h3>
-          @for (contact of campInfo.contacts; track contact.phone) {
-            <div class="contact-item">
-              <nb-icon icon="person-outline"></nb-icon>
-              <p><strong>{{ contact.name }}:</strong> {{ contact.phone }}</p>
+            <div class="info-grid">
+              <div class="info-item">
+                <nb-icon icon="calendar-outline"></nb-icon>
+                <span>Data: {{ campInfo.dates }}</span>
+              </div>
+              <div class="info-item">
+                <nb-icon icon="pin-outline"></nb-icon>
+                <span>Local: {{ campInfo.location }}</span>
+              </div>
+              <div class="info-item">
+                <nb-icon icon="people-outline"></nb-icon>
+                <span
+                  >Idade: {{ campInfo.minAge }} a
+                  {{ campInfo.maxAge }} anos</span
+                >
+              </div>
             </div>
-          }
-        </div>
-      </div>
 
-      <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="registration-form">
-        <h3>Formulário de Inscrição</h3>
+            <div class="preletor">
+              <h3><nb-icon icon="mic-outline"></nb-icon> Preletor</h3>
+              <p>
+                <strong>{{ campInfo.preletor.name }}</strong>
+              </p>
+              <p>{{ campInfo.preletor.description }}</p>
+            </div>
 
-        <div class="form-row">
-          <nb-form-field>
-            <label>Nome da Criança *</label>
-            <input nbInput fullWidth formControlName="childName" placeholder="Nome completo">
-          </nb-form-field>
-        </div>
-
-        <div class="form-row">
-          <nb-form-field>
-            <label>Data de Nascimento *</label>
-            <input nbInput fullWidth formControlName="birthDate" [nbDatepicker]="birthDatePicker">
-            <nb-datepicker #birthDatePicker></nb-datepicker>
-          </nb-form-field>
-
-          <nb-form-field>
-            <label>Idade *</label>
-            <input nbInput type="number" fullWidth formControlName="age" placeholder="Idade">
-          </nb-form-field>
-        </div>
-
-        <div class="form-row">
-          <nb-form-field>
-            <label>Nome do Responsável *</label>
-            <input nbInput fullWidth formControlName="responsibleName" placeholder="Nome do responsável">
-          </nb-form-field>
-        </div>
-
-        <div class="form-row">
-          <nb-form-field>
-            <label>Telefone *</label>
-            <input nbInput fullWidth formControlName="phoneNumber" placeholder="(00) 00000-0000">
-          </nb-form-field>
-
-          <nb-form-field>
-            <label>E-mail *</label>
-            <input nbInput fullWidth formControlName="email" placeholder="email@exemplo.com">
-          </nb-form-field>
-        </div>
-
-        <div class="form-row">
-          <nb-form-field>
-            <label>Medicamentos</label>
-            <textarea nbInput fullWidth formControlName="medications" placeholder="Liste os medicamentos que a criança utiliza"></textarea>
-          </nb-form-field>
-        </div>
-
-        <div class="form-row">
-          <nb-form-field>
-            <label>Alergias</label>
-            <textarea nbInput fullWidth formControlName="allergies" placeholder="Liste as alergias que a criança possui"></textarea>
-          </nb-form-field>
-        </div>
-
-        <div class="form-row">
-          <nb-form-field>
-            <label>Necessidades Especiais</label>
-            <textarea nbInput fullWidth formControlName="specialNeeds" placeholder="Informe se há necessidades especiais"></textarea>
-          </nb-form-field>
-        </div>
-
-        <div formGroupName="emergencyContact" class="emergency-contact">
-          <h4>Contato de Emergência</h4>
-          <div class="form-row">
-            <nb-form-field>
-              <label>Nome *</label>
-              <input nbInput fullWidth formControlName="name" placeholder="Nome do contato">
-            </nb-form-field>
-
-            <nb-form-field>
-              <label>Telefone *</label>
-              <input nbInput fullWidth formControlName="phone" placeholder="(00) 00000-0000">
-            </nb-form-field>
-
-            <nb-form-field>
-              <label>Relação *</label>
-              <input nbInput fullWidth formControlName="relation" placeholder="Ex: Avó, Tio">
-            </nb-form-field>
-          </div>
-        </div>
-
-        <div class="form-row payment-section">
-          <nb-form-field>
-            <label>Forma de Pagamento *</label>
-            <nb-select fullWidth formControlName="paymentMethod">
-              @for (method of campInfo.paymentOptions.methods; track method) {
-                <nb-option [value]="method">
-                  {{ method }}
-                </nb-option>
+            <div class="payment-info">
+              <h3>
+                <nb-icon icon="credit-card-outline"></nb-icon> Investimento
+              </h3>
+              <p>
+                <strong>R$ {{ campInfo.price.toFixed(2) }}</strong>
+              </p>
+              <p>
+                Formas de pagamento:
+                {{ campInfo.paymentOptions.methods.join(" ou ") }}
+              </p>
+              @if (campInfo.paymentOptions.maxInstallments > 1) {
+              <p class="installment-info">
+                Parcelamento em até
+                {{ campInfo.paymentOptions.maxInstallments }}x no cartão
+              </p>
               }
-            </nb-select>
-          </nb-form-field>
+            </div>
 
-          @if (registrationForm.get('paymentMethod')?.value === 'Cartão de Crédito') {
-            <nb-form-field>
-              <label>Parcelas</label>
-              <nb-select fullWidth formControlName="installments">
-                @for (i of [1,2,3,4,5,6,7]; track i) {
-                  <nb-option [value]="i">
-                    {{ i }}x de R$ {{ calculateInstallments(campInfo.price, i).toFixed(2) }}
+            <div class="contacts">
+              <h3><nb-icon icon="phone-outline"></nb-icon> Contatos</h3>
+              @for (contact of campInfo.contacts; track contact.phone) {
+              <div class="contact-item">
+                <nb-icon icon="person-outline"></nb-icon>
+                <p>
+                  <strong>{{ contact.name }}:</strong> {{ contact.phone }}
+                </p>
+              </div>
+              }
+            </div>
+
+            <form [formGroup]="acknowledgmentForm" class="acknowledgment-form">
+              <div class="checkbox-group">
+                <nb-checkbox formControlName="hasReadInfo">
+                  Li e compreendi todas as informações do acampamento
+                </nb-checkbox>
+                <nb-checkbox formControlName="termsAccepted">
+                  Aceito os termos e condições do acampamento
+                </nb-checkbox>
+              </div>
+            </form>
+
+            <button
+              nbButton
+              status="primary"
+              nbStepperNext
+              [disabled]="!canProceedToRegistration()"
+            >
+              Próximo Passo
+            </button>
+          </div>
+        </nb-step>
+
+        <!-- Step 2: Registration Form -->
+        <nb-step [stepControl]="registrationForm" label="Inscrição">
+          <form [formGroup]="registrationForm" class="registration-form">
+            <div class="form-row">
+              <nb-form-field>
+                <label>Nome da Criança *</label>
+                <input
+                  nbInput
+                  fullWidth
+                  formControlName="childName"
+                  placeholder="Nome completo"
+                />
+              </nb-form-field>
+            </div>
+
+            <div class="form-row">
+              <nb-form-field>
+                <label>Data de Nascimento *</label>
+                <input
+                  nbInput
+                  fullWidth
+                  formControlName="birthDate"
+                  [nbDatepicker]="birthDatePicker"
+                />
+                <nb-datepicker #birthDatePicker></nb-datepicker>
+              </nb-form-field>
+
+              <nb-form-field>
+                <label>Idade *</label>
+                <input
+                  nbInput
+                  type="number"
+                  fullWidth
+                  formControlName="age"
+                  placeholder="Idade"
+                />
+              </nb-form-field>
+
+              <nb-form-field>
+                <label>Gênero *</label>
+                <nb-select fullWidth formControlName="gender">
+                  <nb-option value="Feminino">Feminino</nb-option>
+                  <nb-option value="Masculino">Masculino</nb-option>
+                </nb-select>
+              </nb-form-field>
+            </div>
+
+            <div class="form-row">
+              <nb-form-field>
+                <label>Documento de identidade *</label>
+                <input
+                  nbInput
+                  fullWidth
+                  formControlName="identityDocument"
+                  placeholder="RG ou Certidão de Nascimento"
+                />
+              </nb-form-field>
+            </div>
+
+            <div class="form-row">
+              <nb-form-field>
+                <label>Endereço *</label>
+                <textarea
+                  nbInput
+                  fullWidth
+                  formControlName="address"
+                  placeholder="Endereço completo"
+                ></textarea>
+              </nb-form-field>
+            </div>
+
+            <div class="form-row">
+              <nb-form-field>
+                <label>É membro de alguma igreja?</label>
+                <nb-select fullWidth formControlName="churchMembership">
+                  <nb-option value="sim">Sim</nb-option>
+                  <nb-option value="nao">Não</nb-option>
+                </nb-select>
+              </nb-form-field>
+
+              <nb-form-field>
+                <label>Qual igreja?</label>
+                <input
+                  nbInput
+                  fullWidth
+                  formControlName="churchName"
+                  placeholder="Nome da igreja"
+                />
+              </nb-form-field>
+            </div>
+
+            <div class="form-row">
+              <nb-form-field>
+                <label>Plano de Saúde</label>
+                <input
+                  nbInput
+                  fullWidth
+                  formControlName="healthInsurance"
+                  placeholder="Nome do plano de saúde (se possuir)"
+                />
+                <p class="health-insurance-note">
+                  <strong>Observação:</strong> Não possuindo plano de saúde e
+                  não sendo possível contatar o responsável, será levado no
+                  posto de saúde mais próximo
+                </p>
+              </nb-form-field>
+            </div>
+
+            <div formGroupName="emergencyContact" class="emergency-contact">
+              <h4>Contato de Emergência</h4>
+              <div class="form-row">
+                <nb-form-field>
+                  <label>Nome *</label>
+                  <input
+                    nbInput
+                    fullWidth
+                    formControlName="name"
+                    placeholder="Nome do contato"
+                  />
+                </nb-form-field>
+
+                <nb-form-field>
+                  <label>Telefone *</label>
+                  <input
+                    nbInput
+                    fullWidth
+                    formControlName="phone"
+                    placeholder="(00) 00000-0000"
+                  />
+                </nb-form-field>
+
+                <nb-form-field>
+                  <label>Relação *</label>
+                  <input
+                    nbInput
+                    fullWidth
+                    formControlName="relation"
+                    placeholder="Ex: Avó, Tio"
+                  />
+                </nb-form-field>
+              </div>
+            </div>
+
+            <!-- <div class="parental-authorization">
+              <nb-checkbox formControlName="parentalAuthorization">
+                Autorizo o menor citado acima a participar do evento ACAMPS VILA KIDS (NÁRNIA) no Maanaim 1240, Estr. Arns, 1516, Mandaguaçu - PR, 87160-000, no período de 04 a 06 de outubro de 2024. Esta autorização está de acordo com o ECA (lei 8.069/90).
+              </nb-checkbox>
+            </div> -->
+
+            <div class="button-row">
+              <button nbButton status="basic" nbStepperPrevious>Voltar</button>
+              <button
+                nbButton
+                status="primary"
+                nbStepperNext
+                [disabled]="!canProceedToPayment()"
+              >
+                Próximo Passo
+              </button>
+            </div>
+          </form>
+        </nb-step>
+
+        <!-- Step 3: Payment Information -->
+        <nb-step [stepControl]="paymentForm" label="Pagamento">
+          <form [formGroup]="paymentForm" class="payment-form">
+            <div class="form-row">
+              <nb-form-field>
+                <label>Forma de Pagamento *</label>
+                <nb-select fullWidth formControlName="paymentMethod">
+                  @for (method of campInfo.paymentOptions.methods; track method)
+                  {
+                  <nb-option [value]="method">
+                    {{ method }}
                   </nb-option>
-                }
-              </nb-select>
-            </nb-form-field>
-          }
-        </div>
+                  }
+                </nb-select>
+              </nb-form-field>
 
-        <div class="important-notes">
-          <p>
-            <span class="icon">
-              <nb-icon icon="alert-triangle-outline"></nb-icon>
-            </span>
-            Importante: Sua vaga só está garantida mediante pagamento.
-          </p>
-          <p>
-            <span class="icon">
-              <nb-icon icon="heart-outline"></nb-icon>
-            </span>
-            Teremos uma enfermeira (remédios devem ser entregues a ela na chegada)
-          </p>
-        </div>
+              @if (paymentForm.get('paymentMethod')?.value === 'Cartão de
+              Crédito') {
+              <nb-form-field>
+                <label>Parcelas</label>
+                <nb-select fullWidth formControlName="installments">
+                  @for (i of [1,2,3,4,5,6,7]; track i) {
+                  <nb-option [value]="i">
+                    {{ i }}x de R$
+                    {{ calculateInstallments(campInfo.price, i).toFixed(2) }}
+                  </nb-option>
+                  }
+                </nb-select>
+              </nb-form-field>
+              }
+            </div>
 
-        <button nbButton status="primary" type="submit" [disabled]="!registrationForm.valid">
-          Inscrever
-        </button>
-      </form>
+            <div class="button-row">
+              <button nbButton status="basic" nbStepperPrevious>Voltar</button>
+              <button
+                nbButton
+                status="success"
+                (click)="onSubmit()"
+                [disabled]="!paymentForm.valid"
+              >
+                Finalizar Inscrição
+              </button>
+            </div>
+          </form>
+        </nb-step>
+
+        <!-- Step 4: Confirmation -->
+        <nb-step [hidden]="!paymentForm.valid" label="Confirmação">
+          <div class="confirmation-message">
+            <nb-icon
+              icon="checkmark-circle-2-outline"
+              status="success"
+            ></nb-icon>
+            <h2>Inscrição Realizada com Sucesso!</h2>
+            <p>Aguarde o contato da nossa equipe com as próximas instruções.</p>
+            <p>Em caso de dúvidas, entre em contato com:</p>
+            @for (contact of campInfo.contacts; track contact.phone) {
+            <p>
+              <strong>{{ contact.name }}:</strong> {{ contact.phone }}
+            </p>
+            }
+          </div>
+        </nb-step>
+      </nb-stepper>
     </nb-card-body>
   </nb-card>
 </div>

@@ -1,8 +1,26 @@
 nb-layout-header {
+  background: nb-theme(background-basic-color-1) !important;
+  border-bottom: 1px solid nb-theme(border-basic-color-3);
+
   h1 {
     margin: 0;
-    padding: 0;
-    font-size: 1.5rem;
-    color: nb-theme(text-basic-color);
+    padding: 0.75rem 0;
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: nb-theme(text-primary-color);
+  }
+}
+
+::ng-deep {
+  nb-layout .layout {
+    min-height: 100vh;
+  }
+
+  .layout-container {
+    padding-top: 4.75rem !important;
+  }
+
+  nb-layout-column {
+    padding: 0 !important;
   }
 }

@@ -2,7 +2,13 @@ import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideClientHydration } from '@angular/platform-browser';
 import { routes } from './app.routes';
-import { NbThemeModule, NbDatepickerModule, NbDialogModule, NbIconModule } from '@nebular/theme';
+import { 
+  NbThemeModule, 
+  NbDatepickerModule, 
+  NbDialogModule, 
+  NbIconModule,
+  NbStepperModule 
+} from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 
 export const appConfig: ApplicationConfig = {
@@ -14,7 +20,8 @@ export const appConfig: ApplicationConfig = {
       NbDatepickerModule.forRoot(),
       NbDialogModule.forRoot(),
       NbIconModule,
-      NbEvaIconsModule
+      NbEvaIconsModule,
+      NbStepperModule
     )
   ]
 };
