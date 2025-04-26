@@ -9,14 +9,14 @@ import { NbThemeModule, NbLayoutModule } from '@nebular/theme';
   template: `
     <nb-layout>
       <nb-layout-header fixed>
-        <h1>IPVO Summer Camp</h1>
+        <h1>IPVO Acampa Kids</h1>
       </nb-layout-header>
       <nb-layout-column>
         <router-outlet></router-outlet>
       </nb-layout-column>
     </nb-layout>
   `,
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
   title = 'Summer Camp Registration';

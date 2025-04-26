@@ -1,120 +1,183 @@
 <div class="registration-container">
-    <nb-card>
-        <nb-card-header class="text-center">
-            <h2>Camp Registration Form</h2>
-        </nb-card-header>
-        <nb-card-body>
-            <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
-                <nb-form-field>
-                    <label>First Name *</label>
-                    <input nbInput fullWidth formControlName="firstName" placeholder="Enter first name">
-                    <ng-container *ngIf="registrationForm.get('firstName')?.touched">
-                        <p class="error" *ngIf="registrationForm.get('firstName')?.errors?.['required']">
-                            First name is required
-                        </p>
-                    </ng-container>
-                </nb-form-field>
+  <nb-card>
+    <nb-card-header>
+      <h1>{{ campInfo.name }}</h1>
+    </nb-card-header>
+    <nb-card-body>
+      <div class="camp-info">
+        <p class="description">{{ campInfo.description }}</p>
+        
+        <div class="info-grid">
+          <div class="info-item">
+            <nb-icon icon="calendar-outline"></nb-icon>
+            <span>Data: {{ campInfo.dates }}</span>
+          </div>
+          <div class="info-item">
+            <nb-icon icon="pin-outline"></nb-icon>
+            <span>Local: {{ campInfo.location }}</span>
+          </div>
+          <div class="info-item">
+            <nb-icon icon="people-outline"></nb-icon>
+            <span>Idade: {{ campInfo.minAge }} a {{ campInfo.maxAge }} anos</span>
+          </div>
+        </div>
 
-                <nb-form-field>
-                    <label>Last Name *</label>
-                    <input nbInput fullWidth formControlName="lastName" placeholder="Enter last name">
-                    <ng-container *ngIf="registrationForm.get('lastName')?.touched">
-                        <p class="error" *ngIf="registrationForm.get('lastName')?.errors?.['required']">
-                            Last name is required
-                        </p>
-                    </ng-container>
-                </nb-form-field>
+        <div class="preletor">
+          <h3><nb-icon icon="mic-outline"></nb-icon> Preletor</h3>
+          <p><strong>{{ campInfo.preletor.name }}</strong></p>
+          <p>{{ campInfo.preletor.description }}</p>
+        </div>
 
-                <nb-form-field>
-                    <label>Email *</label>
-                    <input nbInput fullWidth formControlName="email" type="email" placeholder="Enter email">
-                    <ng-container *ngIf="registrationForm.get('email')?.touched">
-                        <p class="error" *ngIf="registrationForm.get('email')?.errors?.['required']">
-                            Email is required
-                        </p>
-                        <p class="error" *ngIf="registrationForm.get('email')?.errors?.['email']">
-                            Please enter a valid email address
-                        </p>
-                    </ng-container>
-                </nb-form-field>
+        <div class="payment-info">
+          <h3><nb-icon icon="credit-card-outline"></nb-icon> Investimento</h3>
+          <p><strong>R$ {{ campInfo.price.toFixed(2) }}</strong></p>
+          <p>Formas de pagamento: {{ campInfo.paymentOptions.methods.join(' ou ') }}</p>
+          @if (campInfo.paymentOptions.maxInstallments > 1) {
+            <p class="installment-info">
+              Parcelamento em até {{ campInfo.paymentOptions.maxInstallments }}x no cartão
+            </p>
+          }
+        </div>
 
-                <nb-form-field>
-                    <label>Birth Date *</label>
-                    <input nbInput fullWidth formControlName="birthDate" [nbDatepicker]="birthDatePicker">
-                    <nb-datepicker #birthDatePicker></nb-datepicker>
-                    <ng-container *ngIf="registrationForm.get('birthDate')?.touched">
-                        <p class="error" *ngIf="registrationForm.get('birthDate')?.errors?.['required']">
-                            Birth date is required
-                        </p>
-                    </ng-container>
-                </nb-form-field>
+        <div class="contacts">
+          <h3><nb-icon icon="phone-outline"></nb-icon> Contatos</h3>
+          @for (contact of campInfo.contacts; track contact.phone) {
+            <div class="contact-item">
+              <nb-icon icon="person-outline"></nb-icon>
+              <p><strong>{{ contact.name }}:</strong> {{ contact.phone }}</p>
+            </div>
+          }
+        </div>
+      </div>
 
-                <nb-form-field>
-                    <label>Phone Number *</label>
-                    <input nbInput fullWidth formControlName="phoneNumber" type="tel" placeholder="Enter phone number">
-                    <ng-container *ngIf="registrationForm.get('phoneNumber')?.touched">
-                        <p class="error" *ngIf="registrationForm.get('phoneNumber')?.errors?.['required']">
-                            Phone number is required
-                        </p>
-                    </ng-container>
-                </nb-form-field>
+      <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="registration-form">
+        <h3>Formulário de Inscrição</h3>
 
-                <nb-form-field>
-                    <label>Camp Session *</label>
-                    <nb-select fullWidth formControlName="campSession" placeholder="Select session">
-                        <nb-option [value]="session.id" *ngFor="let session of campSessions">
-                            {{session.name}}
-                        </nb-option>
-                    </nb-select>
-                    <ng-container *ngIf="registrationForm.get('campSession')?.touched">
-                        <p class="error" *ngIf="registrationForm.get('campSession')?.errors?.['required']">
-                            Please select a camp session
-                        </p>
-                    </ng-container>
-                </nb-form-field>
+        <div class="form-row">
+          <nb-form-field>
+            <label>Nome da Criança *</label>
+            <input nbInput fullWidth formControlName="childName" placeholder="Nome completo">
+          </nb-form-field>
+        </div>
 
-                <nb-form-field>
-                    <label>Special Needs</label>
-                    <textarea nbInput fullWidth formControlName="specialNeeds" placeholder="Enter any special needs"></textarea>
-                </nb-form-field>
+        <div class="form-row">
+          <nb-form-field>
+            <label>Data de Nascimento *</label>
+            <input nbInput fullWidth formControlName="birthDate" [nbDatepicker]="birthDatePicker">
+            <nb-datepicker #birthDatePicker></nb-datepicker>
+          </nb-form-field>
 
-                <div formGroupName="emergencyContact" class="emergency-contact">
-                    <h3>Emergency Contact</h3>
-                    <nb-form-field>
-                        <label>Name *</label>
-                        <input nbInput fullWidth formControlName="name" placeholder="Enter contact name">
-                        <ng-container *ngIf="registrationForm.get('emergencyContact.name')?.touched">
-                            <p class="error" *ngIf="registrationForm.get('emergencyContact.name')?.errors?.['required']">
-                                Emergency contact name is required
-                            </p>
-                        </ng-container>
-                    </nb-form-field>
+          <nb-form-field>
+            <label>Idade *</label>
+            <input nbInput type="number" fullWidth formControlName="age" placeholder="Idade">
+          </nb-form-field>
+        </div>
 
-                    <nb-form-field>
-                        <label>Phone *</label>
-                        <input nbInput fullWidth formControlName="phone" type="tel" placeholder="Enter contact phone">
-                        <ng-container *ngIf="registrationForm.get('emergencyContact.phone')?.touched">
-                            <p class="error" *ngIf="registrationForm.get('emergencyContact.phone')?.errors?.['required']">
-                                Emergency contact phone is required
-                            </p>
-                        </ng-container>
-                    </nb-form-field>
+        <div class="form-row">
+          <nb-form-field>
+            <label>Nome do Responsável *</label>
+            <input nbInput fullWidth formControlName="responsibleName" placeholder="Nome do responsável">
+          </nb-form-field>
+        </div>
 
-                    <nb-form-field>
-                        <label>Relation *</label>
-                        <input nbInput fullWidth formControlName="relation" placeholder="Enter relation to camper">
-                        <ng-container *ngIf="registrationForm.get('emergencyContact.relation')?.touched">
-                            <p class="error" *ngIf="registrationForm.get('emergencyContact.relation')?.errors?.['required']">
-                                Relation to camper is required
-                            </p>
-                        </ng-container>
-                    </nb-form-field>
-                </div>
+        <div class="form-row">
+          <nb-form-field>
+            <label>Telefone *</label>
+            <input nbInput fullWidth formControlName="phoneNumber" placeholder="(00) 00000-0000">
+          </nb-form-field>
 
-                <button nbButton status="primary" type="submit" [disabled]="!registrationForm.valid">
-                    Submit Registration
-                </button>
-            </form>
-        </nb-card-body>
-    </nb-card>
+          <nb-form-field>
+            <label>E-mail *</label>
+            <input nbInput fullWidth formControlName="email" placeholder="email@exemplo.com">
+          </nb-form-field>
+        </div>
+
+        <div class="form-row">
+          <nb-form-field>
+            <label>Medicamentos</label>
+            <textarea nbInput fullWidth formControlName="medications" placeholder="Liste os medicamentos que a criança utiliza"></textarea>
+          </nb-form-field>
+        </div>
+
+        <div class="form-row">
+          <nb-form-field>
+            <label>Alergias</label>
+            <textarea nbInput fullWidth formControlName="allergies" placeholder="Liste as alergias que a criança possui"></textarea>
+          </nb-form-field>
+        </div>
+
+        <div class="form-row">
+          <nb-form-field>
+            <label>Necessidades Especiais</label>
+            <textarea nbInput fullWidth formControlName="specialNeeds" placeholder="Informe se há necessidades especiais"></textarea>
+          </nb-form-field>
+        </div>
+
+        <div formGroupName="emergencyContact" class="emergency-contact">
+          <h4>Contato de Emergência</h4>
+          <div class="form-row">
+            <nb-form-field>
+              <label>Nome *</label>
+              <input nbInput fullWidth formControlName="name" placeholder="Nome do contato">
+            </nb-form-field>
+
+            <nb-form-field>
+              <label>Telefone *</label>
+              <input nbInput fullWidth formControlName="phone" placeholder="(00) 00000-0000">
+            </nb-form-field>
+
+            <nb-form-field>
+              <label>Relação *</label>
+              <input nbInput fullWidth formControlName="relation" placeholder="Ex: Avó, Tio">
+            </nb-form-field>
+          </div>
+        </div>
+
+        <div class="form-row payment-section">
+          <nb-form-field>
+            <label>Forma de Pagamento *</label>
+            <nb-select fullWidth formControlName="paymentMethod">
+              @for (method of campInfo.paymentOptions.methods; track method) {
+                <nb-option [value]="method">
+                  {{ method }}
+                </nb-option>
+              }
+            </nb-select>
+          </nb-form-field>
+
+          @if (registrationForm.get('paymentMethod')?.value === 'Cartão de Crédito') {
+            <nb-form-field>
+              <label>Parcelas</label>
+              <nb-select fullWidth formControlName="installments">
+                @for (i of [1,2,3,4,5,6,7]; track i) {
+                  <nb-option [value]="i">
+                    {{ i }}x de R$ {{ calculateInstallments(campInfo.price, i).toFixed(2) }}
+                  </nb-option>
+                }
+              </nb-select>
+            </nb-form-field>
+          }
+        </div>
+
+        <div class="important-notes">
+          <p>
+            <span class="icon">
+              <nb-icon icon="alert-triangle-outline"></nb-icon>
+            </span>
+            Importante: Sua vaga só está garantida mediante pagamento.
+          </p>
+          <p>
+            <span class="icon">
+              <nb-icon icon="heart-outline"></nb-icon>
+            </span>
+            Teremos uma enfermeira (remédios devem ser entregues a ela na chegada)
+          </p>
+        </div>
+
+        <button nbButton status="primary" type="submit" [disabled]="!registrationForm.valid">
+          Inscrever
+        </button>
+      </form>
+    </nb-card-body>
+  </nb-card>
 </div>

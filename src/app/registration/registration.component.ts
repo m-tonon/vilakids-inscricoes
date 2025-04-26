@@ -1,30 +1,37 @@
 import { Component, PLATFORM_ID, inject } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { 
-  NbCardModule, 
-  NbInputModule, 
-  NbSelectModule, 
+import {
+  ReactiveFormsModule,
+  FormGroup,
+  FormBuilder,
+  Validators,
+} from '@angular/forms';
+import {
+  NbCardModule,
+  NbInputModule,
+  NbSelectModule,
   NbButtonModule,
   NbFormFieldModule,
-  NbDatepickerModule
+  NbDatepickerModule,
+  NbIconModule,
 } from '@nebular/theme';
 
 @Component({
   selector: 'app-registration',
   standalone: true,
   imports: [
-    CommonModule, 
-    ReactiveFormsModule, 
+    CommonModule,
+    ReactiveFormsModule,
     NbCardModule,
     NbInputModule,
     NbSelectModule,
     NbButtonModule,
     NbFormFieldModule,
-    NbDatepickerModule
+    NbDatepickerModule,
+    NbIconModule,
   ],
   templateUrl: './registration.component.html',
-  styleUrl: './registration.component.scss'
+  styleUrl: './registration.component.scss',
 })
 export class RegistrationComponent {
   private readonly platformId = inject(PLATFORM_ID);
@@ -32,27 +39,46 @@ export class RegistrationComponent {
 
   registrationForm: FormGroup;
 
-  campSessions = [
-    { id: 1, name: 'Summer Session 1 (June 1-15)' },
-    { id: 2, name: 'Summer Session 2 (June 16-30)' },
-    { id: 3, name: 'Summer Session 3 (July 1-15)' },
-    { id: 4, name: 'Summer Session 4 (July 16-31)' }
-  ];
+  campInfo = {
+    name: '5º Acampa Kids',
+    dates: '03, 04 e 05 de outubro de 2025',
+    location: 'Acampamento Evangélico Maanaim',
+    price: 210.00,
+    minAge: 6,
+    maxAge: 11,
+    preletor: {
+      name: 'Marcus Nati',
+      description: 'Teólogo, pregador, presbítero, desenhista, designer e criador do perfil @brother_bíblia'
+    },
+    contacts: [
+      { name: 'Secretaria IPVO', phone: '(44) 3226-4473' },
+      { name: 'Anjinho', phone: '(44) 9 9846-0089' }
+    ],
+    description: 'Está chegando o 5º ACAMPAKIDS da IPVO, uma ótima oportunidade para que seu filho(a) possa fortalecer a fé e desenvolver autonomia e comunhão.',
+    paymentOptions: {
+      methods: ['PIX', 'Cartão de Crédito'],
+      maxInstallments: 7
+    }
+  };
 
   constructor() {
     this.registrationForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
+      childName: ['', Validators.required],
       birthDate: ['', Validators.required],
+      age: ['', [Validators.required, Validators.min(6), Validators.max(11)]],
+      responsibleName: ['', Validators.required],
       phoneNumber: ['', Validators.required],
-      campSession: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      medications: [''],
+      allergies: [''],
       specialNeeds: [''],
       emergencyContact: this.fb.group({
         name: ['', Validators.required],
         phone: ['', Validators.required],
-        relation: ['', Validators.required]
-      })
+        relation: ['', Validators.required],
+      }),
+      paymentMethod: ['', Validators.required],
+      installments: [1],
     });
   }
 
@@ -60,6 +86,9 @@ export class RegistrationComponent {
     if (isPlatformBrowser(this.platformId) && this.registrationForm.valid) {
       console.log('Form submitted:', this.registrationForm.value);
     }
-    // Add your form submission logic here
+  }
+
+  calculateInstallments(totalValue: number, installments: number): number {
+    return totalValue / installments;
   }
 }

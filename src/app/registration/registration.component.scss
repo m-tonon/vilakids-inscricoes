@@ -1,44 +1,241 @@
 .registration-container {
-  padding: 1rem;
-}
-
-.text-center {
-  text-align: center;
-}
-
-nb-card {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 2rem auto;
+  padding: 0 1rem;
 }
 
-form {
+nb-card-header {
   display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  justify-content: space-between;
+  align-items: center;
+  background: nb-theme(color-primary-500);
+  padding: 1.5rem;
+  
+  h1 {
+    margin: 0;
+    color: rgb(15, 15, 15);
+    font-size: 2rem;
+    font-weight: bold;
+  }
 
-  .emergency-contact {
-    margin-top: 1.5rem;
-    padding-top: 1rem;
-    border-top: 1px solid nb-theme(border-basic-color-3);
+  .price {
+    font-size: 1.8rem;
+    color: rgb(0, 0, 0);
+    margin: 0;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+  }
+}
+
+.camp-info {
+  margin-bottom: 2rem;
+  
+  .description {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    margin: 1.5rem 0 2rem;
+    color: nb-theme(text-basic-color);
+    text-align: center;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.25rem;
+      background: nb-theme(background-basic-color-2);
+      border-radius: 1rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+      
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      nb-icon {
+        font-size: 1.5rem;
+        color: nb-theme(color-primary-500);
+        padding: 0.75rem;
+        background: nb-theme(background-basic-color-1);
+        border-radius: 0.75rem;
+      }
+
+      span {
+        font-size: 1.1rem;
+        color: nb-theme(text-basic-color);
+      }
+    }
+  }
+
+  .info-card {
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    background: nb-theme(background-basic-color-2);
+    border-radius: 1rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
 
     h3 {
+      margin-top: 0;
       margin-bottom: 1rem;
+      color: nb-theme(text-primary-color);
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    p {
+      margin: 0.5rem 0;
+      font-size: 1.1rem;
+      line-height: 1.5;
       color: nb-theme(text-basic-color);
+    }
+  }
+
+  .preletor {
+    @extend .info-card;
+    border-left: 4px solid nb-theme(color-primary-500);
+  }
+
+  .payment-info {
+    @extend .info-card;
+    border-left: 4px solid nb-theme(color-success-500);
+
+    .installment-info {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid nb-theme(border-basic-color-3);
+      font-weight: 500;
+    }
+  }
+
+  .contacts {
+    @extend .info-card;
+    border-left: 4px solid nb-theme(color-info-500);
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin: 0.75rem 0;
+
+      nb-icon {
+        color: nb-theme(color-info-500);
+      }
     }
   }
 }
 
-nb-form-field {
-  width: 100%;
+.registration-form {
+  margin-top: 2rem;
+  
+  h3 {
+    color: nb-theme(text-primary-color);
+    margin-bottom: 1.5rem;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+
+    nb-form-field {
+      width: 100%;
+    }
+  }
+
+  .emergency-contact {
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    background: nb-theme(background-basic-color-2);
+    border-radius: 0.5rem;
+
+    h4 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      color: nb-theme(text-primary-color);
+    }
+  }
+
+  .payment-section {
+    margin: 1.5rem 0;
+  }
+
+  .important-notes {
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, nb-theme(color-warning-100) 0%, nb-theme(color-warning-200) 100%);
+    border-radius: 1rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border-left: 4px solid nb-theme(color-warning-600);
+    transition: transform 0.2s, box-shadow 0.2s;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    }
+    
+    p {
+      margin: 0.75rem 0;
+      color: nb-theme(text-warning-color);
+      font-size: 1.1rem;
+      line-height: 1.5;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      
+      &:first-child {
+        margin-top: 0;
+      }
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .icon {
+        font-size: 1.5rem;
+        flex-shrink: 0;
+        background: nb-theme(background-basic-color-1);
+        padding: 0.5rem;
+        border-radius: 0.75rem;
+        color: nb-theme(color-warning-600);
+      }
+    }
+  }
+
+  button[type="submit"] {
+    margin-top: 1.5rem;
+    width: 100%;
+    max-width: 300px;
+  }
 }
 
-.error {
-  color: nb-theme(color-danger-default);
-  font-size: 0.875rem;
-  margin-top: 0.25rem;
-}
+// Responsive adjustments
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr !important;
+  }
 
-button[type="submit"] {
-  margin-top: 1.5rem;
-  align-self: flex-start;
+  nb-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
 }
