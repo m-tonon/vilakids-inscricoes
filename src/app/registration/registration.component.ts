@@ -1,4 +1,4 @@
-import { Component, PLATFORM_ID, inject, ViewChild } from '@angular/core';
+import { Component, PLATFORM_ID, inject, viewChild, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import {
   ReactiveFormsModule,
@@ -19,6 +19,7 @@ import {
   NbDialogService,
   NbDialogModule,
   NbDialogRef,
+  NbStepperComponent,
 } from '@nebular/theme';
 
 @Component({
@@ -40,24 +41,20 @@ import {
   ],
   templateUrl: './registration.component.html',
   styleUrl: './registration.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RegistrationComponent {
-  @ViewChild('stepper') stepper: any;
-  @ViewChild('pagSeguroModal') pagSeguroModal: any;
+export class RegistrationComponent implements OnInit {
+  stepper = viewChild<NbStepperComponent>('stepper');
 
   private readonly platformId = inject(PLATFORM_ID);
   private fb = inject(FormBuilder);
-  private dialogService = inject(NbDialogService);
 
-  registrationForm: FormGroup;
-  acknowledgmentForm: FormGroup;
-  paymentForm: FormGroup;
+  registrationForm!: FormGroup;
+  acknowledgmentForm!: FormGroup;
+  paymentForm!: FormGroup;
 
   paymentConfirmed = false;
-  private dialogRef: NbDialogRef<any> | null = null; // Store dialog reference
-
-  // PagSeguro payment URL
-  private readonly pagSeguroUrl = 'https://pag.ae/7_B7ktZ7G';
+  private dialogRef?: NbDialogRef<any> | null = null;
 
   campInfo = {
     name: '5º Acampa Kids',
@@ -78,12 +75,14 @@ export class RegistrationComponent {
     description:
       'Está chegando o 5º ACAMPAKIDS da IPVO, uma ótima oportunidade para que seu filho(a) possa fortalecer a fé e desenvolver autonomia e comunhão.',
     paymentOptions: {
-      methods: ['PIX', 'Cartão de Crédito'],
-      maxInstallments: 7,
+      methods: ['PIX', 'Cartão de Crédito', 'Cartão de Débito', 'Boleto'],
+      maxInstallments: 10,
     },
   };
 
-  constructor() {
+  constructor() {}
+
+  ngOnInit(): void {
     this.acknowledgmentForm = this.fb.group({
       hasReadInfo: [false, Validators.requiredTrue],
       termsAccepted: [false, Validators.requiredTrue],
@@ -95,19 +94,18 @@ export class RegistrationComponent {
       age: ['', [Validators.required, Validators.min(6), Validators.max(11)]],
       gender: ['', Validators.required],
       identityDocument: ['', Validators.required],
-      address: ['', Validators.required],
+      address: [''],
       churchMembership: [''],
       churchName: [''],
       healthInsurance: [''],
       medications: [''],
       allergies: [''],
       specialNeeds: [''],
-      responsibleName: ['', Validators.required],
-      phoneNumber: ['', Validators.required],
-      emergencyContact: this.fb.group({
+      responsibleInfo: this.fb.group({
         name: ['', Validators.required],
         phone: ['', Validators.required],
-        relation: ['', Validators.required],
+        relation: [''],
+        document: ['', Validators.required],
       }),
       parentalAuthorization: [false, Validators.requiredTrue],
     });
@@ -143,41 +141,69 @@ export class RegistrationComponent {
   }
 
   openPayment() {
-    if (isPlatformBrowser(this.platformId)) {
-      // Open PagSeguro in a new window
-      window.open(this.pagSeguroUrl, '_blank');
+    // if (isPlatformBrowser(this.platformId)) {
+    //   window.open(this.pagSeguroUrl, '_blank');
 
-      // Open confirmation modal and store the dialog reference
-      this.dialogRef = this.dialogService.open(this.pagSeguroModal, {
-        hasBackdrop: true,
-        closeOnBackdropClick: false,
-      });
+    //   this.dialogRef = this.dialogService.open(this.pagSeguroModal()!, {
+    //     hasBackdrop: true,
+    //     closeOnBackdropClick: false,
+    //   });
 
-      // Handle dialog close
-      this.dialogRef.onClose.subscribe((success: boolean) => {
-        if (success) {
-          this.paymentForm.patchValue({ paymentConfirmed: true });
-          this.stepper.next(); // Move to confirmation step
-        }
-        this.dialogRef = null; // Clear reference
-      });
-    }
+    //   this.dialogRef.onClose.subscribe((success: boolean) => {
+    //     if (success) {
+    //       this.paymentForm.patchValue({ paymentConfirmed: true });
+    //       this.stepper()?.next();
+    //     }
+    //     this.dialogRef = null;
+    //   });
+    // }
   }
 
   confirmPayment(success: boolean) {
     this.paymentConfirmed = success;
     if (this.dialogRef) {
-      this.dialogRef.close(success); // Close dialog with success status
+      this.dialogRef.close(success);
     }
   }
 
   dismiss() {
     if (this.dialogRef) {
-      this.dialogRef.close(false); // Close dialog without confirming payment
+      this.dialogRef.close(false);
     }
   }
 
   calculateInstallments(totalValue: number, installments: number): number {
     return totalValue / installments;
+  }
+
+  getFieldStatus(fieldName: string): string {
+    const field =
+      this.registrationForm.get(fieldName) ||
+      this.acknowledgmentForm.get(fieldName) ||
+      this.paymentForm.get(fieldName);
+
+    if (!field) {
+      console.warn(`Field '${fieldName}' not found in any form.`);
+      return 'basic';
+    }
+
+    if (field.invalid && field.touched) {
+      if (field.errors?.['required']) {
+        return 'danger';
+      }
+      if (field.errors?.['min']) {
+        return 'danger';
+      }
+      if (field.errors?.['max']) {
+        return 'danger';
+      }
+    }
+
+    return 'basic';
+  }
+
+  goToNextStep() {
+    this.stepper()?.next();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }
