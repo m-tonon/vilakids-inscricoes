@@ -4,6 +4,9 @@
       <h1>{{ campInfo.name }}</h1>
     </nb-card-header>
     <nb-card-body style="padding: 1rem">
+      @if(isPaymentConfirmed()) {
+      <ng-container *ngTemplateOutlet="paymentCompleted"></ng-container>
+      } @else {
       <nb-stepper orientation="horizontal" #stepper>
         <!-- Step 1: Camp Information and Acknowledgment -->
         <nb-step [stepControl]="acknowledgmentForm" label="Informações">
@@ -153,8 +156,8 @@
                   formControlName="gender"
                   [status]="getFieldStatus('gender')"
                 >
-                  <nb-option value="Feminino">Feminino</nb-option>
                   <nb-option value="Masculino">Masculino</nb-option>
+                  <nb-option value="Feminino">Feminino</nb-option>
                 </nb-select>
                 @if (getFieldStatus('gender') === 'danger') {
                 <span class="error-message"> O gênero é obrigatório. </span>
@@ -290,7 +293,8 @@
                     nbInput
                     fullWidth
                     formControlName="document"
-                    placeholder="CPF ou RG"
+                    mask="000.000.000-00"
+                    placeholder="CPF"
                     [status]="getFieldStatus('responsibleInfo.document')"
                   />
                   @if (getFieldStatus('responsibleInfo.document') === 'danger')
@@ -307,12 +311,30 @@
                     nbInput
                     fullWidth
                     formControlName="phone"
+                    mask="(00) 00000-0000"
                     placeholder="(00) 00000-0000"
                     [status]="getFieldStatus('responsibleInfo.phone')"
                   />
                   @if (getFieldStatus('responsibleInfo.phone') === 'danger') {
                   <span class="error-message">
                     O telefone do responsável é obrigatório.
+                  </span>
+                  }
+                </nb-form-field>
+
+                <nb-form-field>
+                  <label>Email *</label>
+                  <input
+                    nbInput
+                    fullWidth
+                    formControlName="email"
+                    placeholder="@"
+                    [status]="getFieldStatus('responsibleInfo.email')"
+                  />
+                  @if (getFieldStatus('responsibleInfo.email') === 'danger') {
+                  <span class="error-message">
+                    O email do responsável é necessário para processar o
+                    pagamento.
                   </span>
                   }
                 </nb-form-field>
@@ -362,7 +384,7 @@
         </nb-step>
 
         <!-- Step 3: Payment Information -->
-        <nb-step [stepControl]="paymentForm" label="Pagamento">
+        <nb-step [stepControl]="registrationForm" label="Pagamento">
           <div class="payment-step">
             <div class="payment-info-box">
               <h3>Valor do Investimento</h3>
@@ -397,59 +419,46 @@
                   PagSeguro e retornar para esta página.
                 </p>
                 <div class="button-container">
+                  @if(isLoading()) {
+                  <ng-container *ngTemplateOutlet="spinner"></ng-container>
+                  } @else {
                   <button nbButton status="primary" (click)="openPayment()">
                     <nb-icon icon="credit-card-outline"></nb-icon>
                     Ir para pagamento
                   </button>
+                  }
                 </div>
               </nb-card-body>
             </nb-card>
           </div>
         </nb-step>
-
-        <!-- Step 4: Confirmation -->
-        <nb-step [hidden]="!paymentForm.valid" label="Confirmação">
-          <div class="confirmation-message">
-            <nb-icon
-              icon="checkmark-circle-2-outline"
-              status="success"
-            ></nb-icon>
-            <h2>Inscrição Realizada com Sucesso!</h2>
-            <p>Aguarde o contato da nossa equipe com as próximas instruções.</p>
-            <p>Em caso de dúvidas, entre em contato com:</p>
-            @for (contact of campInfo.contacts; track contact.phone) {
-            <p>
-              <strong>{{ contact.name }}:</strong> {{ contact.phone }}
-            </p>
-            }
-          </div>
-        </nb-step>
       </nb-stepper>
+      }
     </nb-card-body>
   </nb-card>
 </div>
 
-<!-- 
-<ng-template #pagSeguroModal>
-  <nb-card class="modal">
-    <nb-card-header class="modal-header">
-      <h3>Confirmação de Pagamento</h3>
-      <button nbButton ghost (click)="dismiss()">
-        <nb-icon icon="close-outline"></nb-icon>
-      </button>
-    </nb-card-header>
-    <nb-card-body class="modal-body">
-      <p>O pagamento foi realizado com sucesso?</p>
-      <div class="button-container">
-        <button nbButton status="success" (click)="confirmPayment(true)">
-          <nb-icon icon="checkmark-outline"></nb-icon>
-          Sim, pagamento realizado
-        </button>
-        <button nbButton status="danger" (click)="confirmPayment(false)">
-          <nb-icon icon="close-outline"></nb-icon>
-          Não, houve um problema
-        </button>
-      </div>
-    </nb-card-body>
+<ng-template #paymentCompleted>
+  <div class="confirmation-message">
+    <nb-icon icon="checkmark-circle-2-outline" status="success"></nb-icon>
+    <h2>Inscrição realizada com sucesso!</h2>
+    <p>
+      Seu pagamento ainda está em processo de confirmação.<br />
+      Por favor, aguarde a validação e o contato da nossa equipe com as próximas
+      instruções.
+    </p>
+    <br />
+    <p>Em caso de dúvidas, entre em contato com:</p>
+    @for (contact of campInfo.contacts; track contact.phone) {
+    <p>
+      <strong>{{ contact.name }}:</strong> {{ contact.phone }}
+    </p>
+    }
+  </div>
+</ng-template>
+
+<ng-template #spinner>
+  <nb-card [nbSpinner]="isLoading()" nbSpinnerStatus="info">
+    <nb-card-body> </nb-card-body>
   </nb-card>
-</ng-template> -->
+</ng-template>

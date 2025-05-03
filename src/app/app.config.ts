@@ -10,6 +10,7 @@ import {
   NbStepperModule,
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
+import { provideHttpClient } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,7 +22,8 @@ export const appConfig: ApplicationConfig = {
       NbDialogModule.forRoot(),
       NbIconModule,
       NbEvaIconsModule,
-      NbStepperModule
+      NbStepperModule,
     ),
+    provideHttpClient(),
   ],
 };

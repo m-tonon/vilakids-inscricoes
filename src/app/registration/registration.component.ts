@@ -1,4 +1,12 @@
-import { Component, PLATFORM_ID, inject, viewChild, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import {
+  Component,
+  PLATFORM_ID,
+  inject,
+  viewChild,
+  ChangeDetectionStrategy,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import {
   ReactiveFormsModule,
@@ -16,11 +24,20 @@ import {
   NbIconModule,
   NbStepperModule,
   NbCheckboxModule,
-  NbDialogService,
   NbDialogModule,
-  NbDialogRef,
   NbStepperComponent,
+  NbSpinnerModule,
 } from '@nebular/theme';
+import { RegistrationService } from '../services/registration.service';
+import { PaymentService } from '../services/payment.service';
+import {
+  PagBankResponse,
+  PaymentData,
+  RegistrationFormData,
+  SaveRegistrationResponse,
+} from '../types';
+import { ActivatedRoute } from '@angular/router';
+import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 
 @Component({
   selector: 'app-registration',
@@ -38,6 +55,8 @@ import {
     NbStepperModule,
     NbCheckboxModule,
     NbDialogModule,
+    NbSpinnerModule,
+    NgxMaskDirective,
   ],
   templateUrl: './registration.component.html',
   styleUrl: './registration.component.scss',
@@ -45,22 +64,25 @@ import {
 })
 export class RegistrationComponent implements OnInit {
   stepper = viewChild<NbStepperComponent>('stepper');
-
   private readonly platformId = inject(PLATFORM_ID);
+  private registrationService = inject(RegistrationService);
+  private paymentService = inject(PaymentService);
   private fb = inject(FormBuilder);
+  private route = inject(ActivatedRoute);
 
   registrationForm!: FormGroup;
   acknowledgmentForm!: FormGroup;
   paymentForm!: FormGroup;
 
-  paymentConfirmed = false;
-  private dialogRef?: NbDialogRef<any> | null = null;
+  submissionMessage: string | null = null;
+  isPaymentConfirmed = signal(false);
+  isLoading = signal(false);
 
   campInfo = {
     name: '5º Acampa Kids',
     dates: '03, 04 e 05 de outubro de 2025',
     location: 'Acampamento Evangélico Maanaim',
-    price: 210.0,
+    price: 230.0,
     minAge: 6,
     maxAge: 11,
     preletor: {
@@ -83,6 +105,14 @@ export class RegistrationComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
+    this.route.queryParamMap.subscribe((params) => {
+      const paymentConfirmed = params.get('paymentCompleted');
+      if (paymentConfirmed) {
+        this.isPaymentConfirmed.set(true);
+        this.submissionMessage = 'Payment confirmed successfully!';
+      }
+    });
+
     this.acknowledgmentForm = this.fb.group({
       hasReadInfo: [false, Validators.requiredTrue],
       termsAccepted: [false, Validators.requiredTrue],
@@ -103,16 +133,12 @@ export class RegistrationComponent implements OnInit {
       specialNeeds: [''],
       responsibleInfo: this.fb.group({
         name: ['', Validators.required],
-        phone: ['', Validators.required],
-        relation: [''],
         document: ['', Validators.required],
+        phone: ['', Validators.required],
+        email: ['', Validators.required],
+        relation: [''],
       }),
       parentalAuthorization: [false, Validators.requiredTrue],
-    });
-
-    this.paymentForm = this.fb.group({
-      paymentMethod: ['PagSeguro', Validators.required],
-      paymentConfirmed: [false, Validators.requiredTrue],
     });
   }
 
@@ -124,56 +150,66 @@ export class RegistrationComponent implements OnInit {
     return this.registrationForm.valid;
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (
       isPlatformBrowser(this.platformId) &&
       this.acknowledgmentForm.valid &&
-      this.registrationForm.valid &&
-      this.paymentForm.valid
+      this.registrationForm.valid
     ) {
-      const formData = {
-        ...this.registrationForm.value,
-        payment: this.paymentForm.value,
-        acknowledgment: this.acknowledgmentForm.value,
-      };
-      console.log('Form submitted:', formData);
+      this.isLoading.set(true);
+
+      const formData: RegistrationFormData = this.registrationForm.value;
+
+      this.registrationService.saveRegistration(formData).subscribe({
+        next: (response: SaveRegistrationResponse) => {
+          this.submissionMessage =
+            response.message || 'Registration successful!';
+          this.isLoading.set(false);
+        },
+        error: (error) => {
+          console.error('Error during registration:', error);
+          this.submissionMessage =
+            'Failed to submit registration. Please try again.';
+          this.isLoading.set(false);
+        },
+      });
+    } else {
+      this.submissionMessage = 'Please fill out all required fields.';
     }
   }
 
-  openPayment() {
-    // if (isPlatformBrowser(this.platformId)) {
-    //   window.open(this.pagSeguroUrl, '_blank');
+  openPayment(): void {
+    this.isLoading.set(true);
 
-    //   this.dialogRef = this.dialogService.open(this.pagSeguroModal()!, {
-    //     hasBackdrop: true,
-    //     closeOnBackdropClick: false,
-    //   });
-
-    //   this.dialogRef.onClose.subscribe((success: boolean) => {
-    //     if (success) {
-    //       this.paymentForm.patchValue({ paymentConfirmed: true });
-    //       this.stepper()?.next();
-    //     }
-    //     this.dialogRef = null;
-    //   });
-    // }
-  }
-
-  confirmPayment(success: boolean) {
-    this.paymentConfirmed = success;
-    if (this.dialogRef) {
-      this.dialogRef.close(success);
+    const paymentData: PaymentData = {
+      checkoutId: '',
+      paymentConfirmed: false,
+      name: this.registrationForm.get('responsibleInfo.name')?.value,
+      cpf: this.registrationForm.get('responsibleInfo.document')?.value,
+      phone: this.registrationForm.get('responsibleInfo.phone')?.value,
+      email: this.registrationForm.get('responsibleInfo.email')?.value,
     }
-  }
 
-  dismiss() {
-    if (this.dialogRef) {
-      this.dialogRef.close(false);
-    }
-  }
-
-  calculateInstallments(totalValue: number, installments: number): number {
-    return totalValue / installments;
+    this.paymentService.createCheckoutPage(paymentData).subscribe({
+      next: (response: PagBankResponse) => {
+        const payLink = response.links.find((r) => r.rel === 'PAY');
+        if (payLink && payLink.href) {
+          const checkoutUrl = payLink.href;
+          window.location.href = checkoutUrl;
+        } else {
+          console.error('PAY link not found in response.');
+          this.submissionMessage =
+            'Failed to initiate payment. Please try again.';
+        }
+        this.isLoading.set(false);
+      },
+      error: (error) => {
+        console.error('Error initiating payment:', error);
+        this.submissionMessage =
+          'Failed to initiate payment. Please try again.';
+        this.isLoading.set(false);
+      },
+    });
   }
 
   getFieldStatus(fieldName: string): string {
