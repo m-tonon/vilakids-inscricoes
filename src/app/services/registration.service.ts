@@ -14,6 +14,6 @@ export class RegistrationService {
   saveRegistration(registrationForm: RegistrationFormData): Observable<SaveRegistrationResponse> {
     const url = `${this.apiUrl}/save-registration`;
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post(this.apiUrl, registrationForm, { headers });
+    return this.http.post(url, registrationForm, { headers, withCredentials: true });
   }
 }

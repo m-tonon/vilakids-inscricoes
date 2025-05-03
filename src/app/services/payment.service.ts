@@ -14,12 +14,12 @@ export class PaymentService {
   createCheckoutPage(paymentRequest: PaymentData): Observable<PagBankResponse> {
     const url = `${this.apiUrl}/checkout_page`;
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post<PagBankResponse>(url, paymentRequest, { headers });
+    return this.http.post<PagBankResponse>(url, paymentRequest, { headers, withCredentials: true });
   }
 
   handleNotifications(notificationData: any): Observable<any> {
     const url = `${this.apiUrl}/notifications`;
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post(url, notificationData, { headers });
+    return this.http.post(url, notificationData, { headers, withCredentials: true });
   }
 }
