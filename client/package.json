@@ -2,12 +2,12 @@
   "name": "ipvo-camp-registration",
   "version": "0.0.0",
   "scripts": {
-    "ng": "cd client && ng",
-    "start": "cd client && ng serve",
-    "build": "cd client && ng build",
-    "watch": "cd client && ng build --watch --configuration development",
-    "test": "cd client && ng test",
-    "serve:ssr:ipvo-camp-registration": "node client/dist/ipvo-camp-registration/server/server.mjs"
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "serve:ssr:ipvo-camp-registration": "node dist/ipvo-camp-registration/server/server.mjs"
   },
   "private": true,
   "dependencies": {
