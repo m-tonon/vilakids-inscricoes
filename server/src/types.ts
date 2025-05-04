@@ -7,7 +7,7 @@ export interface PaymentData {
   phone?: string;
 }
 
-export interface FormData {
+export interface RegistrationFormData {
   childName: string;
   birthDate: string;
   age: number;
@@ -20,8 +20,12 @@ export interface FormData {
   medications: string;
   allergies: string;
   specialNeeds: string;
-  responsibleName: string;
-  phoneNumber: string;
+  responsibleInfo: {
+    name: string;
+    phone: string;
+    relation: string;
+    document: string;
+  };
   parentalAuthorization: boolean;
   payment: PaymentData;
 }

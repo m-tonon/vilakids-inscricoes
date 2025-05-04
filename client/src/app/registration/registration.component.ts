@@ -72,9 +72,9 @@ export class RegistrationComponent implements OnInit {
 
   registrationForm!: FormGroup;
   acknowledgmentForm!: FormGroup;
-  paymentForm!: FormGroup;
 
   submissionMessage: string | null = null;
+  isRegistrationComplete = signal(false);
   isPaymentConfirmed = signal(false);
   isLoading = signal(false);
 
@@ -133,12 +133,16 @@ export class RegistrationComponent implements OnInit {
       specialNeeds: [''],
       responsibleInfo: this.fb.group({
         name: ['', Validators.required],
-        document: ['', Validators.required],
-        phone: ['', Validators.required],
-        email: ['', Validators.required],
+        document: ['', [Validators.required, Validators.minLength(11)]],
+        phone: ['', [Validators.required, Validators.minLength(11)]],
+        email: ['', [Validators.required, Validators.email]],
         relation: [''],
       }),
       parentalAuthorization: [false, Validators.requiredTrue],
+      payment: this.fb.group({
+        checkoutId: [''],
+        paymentConfirmed: [false],
+      }),
     });
   }
 
@@ -164,12 +168,15 @@ export class RegistrationComponent implements OnInit {
         next: (response: SaveRegistrationResponse) => {
           this.submissionMessage =
             response.message || 'Registration successful!';
+          this.isRegistrationComplete.set(true);
           this.isLoading.set(false);
         },
         error: (error) => {
           console.error('Error during registration:', error);
           this.submissionMessage =
             'Failed to submit registration. Please try again.';
+
+            this.isRegistrationComplete.set(true);
           this.isLoading.set(false);
         },
       });
@@ -185,11 +192,10 @@ export class RegistrationComponent implements OnInit {
       checkoutId: '',
       paymentConfirmed: false,
       name: this.registrationForm.get('responsibleInfo.name')?.value,
-      cpf: this.registrationForm.get('responsibleInfo.document')?.value,
+      cpf: this.registrationForm.get('responsibleInfo.document')?.value.replace(/\D/g, ''),
       phone: this.registrationForm.get('responsibleInfo.phone')?.value,
       email: this.registrationForm.get('responsibleInfo.email')?.value,
     }
-
     this.paymentService.createCheckoutPage(paymentData).subscribe({
       next: (response: PagBankResponse) => {
         const payLink = response.links.find((r) => r.rel === 'PAY');
@@ -214,9 +220,7 @@ export class RegistrationComponent implements OnInit {
 
   getFieldStatus(fieldName: string): string {
     const field =
-      this.registrationForm.get(fieldName) ||
-      this.acknowledgmentForm.get(fieldName) ||
-      this.paymentForm.get(fieldName);
+      this.registrationForm.get(fieldName) || this.acknowledgmentForm.get(fieldName)
 
     if (!field) {
       console.warn(`Field '${fieldName}' not found in any form.`);
@@ -232,6 +236,12 @@ export class RegistrationComponent implements OnInit {
       }
       if (field.errors?.['max']) {
         return 'danger';
+      }
+      if (field.errors?.['email']) {
+        return 'warning';
+      }
+      if (field.errors?.['minlength'] || field.errors?.['maxlength']) {
+        return 'warning';
       }
     }
 

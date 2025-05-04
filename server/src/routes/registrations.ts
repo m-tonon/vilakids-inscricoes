@@ -1,6 +1,6 @@
 import { Router, RequestHandler } from 'express';
 import axios from 'axios';
-import { FormData } from '../types';
+import { RegistrationFormData } from '../types';
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -9,14 +9,22 @@ const router = Router();
 
 const APPS_SCRIPT_URL = process.env['APPS_SCRIPT_URL']!;
 
-const saveRegistration: RequestHandler<{}, any, FormData, any> = async (req, res) => {
+const saveRegistration: RequestHandler<{}, any, RegistrationFormData, any> = async (req, res) => {
   try {
-    const formData: FormData = req.body;
+    const formData: RegistrationFormData = req.body;
 
     // Validate required fields
-    if (!formData.childName || !formData.responsibleName) {
+    if (
+      !formData.childName ||
+      !formData.responsibleInfo.name ||
+      !formData.responsibleInfo.document ||
+      !formData.responsibleInfo.phone ||
+      !formData.parentalAuthorization
+    ) {
       console.warn('Invalid request payload:', formData);
-      res.status(400).json({ error: 'Missing required fields or payment not confirmed' });
+      res
+        .status(400)
+        .json({ error: 'Missing required fields or payment not confirmed' });
       return;
     }
 
