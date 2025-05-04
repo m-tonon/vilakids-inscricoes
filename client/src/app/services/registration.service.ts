@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { RegistrationFormData, SaveRegistrationResponse } from '../types';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RegistrationService {
-  private apiUrl = 'https://vilakids-backend.vercel.app/registrations';
+  private apiUrl = `${environment.apiBaseUrl}/api/registrations`;
+
 
   constructor(private http: HttpClient) {}
 
