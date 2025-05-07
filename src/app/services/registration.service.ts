@@ -8,7 +8,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root',
 })
 export class RegistrationService {
-  private apiUrl = `${environment.apiBaseUrl}/api/registrations`;
+  private apiUrl = `${environment.apiBaseUrl}/registrations`;
 
 
   constructor(private http: HttpClient) {}

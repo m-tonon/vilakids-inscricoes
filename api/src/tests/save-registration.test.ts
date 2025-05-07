@@ -18,8 +18,12 @@ describe('Save registration data', () => {
       medications: "None",
       allergies: "Peanuts",
       specialNeeds: "None",
-      responsibleName: "Jane Doe",
-      phoneNumber: "555-1234",
+      responsibleInfo: {
+        name: "Jane Doe",
+        document: "987654321",
+        phone: "555-1234",
+        relation: "Mother",
+      },
       parentalAuthorization: true,
       payment: {
         checkoutId: 'CHEC_49AF342C-0007-49F9-9460-32A5496218C5',
