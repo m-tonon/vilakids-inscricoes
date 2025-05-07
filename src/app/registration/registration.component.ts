@@ -38,6 +38,7 @@ import {
 } from '../types';
 import { ActivatedRoute } from '@angular/router';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-registration',
@@ -73,10 +74,10 @@ export class RegistrationComponent implements OnInit {
   registrationForm!: FormGroup;
   acknowledgmentForm!: FormGroup;
 
-  submissionMessage: string | null = null;
   isRegistrationComplete = signal(false);
   isPaymentConfirmed = signal(false);
   isLoading = signal(false);
+  checkoutUrl: string = '';
 
   campInfo = {
     name: '5º Acampa Kids',
@@ -109,7 +110,6 @@ export class RegistrationComponent implements OnInit {
       const paymentConfirmed = params.get('paymentCompleted');
       if (paymentConfirmed) {
         this.isPaymentConfirmed.set(true);
-        this.submissionMessage = 'Payment confirmed successfully!';
       }
     });
 
@@ -164,63 +164,51 @@ export class RegistrationComponent implements OnInit {
 
       const formData: RegistrationFormData = this.registrationForm.value;
 
-      this.registrationService.saveRegistration(formData).subscribe({
+      const paymentData: PaymentData = {
+        checkoutId: '',
+        paymentConfirmed: false,
+        name: formData.responsibleInfo.name,
+        cpf: formData.responsibleInfo.document.replace(/\D/g, ''),
+        phone: formData.responsibleInfo.phone,
+        email: formData.responsibleInfo.email,
+      };
+
+      this.paymentService.createCheckoutPage(paymentData).pipe(
+        switchMap((response: PagBankResponse) => {
+          const payLink = response.links.find((r) => r.rel === 'PAY');
+          if (payLink && payLink.href) {
+            this.checkoutUrl = payLink.href;
+            formData.payment.checkoutId = response.id;
+            return this.registrationService.saveRegistration(formData);
+          } else {
+            throw new Error('PAY link not found in response.');
+          }
+        })
+      ).subscribe({
         next: (response: SaveRegistrationResponse) => {
-          this.submissionMessage =
-            response.message || 'Registration successful!';
+          console.log('Registration and payment data saved successfully:', response);
           this.isRegistrationComplete.set(true);
           this.isLoading.set(false);
         },
         error: (error) => {
-          console.error('Error during registration:', error);
-          this.submissionMessage =
-            'Failed to submit registration. Please try again.';
-
-            this.isRegistrationComplete.set(true);
+          console.error('Error during registration or payment:', error);
           this.isLoading.set(false);
         },
       });
-    } else {
-      this.submissionMessage = 'Please fill out all required fields.';
     }
   }
 
-  openPayment(): void {
-    this.isLoading.set(true);
-
-    const paymentData: PaymentData = {
-      checkoutId: '',
-      paymentConfirmed: false,
-      name: this.registrationForm.get('responsibleInfo.name')?.value,
-      cpf: this.registrationForm.get('responsibleInfo.document')?.value.replace(/\D/g, ''),
-      phone: this.registrationForm.get('responsibleInfo.phone')?.value,
-      email: this.registrationForm.get('responsibleInfo.email')?.value,
+  openPaymentPage(): void {
+    if (this.checkoutUrl) {
+      window.location.href = this.checkoutUrl;
+    } else {
+      console.error('Checkout URL is not set. Cannot open payment page.');
     }
-    this.paymentService.createCheckoutPage(paymentData).subscribe({
-      next: (response: PagBankResponse) => {
-        const payLink = response.links.find((r) => r.rel === 'PAY');
-        if (payLink && payLink.href) {
-          const checkoutUrl = payLink.href;
-          window.location.href = checkoutUrl;
-        } else {
-          console.error('PAY link not found in response.');
-          this.submissionMessage =
-            'Failed to initiate payment. Please try again.';
-        }
-        this.isLoading.set(false);
-      },
-      error: (error) => {
-        console.error('Error initiating payment:', error);
-        this.submissionMessage =
-          'Failed to initiate payment. Please try again.';
-        this.isLoading.set(false);
-      },
-    });
   }
 
   getFieldStatus(fieldName: string): string {
     const field =
-      this.registrationForm.get(fieldName) || this.acknowledgmentForm.get(fieldName)
+      this.registrationForm.get(fieldName) || this.acknowledgmentForm.get(fieldName);
 
     if (!field) {
       console.warn(`Field '${fieldName}' not found in any form.`);

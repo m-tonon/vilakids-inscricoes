@@ -302,8 +302,8 @@
                   <span class="error-message">
                     O documento do responsável é obrigatório.
                   </span>
-                  }
-                  @if (getFieldStatus('responsibleInfo.document') === 'warning') {
+                  } @if (getFieldStatus('responsibleInfo.document') ===
+                  'warning') {
                   <span class="error-message">
                     O CPF deve conter 11 caracteres. Por favor, corrija.
                   </span>
@@ -324,12 +324,12 @@
                   <span class="error-message">
                     O telefone do responsável é obrigatório.
                   </span>
+                  } @if (getFieldStatus('responsibleInfo.phone') === 'warning')
+                  {
+                  <span class="error-message">
+                    O telefone deve conter 11 dígitos. Por favor, corrija.
+                  </span>
                   }
-                  @if (getFieldStatus('responsibleInfo.phone') === 'warning') {
-                    <span class="error-message">
-                      O telefone deve conter 11 dígitos. Por favor, corrija.
-                    </span>
-                    }
                 </nb-form-field>
 
                 <nb-form-field>
@@ -343,12 +343,14 @@
                   />
                   @if (getFieldStatus('responsibleInfo.email') === 'danger') {
                   <span class="error-message">
-                    O email do responsável é necessário para processar o pagamento.
+                    O email do responsável é necessário para processar o
+                    pagamento.
                   </span>
-                  }
-                  @if (getFieldStatus('responsibleInfo.email') === 'warning') {
+                  } @if (getFieldStatus('responsibleInfo.email') === 'warning')
+                  {
                   <span class="error-message">
-                    O formato do email está incorreto. Por favor, insira um email válido.
+                    O formato do email está incorreto. Por favor, insira um
+                    email válido.
                   </span>
                   }
                 </nb-form-field>
@@ -419,6 +421,9 @@
               </div>
             </div>
 
+            @if(isLoading()) {
+            <ng-container *ngTemplateOutlet="spinner"></ng-container>
+            } @else {
             <nb-card>
               <nb-card-header>
                 <h3>Pagamento via PagSeguro</h3>
@@ -433,25 +438,24 @@
                   PagSeguro e retornar para esta página.
                 </p>
                 <div class="button-container">
-                  @if(isLoading()) {
-                  <ng-container *ngTemplateOutlet="spinner"></ng-container>
-                  } @else {
                   <button
                     nbButton
                     status="primary"
-                    (click)="openPayment()"
+                    (click)="openPaymentPage()"
                     [disabled]="isRegistrationComplete()"
                   >
                     <nb-icon icon="credit-card-outline"></nb-icon>
                     Ir para pagamento
                   </button>
-                  }
                 </div>
                 <div class="button-container">
-                  <button nbButton status="basic" nbStepperPrevious>Voltar</button>
+                  <button nbButton status="basic" nbStepperPrevious>
+                    Voltar
+                  </button>
                 </div>
               </nb-card-body>
             </nb-card>
+            }
           </div>
         </nb-step>
       </nb-stepper>
@@ -480,7 +484,7 @@
 </ng-template>
 
 <ng-template #spinner>
-  <nb-card [nbSpinner]="isLoading()" nbSpinnerStatus="info">
-    <nb-card-body> </nb-card-body>
+  <nb-card [nbSpinner]="isLoading()" class="spinner" nbSpinnerStatus="info">
+    <nb-card-body></nb-card-body>
   </nb-card>
 </ng-template>

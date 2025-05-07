@@ -25,6 +25,7 @@ export interface RegistrationFormData {
     phone: string;
     relation: string;
     document: string;
+    email: string;
   };
   parentalAuthorization: boolean;
   payment: PaymentData;

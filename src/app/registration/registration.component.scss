@@ -341,6 +341,10 @@ nb-card-header {
   margin: 0 auto;
   padding: 1rem;
 
+  .spinner {
+    height: 6rem;
+  }
+
   .payment-info-box {
     background: nb-theme(background-basic-color-2);
     border-radius: 0.75rem;
