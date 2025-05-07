@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import axios from 'axios';
 
-const baseURL = 'http://localhost:3000/registrations';
+const baseURL = 'http://localhost:3000/api/registrations';
 
 describe('Save registration data', () => {
   it('should successfully save registration data', async () => {

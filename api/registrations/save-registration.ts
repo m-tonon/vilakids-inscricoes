@@ -1,11 +1,13 @@
-import { Router, RequestHandler } from 'express';
+import serverless from 'serverless-http';
+import express, { RequestHandler } from 'express';
 import axios from 'axios';
-import { RegistrationFormData } from '../types';
-
 import dotenv from 'dotenv';
+import { RegistrationFormData } from '../interfaces/types';
+
 dotenv.config();
 
-const router = Router();
+const app = express();
+app.use(express.json());
 
 const APPS_SCRIPT_URL = process.env['APPS_SCRIPT_URL']!;
 
@@ -58,6 +60,5 @@ const saveRegistration: RequestHandler<{}, any, RegistrationFormData, any> = asy
   }
 };
 
-router.post('/save-registration', saveRegistration);
-
-export default router;
+app.post('/save-registration', saveRegistration);
+export const handler = serverless(app);

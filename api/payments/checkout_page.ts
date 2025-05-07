@@ -1,27 +1,24 @@
-import { Router, Request, Response, RequestHandler } from 'express';
+import serverless from 'serverless-http';
+import express from 'express';
 import axios from 'axios';
-import { PaymentData } from '../types';
-
 import dotenv from 'dotenv';
+import { PaymentData } from '../interfaces/types';
+
 dotenv.config();
 
-const router = Router();
+const app = express();
+app.use(express.json());
 
-// Configuration
 const PAGBANK_TOKEN = process.env['PAGBANK_TOKEN']!;
 const PAGBANK_API_URL = process.env['PAGBANK_API_URL']!;
-
 const NOTIFICATION_URL = process.env['NOTIFICATION_URL']!;
 const APPS_SCRIPT_URL = process.env['APPS_SCRIPT_URL']!;
 
-// Added validation for environment variables
-if (!PAGBANK_TOKEN || !PAGBANK_API_URL || !NOTIFICATION_URL) {
-  throw new Error(
-    'Missing required environment variables for PagBank integration'
-  );
+if (!PAGBANK_TOKEN || !PAGBANK_API_URL || !NOTIFICATION_URL || !APPS_SCRIPT_URL) {
+  throw new Error('Missing required environment variables');
 }
 
-const createCheckoutPage: RequestHandler<{}, any, PaymentData, any> = async (req, res) => {
+app.post('/checkout_page', async (req, res) => {
   try {
     const payment: PaymentData = req.body;
 
@@ -93,36 +90,6 @@ const createCheckoutPage: RequestHandler<{}, any, PaymentData, any> = async (req
     );
     res.status(500).json({ error: 'Error creating checkout page' });
   }
-};
-
-// Notification Endpoint
-router.post('/notifications', async (req: Request, res: Response) => {
-  try {
-    const charge = req.body.charges?.[0];
-    if (!charge || charge.status !== 'PAID') {
-      res.status(200).send('No payment confirmation to process');
-      return;
-    }
-
-    const checkoutId = charge.id;
-    if (!checkoutId) {
-      res.status(400).send('Missing referenceId');
-      return;
-    }
-
-    await axios.post(APPS_SCRIPT_URL, {
-      type: 'payment-confirmation',
-      checkoutId: `${checkoutId}`,
-    });
-
-    console.log(`Payment confirmed and sheet updated for ${checkoutId}`);
-    res.status(200).send('Payment handled');
-  } catch (error) {
-    console.error('Error in notification processing:', error);
-    res.status(500).send('Error updating Google Sheet');
-  }
 });
 
-router.post('/checkout_page', createCheckoutPage);
-
-export default router;
+export const handler = serverless(app);

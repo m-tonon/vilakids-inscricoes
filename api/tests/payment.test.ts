@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import axios from 'axios';
 
-const baseURL = 'http://localhost:3000/payments';
+const baseURL = 'http://localhost:3000/api/payments';
 
 describe('Return checkout payment links', () => {
   it('should validate the PagBank response structure', async () => {
