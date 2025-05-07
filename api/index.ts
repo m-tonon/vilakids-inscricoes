@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import paymentsRoutes from './src/routes/payments';
 import registrationsRoutes from './src/routes/registrations';
+import serverless from 'serverless-http';
 
 dotenv.config();
 
@@ -25,7 +26,5 @@ app.use(express.json());
 app.use('/api/payments', paymentsRoutes);
 app.use('/api/registrations', registrationsRoutes);
 
-// Start the server
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
+// Export as serverless function
+export const handler = serverless(app);
