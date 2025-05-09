@@ -1,7 +1,7 @@
-import serverless from 'serverless-http';
 import express from 'express';
 import axios from 'axios';
 import dotenv from 'dotenv';
+import serverless from 'serverless-http';
 import { PaymentData } from '../interfaces/types';
 
 dotenv.config();
@@ -18,7 +18,7 @@ if (!PAGBANK_TOKEN || !PAGBANK_API_URL || !NOTIFICATION_URL || !APPS_SCRIPT_URL)
   throw new Error('Missing required environment variables');
 }
 
-app.post('/checkout_page', async (req, res) => {
+app.post('/', async (req, res) => {
   try {
     const payment: PaymentData = req.body;
 
@@ -92,4 +92,4 @@ app.post('/checkout_page', async (req, res) => {
   }
 });
 
-export const handler = serverless(app);
+export default serverless(app);

@@ -1,7 +1,7 @@
-import serverless from 'serverless-http';
 import express from 'express';
 import axios from 'axios';
 import dotenv from 'dotenv';
+import serverless from 'serverless-http';
 
 dotenv.config();
 
@@ -10,7 +10,7 @@ app.use(express.json());
 
 const APPS_SCRIPT_URL = process.env['APPS_SCRIPT_URL']!;
 
-app.post('/notifications', async (req, res) => {
+app.post('/', async (req, res) => {
   try {
     const charge = req.body.charges?.[0];
     if (!charge || charge.status !== 'PAID') {
@@ -37,4 +37,4 @@ app.post('/notifications', async (req, res) => {
   }
 });
 
-export const handler = serverless(app);
+export default serverless(app);

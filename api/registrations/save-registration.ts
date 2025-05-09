@@ -1,7 +1,7 @@
-import serverless from 'serverless-http';
 import express, { RequestHandler } from 'express';
 import axios from 'axios';
 import dotenv from 'dotenv';
+import serverless from 'serverless-http';
 import { RegistrationFormData } from '../interfaces/types';
 
 dotenv.config();
@@ -60,5 +60,5 @@ const saveRegistration: RequestHandler<{}, any, RegistrationFormData, any> = asy
   }
 };
 
-app.post('/save-registration', saveRegistration);
-export const handler = serverless(app);
+app.post('/', saveRegistration);
+export default serverless(app);
