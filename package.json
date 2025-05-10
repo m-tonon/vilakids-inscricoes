@@ -6,7 +6,10 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "build:api": "tsc -p tsconfig.api.json",
+    "build:all": "npm run build && npm run build:api",
+    "vercel-build": "npm run build:all"
   },
   "private": true,
   "dependencies": {

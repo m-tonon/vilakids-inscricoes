@@ -2,14 +2,22 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/**",
+      "src": "dist/ipvo-camp-registration/browser/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "api-dist/**/*.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/api/$1"
+      "dest": "/api-dist/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/dist/ipvo-camp-registration/browser/index.html"
     }
   ]
 }
