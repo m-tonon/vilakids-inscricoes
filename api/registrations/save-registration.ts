@@ -7,7 +7,6 @@ import { RegistrationFormData } from '../interfaces/types';
 dotenv.config();
 
 const app = express();
-app.use(express.json());
 
 const APPS_SCRIPT_URL = process.env['APPS_SCRIPT_URL']!;
 

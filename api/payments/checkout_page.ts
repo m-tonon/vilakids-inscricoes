@@ -6,8 +6,13 @@ import { PaymentData } from '../interfaces/types';
 
 dotenv.config();
 
+console.log('checkout_page.ts: Function file loaded');
+console.log('checkout_page.ts: APPS_SCRIPT_URL set:', !!process.env['APPS_SCRIPT_URL']);
+console.log('checkout_page.ts: PAGBANK_TOKEN set:', !!process.env['PAGBANK_TOKEN']);
+console.log('checkout_page.ts: PAGBANK_API_URL set:', !!process.env['PAGBANK_API_URL']);
+console.log('checkout_page.ts: NOTIFICATION_URL set:', !!process.env['NOTIFICATION_URL']);
+
 const app = express();
-app.use(express.json());
 
 const PAGBANK_TOKEN = process.env['PAGBANK_TOKEN']!;
 const PAGBANK_API_URL = process.env['PAGBANK_API_URL']!;
@@ -18,9 +23,19 @@ if (!PAGBANK_TOKEN || !PAGBANK_API_URL || !NOTIFICATION_URL || !APPS_SCRIPT_URL)
   throw new Error('Missing required environment variables');
 }
 
+console.log('APPS_SCRIPT_URL set:', !!process.env['APPS_SCRIPT_URL']);
+console.log('PAGBANK_TOKEN set:', !!process.env['PAGBANK_TOKEN']);
+
 app.post('/', async (req, res) => {
   try {
+    console.log('Function started at:', new Date().toISOString());
+
     const payment: PaymentData = req.body;
+    console.log('Payment data:', payment);
+
+    if (!payment?.name || !payment?.cpf) {
+      res.status(400).json({ error: 'Missing payment info' });
+    }
 
     const rawPhone = payment.phone?.replace(/\D/g, '');
 
@@ -53,7 +68,7 @@ app.post('/', async (req, res) => {
           {
             name: 'AcampaKids 2025',
             quantity: 1,
-            unit_amount: 23000,
+            unit_amount: 21000,
           }
         ],
         payment_methods: [
@@ -74,7 +89,10 @@ app.post('/', async (req, res) => {
       }
     };
 
-    const response = await axios.request(options);
+
+    console.log('Sending request to PagBank...');
+    const response = await axios.request({ ...options });
+    console.log('Received response from PagBank');
 
     if ((response.data as any).error) {
       res.status(500).json({ error: (response.data as any).error });
