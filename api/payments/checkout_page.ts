@@ -1,13 +1,8 @@
-import express from 'express';
 import axios from 'axios';
 import dotenv from 'dotenv';
-import serverless from 'serverless-http';
 import { PaymentData } from '../interfaces/types';
 
 dotenv.config();
-
-const app = express();
-app.use(express.json());
 
 const PAGBANK_TOKEN = process.env['PAGBANK_TOKEN']!;
 const PAGBANK_API_URL = process.env['PAGBANK_API_URL']!;
@@ -18,9 +13,17 @@ if (!PAGBANK_TOKEN || !PAGBANK_API_URL || !NOTIFICATION_URL || !APPS_SCRIPT_URL)
   throw new Error('Missing required environment variables');
 }
 
-app.post('/', async (req, res) => {
+module.exports = async (req: any, res: any) => {
   try {
+    console.log('Function started at:', new Date().toISOString());
+
     const payment: PaymentData = req.body;
+    console.log('Payment data:', payment);
+
+    if (!payment?.name || !payment?.cpf) {
+      res.status(400).json({ error: 'Missing payment info' });
+      return;
+    }
 
     const rawPhone = payment.phone?.replace(/\D/g, '');
 
@@ -53,7 +56,7 @@ app.post('/', async (req, res) => {
           {
             name: 'AcampaKids 2025',
             quantity: 1,
-            unit_amount: 23000,
+            unit_amount: 21000,
           }
         ],
         payment_methods: [
@@ -90,6 +93,4 @@ app.post('/', async (req, res) => {
     );
     res.status(500).json({ error: 'Error creating checkout page' });
   }
-});
-
-export default serverless(app);
+};

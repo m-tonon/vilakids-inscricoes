@@ -83,7 +83,7 @@ export class RegistrationComponent implements OnInit {
     name: '5º Acampa Kids',
     dates: '03, 04 e 05 de outubro de 2025',
     location: 'Acampamento Evangélico Maanaim',
-    price: 230.0,
+    price: 210.0,
     minAge: 6,
     maxAge: 11,
     preletor: {

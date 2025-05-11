@@ -1,17 +1,13 @@
 import express, { RequestHandler } from 'express';
 import axios from 'axios';
 import dotenv from 'dotenv';
-import serverless from 'serverless-http';
 import { RegistrationFormData } from '../interfaces/types';
 
 dotenv.config();
 
-const app = express();
-app.use(express.json());
-
 const APPS_SCRIPT_URL = process.env['APPS_SCRIPT_URL']!;
 
-const saveRegistration: RequestHandler<{}, any, RegistrationFormData, any> = async (req, res) => {
+module.exports = async (req: any, res: any) => {
   try {
     const formData: RegistrationFormData = req.body;
 
@@ -59,6 +55,3 @@ const saveRegistration: RequestHandler<{}, any, RegistrationFormData, any> = asy
     res.status(500).json({ error: 'Failed to save data to Google Sheet' });
   }
 };
-
-app.post('/', saveRegistration);
-export default serverless(app);

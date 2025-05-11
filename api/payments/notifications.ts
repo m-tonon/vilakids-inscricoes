@@ -1,16 +1,11 @@
-import express from 'express';
 import axios from 'axios';
 import dotenv from 'dotenv';
-import serverless from 'serverless-http';
 
 dotenv.config();
 
-const app = express();
-app.use(express.json());
-
 const APPS_SCRIPT_URL = process.env['APPS_SCRIPT_URL']!;
 
-app.post('/', async (req, res) => {
+module.exports = async (req: any, res: any) => {
   try {
     const charge = req.body.charges?.[0];
     if (!charge || charge.status !== 'PAID') {
@@ -35,6 +30,4 @@ app.post('/', async (req, res) => {
     console.error('Error in notification processing:', error);
     res.status(500).send('Error updating Google Sheet');
   }
-});
-
-export default serverless(app);
+};
