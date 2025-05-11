@@ -73,7 +73,7 @@ module.exports = async (req: any, res: any) => {
         soft_descriptor: '',
         redirect_url: 'https://vilakids-inscricoes.vercel.app/?paymentCompleted=true',
         return_url: 'https://vilakids-inscricoes.vercel.app/?paymentCompleted=true',
-        notification_urls: [NOTIFICATION_URL]
+        notification_urls: ['https://vilakids-inscricoes.vercel.app/api/payments/notifications'],
       }
     };
 

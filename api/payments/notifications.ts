@@ -7,6 +7,9 @@ const APPS_SCRIPT_URL = process.env['APPS_SCRIPT_URL']!;
 
 module.exports = async (req: any, res: any) => {
   try {
+    console.log('Function started at:', new Date().toISOString());
+    console.log('Notification data:', req.body);
+
     const charge = req.body.charges?.[0];
     if (!charge || charge.status !== 'PAID') {
       res.status(200).send('No payment confirmation to process');
