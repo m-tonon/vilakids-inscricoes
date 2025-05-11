@@ -76,8 +76,10 @@ module.exports = async (req: any, res: any) => {
         notification_urls: ['https://vilakids-inscricoes.vercel.app/api/payments/notifications'],
       }
     };
+    console.log('Request options to PagBank:', options);
 
     const response = await axios.request(options);
+    console.log('Response from PagBank:', response.data);
 
     if ((response.data as any).error) {
       res.status(500).json({ error: (response.data as any).error });
