@@ -442,7 +442,7 @@
                     nbButton
                     status="primary"
                     (click)="openPaymentPage()"
-                    [disabled]="isRegistrationComplete()"
+                    [disabled]="!isRegistrationComplete()"
                   >
                     <nb-icon icon="credit-card-outline"></nb-icon>
                     Ir para pagamento
