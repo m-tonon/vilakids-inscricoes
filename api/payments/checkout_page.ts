@@ -4,12 +4,11 @@ import { PaymentData } from '../../shared/types';
 
 dotenv.config();
 
-const PAGBANK_TOKEN = process.env['PAGBANK_TOKEN']!;
-const PAGBANK_API_URL = process.env['PAGBANK_API_URL']!;
-const NOTIFICATION_URL = process.env['NOTIFICATION_URL']!;
-const APPS_SCRIPT_URL = process.env['APPS_SCRIPT_URL']!;
+const PAGBANK_TOKEN = process.env['PAGBANK_TOKEN'];
+const PAGBANK_API_URL = process.env['PAGBANK_API_URL'];
+const APPS_SCRIPT_URL = process.env['APPS_SCRIPT_URL'];
 
-if (!PAGBANK_TOKEN || !PAGBANK_API_URL || !NOTIFICATION_URL || !APPS_SCRIPT_URL) {
+if (!PAGBANK_TOKEN || !PAGBANK_API_URL || !APPS_SCRIPT_URL) {
   throw new Error('Missing required environment variables');
 }
 
