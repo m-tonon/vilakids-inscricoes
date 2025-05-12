@@ -3,11 +3,11 @@
     "target": "ES2022",
     "module": "CommonJS",
     "outDir": "./dist",
-    "rootDir": "./",
+    "rootDir": "../",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true
   },
-  "include": ["src/**/*", "../shared/interfaces/types.ts", "tests"],
+  "include": ["payments/**/*", "registrations/**/*", "tests/**/*", "../shared/types.ts"],
   "exclude": ["node_modules"]
 }

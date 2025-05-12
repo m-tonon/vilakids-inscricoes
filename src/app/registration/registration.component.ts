@@ -27,18 +27,21 @@ import {
   NbDialogModule,
   NbStepperComponent,
   NbSpinnerModule,
+  NbToastrService,
 } from '@nebular/theme';
 import { RegistrationService } from '../services/registration.service';
 import { PaymentService } from '../services/payment.service';
 import {
+  AppApiError,
   PagBankResponse,
   PaymentData,
   RegistrationFormData,
   SaveRegistrationResponse,
 } from '../../../shared/types';
 import { ActivatedRoute } from '@angular/router';
-import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
+import { NgxMaskDirective } from 'ngx-mask';
 import { switchMap } from 'rxjs';
+import { NbDateFnsDateModule } from '@nebular/date-fns';
 
 @Component({
   selector: 'app-registration',
@@ -58,6 +61,7 @@ import { switchMap } from 'rxjs';
     NbDialogModule,
     NbSpinnerModule,
     NgxMaskDirective,
+    NbDateFnsDateModule
   ],
   templateUrl: './registration.component.html',
   styleUrl: './registration.component.scss',
@@ -68,6 +72,7 @@ export class RegistrationComponent implements OnInit {
   private readonly platformId = inject(PLATFORM_ID);
   private registrationService = inject(RegistrationService);
   private paymentService = inject(PaymentService);
+  private toastrService = inject(NbToastrService);
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
 
@@ -179,28 +184,50 @@ export class RegistrationComponent implements OnInit {
         email: formData.responsibleInfo.email,
       };
 
-      this.paymentService.createCheckoutPage(paymentData).pipe(
-        switchMap((response: PagBankResponse) => {
-          const payLink = response.links.find((r) => r.rel === 'PAY');
-          if (payLink && payLink.href) {
-            this.checkoutUrl = payLink.href;
-            formData.payment.referenceId = response.reference_id;
-            return this.registrationService.saveRegistration(formData);
-          } else {
-            throw new Error('PAY link not found in response.');
-          }
-        })
-      ).subscribe({
-        next: (response: SaveRegistrationResponse) => {
-          console.log('Registration and payment data saved successfully:', response);
-          this.isRegistrationComplete.set(true);
-          this.isLoading.set(false);
-        },
-        error: (error) => {
-          console.error('Error during registration or payment:', error);
-          this.isLoading.set(false);
-        },
-      });
+      this.paymentService
+        .createCheckoutPage(paymentData)
+        .pipe(
+          switchMap((response: PagBankResponse) => {
+            const payLink = response.links.find((r) => r.rel === 'PAY');
+            if (payLink && payLink.href) {
+              this.checkoutUrl = payLink.href;
+              formData.payment.referenceId = response.reference_id;
+              return this.registrationService.saveRegistration(formData);
+            } else {
+              throw new Error('PAY link not found in response.');
+            }
+          })
+        )
+        .subscribe({
+          next: (response: SaveRegistrationResponse) => {
+            console.log(
+              'Registration and payment data saved successfully:',
+              response
+            );
+            this.isRegistrationComplete.set(true);
+            this.isLoading.set(false);
+          },
+          error: (error) => {
+            console.error('Error saving registration and payment data:', error);
+
+            const apiError = error?.error?.error as AppApiError;
+            const source = apiError?.source;
+
+            let errorMsg = 'Ocorreu um erro inesperado. Entre em contato com a secretaria';
+            if (source === 'PagBank') {
+              errorMsg = 'Erro ao processar o pagamento. Alguns dados do responsável podem estar incorretos.';
+            }
+
+            this.toastrService.danger(errorMsg, 'Erro', {
+              duration: 10000,
+              hasIcon: true,
+              icon: 'close-circle',
+              status: 'danger',
+            });
+
+            this.isLoading.set(false);
+          },
+        });
     }
   }
 
@@ -209,7 +236,16 @@ export class RegistrationComponent implements OnInit {
       this.isLoading.set(true);
       window.location.href = this.checkoutUrl;
     } else {
-      console.error('Checkout URL is not set. Cannot open payment page.');
+      this.toastrService.danger(
+        'Erro ao abrir a página de pagamento.',
+        'Erro',
+        {
+          duration: 5000,
+          hasIcon: true,
+          icon: 'close-circle',
+          status: 'danger',
+        }
+      );
     }
   }
 
