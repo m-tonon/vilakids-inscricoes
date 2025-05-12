@@ -98,7 +98,7 @@ export class RegistrationComponent implements OnInit {
     description:
       'Está chegando o 5º ACAMPAKIDS da IPVO, uma ótima oportunidade para que seu filho(a) possa fortalecer a fé e desenvolver autonomia e comunhão.',
     paymentOptions: {
-      methods: ['PIX', 'Cartão de Crédito', 'Cartão de Débito', 'Boleto'],
+      methods: ['PIX', 'Cartão de Crédito', 'Cartão de Débito'],
       maxInstallments: 10,
     },
   };
@@ -164,6 +164,12 @@ export class RegistrationComponent implements OnInit {
 
       const formData: RegistrationFormData = this.registrationForm.value;
 
+      const birthDate = formData.birthDate;
+      if (birthDate) {
+        const date = new Date(birthDate);
+        formData.birthDate = date.toISOString().split('T')[0];
+      }
+
       const paymentData: PaymentData = {
         referenceId: '',
         paymentConfirmed: false,
@@ -200,6 +206,7 @@ export class RegistrationComponent implements OnInit {
 
   openPaymentPage(): void {
     if (this.checkoutUrl) {
+      this.isLoading.set(true);
       window.location.href = this.checkoutUrl;
     } else {
       console.error('Checkout URL is not set. Cannot open payment page.');

@@ -124,7 +124,7 @@
                   [nbDatepicker]="birthDatePicker"
                   [status]="getFieldStatus('birthDate')"
                 />
-                <nb-datepicker #birthDatePicker></nb-datepicker>
+                <nb-datepicker #birthDatePicker format="dd.MM.yyyy"></nb-datepicker>
                 @if (getFieldStatus('birthDate') === 'danger') {
                 <span class="error-message">
                   A data de nascimento é obrigatória.
