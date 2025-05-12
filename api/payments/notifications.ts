@@ -4,6 +4,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const APPS_SCRIPT_URL = process.env['APPS_SCRIPT_URL']!;
+const PAGBANK_TOKEN = process.env['PAGBANK_TOKEN']!;
+const PAGBANK_API_URL = process.env['PAGBANK_API_URL']!;
 
 module.exports = async (req: any, res: any) => {
   try {
@@ -16,11 +18,23 @@ module.exports = async (req: any, res: any) => {
       return;
     }
 
-    const checkoutId = charge.id;
-    if (!checkoutId) {
+    const chargeId = charge.id;
+    if (!chargeId) {
       res.status(400).send('Missing referenceId');
       return;
     }
+
+    const response = await axios.get(`${PAGBANK_API_URL}/charges/${chargeId}`, {
+      headers: {
+        accept: '*/*',
+        Authorization: `Bearer ${PAGBANK_TOKEN}`,
+      },
+    });
+
+    const chargeDetails = response.data;
+    console.log('Full charge info:', chargeDetails)
+
+    const checkoutId = chargeDetails?.checkout?.id;
 
     await axios.post(APPS_SCRIPT_URL, {
       type: 'payment-confirmation',
