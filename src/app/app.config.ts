@@ -8,6 +8,7 @@ import {
   NbDialogModule,
   NbIconModule,
   NbStepperModule,
+  NbToastrModule,
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { provideHttpClient } from '@angular/common/http';
@@ -20,6 +21,7 @@ export const appConfig: ApplicationConfig = {
       NbThemeModule.forRoot({ name: 'default' }),
       NbDatepickerModule.forRoot(),
       NbDialogModule.forRoot(),
+      NbToastrModule.forRoot(),
       NbIconModule,
       NbEvaIconsModule,
       NbStepperModule,

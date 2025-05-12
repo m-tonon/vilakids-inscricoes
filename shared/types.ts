@@ -96,3 +96,9 @@ export interface PagBankCharge {
   paid_at: string;
   amount: number;
 }
+
+export interface AppApiError {
+  source?: 'PagBank' | 'App' | 'Network';
+  code?: string;
+  message: string;
+}

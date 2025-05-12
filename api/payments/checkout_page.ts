@@ -1,6 +1,6 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
-import { PaymentData } from '../../shared/types';
+import { AppApiError, PaymentData } from '../../shared/types';
 
 dotenv.config();
 
@@ -93,10 +93,15 @@ module.exports = async (req: any, res: any) => {
     res.status(200).json(response.data);
   } catch (error) {
     const axiosError = error as any;
-    console.error(
-      'Error in /checkout_page:',
-      axiosError.response?.data || axiosError.message
-    );
-    res.status(500).json({ error: 'Error creating checkout page' });
+    const pagBankErrors = axiosError.response?.data?.error_messages;
+
+    const customError: AppApiError = {
+      source: pagBankErrors ? 'PagBank' : axiosError.code === 'ECONNABORTED' ? 'Network' : 'App',
+      code: axiosError.code || 'APP_ERROR',
+      message: axiosError.message || 'Erro inesperado no servidor.',
+    };
+
+    console.error('Error in /checkout_page:', customError);
+    res.status(500).json({ error: customError });
   }
 };
