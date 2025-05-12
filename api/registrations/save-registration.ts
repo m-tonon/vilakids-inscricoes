@@ -1,7 +1,7 @@
 import express, { RequestHandler } from 'express';
 import axios from 'axios';
 import dotenv from 'dotenv';
-import { RegistrationFormData } from '../interfaces/types';
+import { RegistrationFormData } from '../../shared/types';
 
 dotenv.config();
 
@@ -10,6 +10,7 @@ const APPS_SCRIPT_URL = process.env['APPS_SCRIPT_URL']!;
 module.exports = async (req: any, res: any) => {
   try {
     const formData: RegistrationFormData = req.body;
+    console.log('Registration data:', formData);
 
     // Validate required fields
     if (

@@ -8,6 +8,6 @@
     "esModuleInterop": true,
     "skipLibCheck": true
   },
-  "include": ["src/**/*", "interfaces/types.ts", "tests"],
+  "include": ["src/**/*", "../shared/interfaces/types.ts", "tests"],
   "exclude": ["node_modules"]
 }

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
-import { PaymentData } from '../interfaces/types';
+import { PaymentData } from '../../shared/types';
 
 dotenv.config();
 
@@ -11,6 +11,11 @@ const APPS_SCRIPT_URL = process.env['APPS_SCRIPT_URL']!;
 
 if (!PAGBANK_TOKEN || !PAGBANK_API_URL || !NOTIFICATION_URL || !APPS_SCRIPT_URL) {
   throw new Error('Missing required environment variables');
+}
+
+function generateReferenceId() {
+  const randomPart = Math.random().toString(36).slice(2, 8).toUpperCase();
+  return `REF-${randomPart}`;
 }
 
 module.exports = async (req: any, res: any) => {
@@ -39,7 +44,7 @@ module.exports = async (req: any, res: any) => {
         'Content-type': 'application/json',
       },
       data: {
-        reference_id: '0001',
+        reference_id: generateReferenceId(),
         expiration_date: '2025-08-14T19:09:10-03:00',
         customer: {
           name: payment.name,

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { RegistrationFormData, SaveRegistrationResponse } from '../types';
+import { RegistrationFormData, SaveRegistrationResponse } from '../../../shared/types';
 import { environment } from '../../environments/environment';
 
 @Injectable({

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { PagBankResponse, PaymentData } from '../types';
+import { PagBankResponse, PaymentData } from '../../../shared/types';
 import { environment } from '../../environments/environment';
 
 @Injectable({

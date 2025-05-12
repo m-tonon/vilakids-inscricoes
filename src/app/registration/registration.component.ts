@@ -35,7 +35,7 @@ import {
   PaymentData,
   RegistrationFormData,
   SaveRegistrationResponse,
-} from '../types';
+} from '../../../shared/types';
 import { ActivatedRoute } from '@angular/router';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { switchMap } from 'rxjs';
@@ -140,7 +140,7 @@ export class RegistrationComponent implements OnInit {
       }),
       parentalAuthorization: [false, Validators.requiredTrue],
       payment: this.fb.group({
-        checkoutId: [''],
+        referenceId: [''],
         paymentConfirmed: [false],
       }),
     });
@@ -165,7 +165,7 @@ export class RegistrationComponent implements OnInit {
       const formData: RegistrationFormData = this.registrationForm.value;
 
       const paymentData: PaymentData = {
-        checkoutId: '',
+        referenceId: '',
         paymentConfirmed: false,
         name: formData.responsibleInfo.name,
         cpf: formData.responsibleInfo.document.replace(/\D/g, ''),
@@ -178,7 +178,7 @@ export class RegistrationComponent implements OnInit {
           const payLink = response.links.find((r) => r.rel === 'PAY');
           if (payLink && payLink.href) {
             this.checkoutUrl = payLink.href;
-            formData.payment.checkoutId = response.id;
+            formData.payment.referenceId = response.reference_id;
             return this.registrationService.saveRegistration(formData);
           } else {
             throw new Error('PAY link not found in response.');

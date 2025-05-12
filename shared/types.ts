@@ -1,5 +1,5 @@
 export interface PaymentData {
-  checkoutId?: string;
+  referenceId?: string;
   paymentConfirmed: boolean;
   name: string;
   cpf: string;
@@ -42,10 +42,7 @@ export interface PagBankResponse {
   expiration_date: string;
   created_at: string;
   status: string;
-  customer: {
-    name: string;
-    tax_id: string;
-  };
+  customer: PagBankCustomer;
   customer_modifiable: boolean;
   items: Array<{
     name: string;
@@ -71,4 +68,31 @@ export interface PagLinks {
   rel: string;
   href: string;
   method: string;
+}
+
+export interface PagBankNotification {
+  id: string;
+  reference_id: string;
+  created_at: string;
+  customer: PagBankCustomer;
+  charges: PagBankCharge[];
+}
+
+export interface PagBankCustomer {
+  name: string;
+  tax_id: string;
+  phone: {
+    country: string;
+    area: string;
+    number: string;
+  };
+}
+
+export interface PagBankCharge {
+  id: string;
+  reference_id: string;
+  status: string;
+  created_at: string;
+  paid_at: string;
+  amount: number;
 }
