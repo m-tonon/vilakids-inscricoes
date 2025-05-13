@@ -1,13 +1,13 @@
-import express, { RequestHandler } from 'express';
-import axios from 'axios';
 import dotenv from 'dotenv';
 import { RegistrationFormData } from '../../shared/types';
+import { connectToDatabase } from '../mongoose-connection';
+import { RegistrationModel } from '../../shared/models/registration.model';
 
 dotenv.config();
 
-const APPS_SCRIPT_URL = process.env['APPS_SCRIPT_URL']!;
-
 module.exports = async (req: any, res: any) => {
+  await connectToDatabase();
+
   try {
     const formData: RegistrationFormData = req.body;
     console.log('Registration data:', formData);
@@ -27,25 +27,30 @@ module.exports = async (req: any, res: any) => {
       return;
     }
 
-    // Send data to Google Apps Script
-    const response = await axios.post(APPS_SCRIPT_URL, {
-      type: 'registration',
-      ...formData
-    }, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
+    const uniqueQuery = {
+      'payment.referenceId': formData.payment.referenceId,
+    };
 
-    if ((response.data as any).error) {
-      res.status(500).json({ error: (response.data as any).error });
+    const updatedRegistration = await RegistrationModel.findOneAndUpdate(
+      uniqueQuery,
+      { $set: formData },
+      { new: true }
+    );
+
+    if (updatedRegistration) {
+      res.status(200).json({
+        message: 'Registration updated successfully',
+        referenceId: updatedRegistration.payment.referenceId,
+      });
       return;
     }
 
-    const message = (response.data as any).message || 'Data successfully saved to Google Sheet';
+    const registration = new RegistrationModel(formData);
+    await registration.save();
 
     res.status(200).json({
-      message,
+      message: 'Data successfully saved to MongoDB',
+      referenceId: registration.payment.referenceId,
     });
   } catch (error) {
     const axiosError = error as any;
@@ -53,6 +58,6 @@ module.exports = async (req: any, res: any) => {
       'Error in /save-registration:',
       axiosError.response?.data || axiosError.message
     );
-    res.status(500).json({ error: 'Failed to save data to Google Sheet' });
+    res.status(500).json({ error: 'Failed to save data to MongoDB' });
   }
 };

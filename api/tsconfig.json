@@ -8,6 +8,6 @@
     "esModuleInterop": true,
     "skipLibCheck": true
   },
-  "include": ["payments/**/*", "registrations/**/*", "tests/**/*", "../shared/types.ts"],
+  "include": ["payments/**/*", "registrations/**/*", "tests/**/*", "../shared/*", "../shared/models/registration.model.ts"],
   "exclude": ["node_modules"]
 }

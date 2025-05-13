@@ -140,6 +140,7 @@
                   fullWidth
                   [value]="calculatedAge()"
                   readonly
+                  disabled
                   />
                   @let age = calculatedAge();
                   @if (age != null && (age < 6 || age > 11)) {
@@ -171,6 +172,7 @@
                 <input
                   nbInput
                   fullWidth
+                  type="number"
                   formControlName="identityDocument"
                   placeholder="RG ou Certidão de Nascimento"
                   [status]="getFieldStatus('identityDocument')"

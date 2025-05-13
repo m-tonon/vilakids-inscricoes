@@ -6,15 +6,9 @@ dotenv.config();
 
 const PAGBANK_TOKEN = process.env['PAGBANK_TOKEN'];
 const PAGBANK_API_URL = process.env['PAGBANK_API_URL'];
-const APPS_SCRIPT_URL = process.env['APPS_SCRIPT_URL'];
 
-if (!PAGBANK_TOKEN || !PAGBANK_API_URL || !APPS_SCRIPT_URL) {
+if (!PAGBANK_TOKEN || !PAGBANK_API_URL) {
   throw new Error('Missing required environment variables');
-}
-
-function generateReferenceId() {
-  const randomPart = Math.random().toString(36).slice(2, 8).toUpperCase();
-  return `REF-${randomPart}`;
 }
 
 module.exports = async (req: any, res: any) => {
@@ -24,7 +18,7 @@ module.exports = async (req: any, res: any) => {
     const payment: PaymentData = req.body;
     console.log('Payment data:', payment);
 
-    if (!payment?.name || !payment?.cpf) {
+    if (!payment?.name || !payment?.cpf || !payment?.referenceId) {
       res.status(400).json({ error: 'Missing payment info' });
       return;
     }
@@ -43,7 +37,7 @@ module.exports = async (req: any, res: any) => {
         'Content-type': 'application/json',
       },
       data: {
-        reference_id: generateReferenceId(),
+        reference_id: payment.referenceId,
         expiration_date: '2025-08-14T19:09:10-03:00',
         customer: {
           name: payment.name,
@@ -76,7 +70,7 @@ module.exports = async (req: any, res: any) => {
         ],
         soft_descriptor: '',
         redirect_url: 'https://vilakids-inscricoes.vercel.app/?paymentCompleted=true',
-        return_url: 'https://vilakids-inscricoes.vercel.app/?paymentCompleted=true',
+        return_url: 'https://vilakids-inscricoes.vercel.app/',
         notification_urls: ['https://vilakids-inscricoes.vercel.app/api/payments/notifications'],
       }
     };
