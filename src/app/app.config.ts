@@ -12,6 +12,7 @@ import {
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { provideHttpClient } from '@angular/common/http';
+import { NbDateFnsDateModule } from '@nebular/date-fns';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -25,6 +26,7 @@ export const appConfig: ApplicationConfig = {
       NbIconModule,
       NbEvaIconsModule,
       NbStepperModule,
+      NbDateFnsDateModule.forRoot({ format: 'dd/MM/yyyy' })
     ),
     provideHttpClient(),
   ],

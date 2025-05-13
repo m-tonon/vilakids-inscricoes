@@ -124,7 +124,7 @@
                   [nbDatepicker]="birthDatePicker"
                   [status]="getFieldStatus('birthDate')"
                 />
-                <nb-datepicker #birthDatePicker format="dd.MM.yyyy"></nb-datepicker>
+                <nb-datepicker #birthDatePicker></nb-datepicker>
                 @if (getFieldStatus('birthDate') === 'danger') {
                 <span class="error-message">
                   A data de nascimento é obrigatória.
@@ -138,15 +138,15 @@
                   nbInput
                   type="number"
                   fullWidth
-                  formControlName="age"
-                  placeholder="Idade"
-                  [status]="getFieldStatus('age')"
-                />
-                @if (getFieldStatus('age') === 'danger') {
-                <span class="error-message">
-                  A criança deve ter entre 6 e 11 anos de idade.
-                </span>
-                }
+                  [value]="calculatedAge()"
+                  readonly
+                  />
+                  @let age = calculatedAge();
+                  @if (age != null && (age < 6 || age > 11)) {
+                    <span class="error-message">
+                      A criança deve ter entre 6 e 11 anos de idade.
+                    </span>
+                  }
               </nb-form-field>
 
               <nb-form-field>
@@ -393,6 +393,7 @@
               nbStepperNext
               (click)="onSubmit()"
               [disabled]="!canProceedToPayment()"
+              nbTooltip="Todos os campos obrigatórios precisam estar preenchidos corretamente."
             >
               Próximo Passo
             </button>
