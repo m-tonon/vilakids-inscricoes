@@ -28,6 +28,7 @@ import {
   NbStepperComponent,
   NbSpinnerModule,
   NbToastrService,
+  NbTooltipModule,
 } from '@nebular/theme';
 import { RegistrationService } from '../services/registration.service';
 import { PaymentService } from '../services/payment.service';
@@ -61,7 +62,8 @@ import { NbDateFnsDateModule } from '@nebular/date-fns';
     NbDialogModule,
     NbSpinnerModule,
     NgxMaskDirective,
-    NbDateFnsDateModule
+    NbDateFnsDateModule,
+    NbTooltipModule
   ],
   templateUrl: './registration.component.html',
   styleUrl: './registration.component.scss',
