@@ -86,6 +86,7 @@ export class RegistrationComponent implements OnInit {
   isLoading = signal(false);
   calculatedAge = signal<number | null>(null);
   checkoutUrl: string = '';
+  referenceId: string = this.generateReferenceId();
 
   campInfo = {
     name: '5º Acampa Kids',
@@ -187,17 +188,19 @@ export class RegistrationComponent implements OnInit {
       const birthDate = formData.birthDate;
       if (birthDate) {
         const date = new Date(birthDate);
-        formData.birthDate = date.toISOString().split('T')[0];
+        formData.birthDate = new Intl.DateTimeFormat('en-GB').format(date);
       }
 
       const paymentData: PaymentData = {
-        referenceId: '',
+        referenceId: this.referenceId,
         paymentConfirmed: false,
         name: formData.responsibleInfo.name,
         cpf: formData.responsibleInfo.document.replace(/\D/g, ''),
         phone: formData.responsibleInfo.phone,
         email: formData.responsibleInfo.email,
       };
+
+      formData.payment = paymentData;
 
       this.paymentService
         .createCheckoutPage(paymentData)
@@ -206,7 +209,6 @@ export class RegistrationComponent implements OnInit {
             const payLink = response.links.find((r) => r.rel === 'PAY');
             if (payLink && payLink.href) {
               this.checkoutUrl = payLink.href;
-              formData.payment.referenceId = response.reference_id;
               return this.registrationService.saveRegistration(formData);
             } else {
               throw new Error('PAY link not found in response.');
@@ -215,10 +217,17 @@ export class RegistrationComponent implements OnInit {
         )
         .subscribe({
           next: (response: SaveRegistrationResponse) => {
-            console.log(
-              'Registration and payment data saved successfully:',
-              response
+            this.toastrService.success(
+              'Dados salvos com sucesso. Você será redirecionado para a página de pagamento.',
+              'Sucesso',
+              {
+                duration: 5000,
+                hasIcon: true,
+                icon: 'checkmark-circle',
+                status: 'success',
+              }
             );
+
             this.isRegistrationComplete.set(true);
             this.isLoading.set(false);
           },
@@ -292,6 +301,11 @@ export class RegistrationComponent implements OnInit {
     }
 
     return 'basic';
+  }
+
+  generateReferenceId() {
+    const randomPart = Math.random().toString(36).slice(2, 8).toUpperCase();
+    return `REF-${randomPart}`;
   }
 
   goToNextStep() {
