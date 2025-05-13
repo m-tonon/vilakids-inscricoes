@@ -1,5 +1,5 @@
 export interface PaymentData {
-  referenceId?: string;
+  referenceId: string;
   paymentConfirmed: boolean;
   name: string;
   cpf: string;

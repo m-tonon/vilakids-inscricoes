@@ -1,9 +1,7 @@
-import express, { RequestHandler } from 'express';
-import axios from 'axios';
 import dotenv from 'dotenv';
 import { RegistrationFormData } from '../../shared/types';
 import { connectToDatabase } from '../mongoose-connection';
-import { RegistrationModel } from './registration.model';
+import { RegistrationModel } from '../../shared/models/registration.model';
 
 dotenv.config();
 
@@ -29,12 +27,30 @@ module.exports = async (req: any, res: any) => {
       return;
     }
 
-    // Save data to MongoDB
+    const uniqueQuery = {
+      'payment.referenceId': formData.payment.referenceId,
+    };
+
+    const updatedRegistration = await RegistrationModel.findOneAndUpdate(
+      uniqueQuery,
+      { $set: formData },
+      { new: true }
+    );
+
+    if (updatedRegistration) {
+      res.status(200).json({
+        message: 'Registration updated successfully',
+        referenceId: updatedRegistration.payment.referenceId,
+      });
+      return;
+    }
+
     const registration = new RegistrationModel(formData);
     await registration.save();
 
     res.status(200).json({
       message: 'Data successfully saved to MongoDB',
+      referenceId: registration.payment.referenceId,
     });
   } catch (error) {
     const axiosError = error as any;
