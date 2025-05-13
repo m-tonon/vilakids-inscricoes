@@ -33,4 +33,4 @@ const RegistrationSchema = new mongoose.Schema({
   payment: PaymentDataSchema,
 }, { timestamps: true });
 
-export const RegistrationModel = mongoose.models.Registration || mongoose.model('Registration', RegistrationSchema);
+export const RegistrationModel = mongoose.models['Registration'] || mongoose.model('Registration', RegistrationSchema);
