@@ -82,6 +82,7 @@ export class RegistrationComponent implements OnInit {
   isRegistrationComplete = signal(false);
   isPaymentConfirmed = signal(false);
   isLoading = signal(false);
+  calculatedAge = signal<number | null>(null);
   checkoutUrl: string = '';
 
   campInfo = {
@@ -126,7 +127,6 @@ export class RegistrationComponent implements OnInit {
     this.registrationForm = this.fb.group({
       childName: ['', Validators.required],
       birthDate: ['', Validators.required],
-      age: ['', [Validators.required, Validators.min(6), Validators.max(11)]],
       gender: ['', Validators.required],
       identityDocument: ['', Validators.required],
       address: [''],
@@ -148,6 +148,19 @@ export class RegistrationComponent implements OnInit {
         referenceId: [''],
         paymentConfirmed: [false],
       }),
+    });
+
+    this.registrationForm.get('birthDate')?.valueChanges.subscribe((value) => {
+      if (value) {
+        const date = new Date(value);
+        if (!isNaN(date.getTime())) {
+          this.calculatedAge.set(this.calculateAge(date));
+        } else {
+          this.calculatedAge.set(null);
+        }
+      } else {
+        this.calculatedAge.set(null);
+      }
     });
   }
 
@@ -282,5 +295,17 @@ export class RegistrationComponent implements OnInit {
   goToNextStep() {
     this.stepper()?.next();
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  private calculateAge(birthDate: Date): number {
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+  
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+
+    return age;
   }
 }
