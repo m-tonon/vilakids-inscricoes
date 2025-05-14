@@ -1,0 +1,58 @@
+@use "@nebular/theme/styles/theming" as *;
+@include nb-install-component();
+
+.container {
+  max-width: 800px;
+  margin: 0.5rem auto;
+  padding: 0 0.75rem;
+
+  nb-card {
+    margin-bottom: 1rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+  }
+}
+
+button[nbTreeGridRowToggle] {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.search-label {
+  display: block;
+}
+.search-input {
+  margin-bottom: 1rem;
+}
+
+.nb-column-name {
+  width: 100%;
+}
+
+@media screen and (min-width: 400px) {
+  .nb-column-name,
+  .nb-column-size {
+    width: 50%;
+  }
+}
+
+@media screen and (min-width: 500px) {
+  .nb-column-name,
+  .nb-column-size,
+  .nb-column-kind {
+    width: 33.333%;
+  }
+}
+
+@media screen and (min-width: 600px) {
+  .nb-column-name {
+    width: 31%;
+  }
+  .nb-column-size,
+  .nb-column-kind,
+  .nb-column-items {
+    width: 23%;
+  }
+}
