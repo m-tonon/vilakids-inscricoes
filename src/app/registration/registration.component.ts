@@ -130,7 +130,7 @@ export class RegistrationComponent implements OnInit {
     this.registrationForm = this.fb.group({
       childName: ['', Validators.required],
       birthDate: ['', Validators.required],
-      age: [''],
+      age: ['', [Validators.required, Validators.min(this.campInfo.minAge), Validators.max(12)]],
       gender: ['', Validators.required],
       identityDocument: ['', Validators.required],
       address: [''],
