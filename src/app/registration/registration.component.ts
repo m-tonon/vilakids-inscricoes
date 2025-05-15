@@ -130,6 +130,7 @@ export class RegistrationComponent implements OnInit {
     this.registrationForm = this.fb.group({
       childName: ['', Validators.required],
       birthDate: ['', Validators.required],
+      age: [''],
       gender: ['', Validators.required],
       identityDocument: ['', Validators.required],
       address: [''],
@@ -157,7 +158,9 @@ export class RegistrationComponent implements OnInit {
       if (value) {
         const date = new Date(value);
         if (!isNaN(date.getTime())) {
-          this.calculatedAge.set(this.calculateAge(date));
+          const age = this.calculateAge(date);
+          this.calculatedAge.set(age);
+          this.registrationForm.get('age')?.setValue(age, { emitEvent: false });
         } else {
           this.calculatedAge.set(null);
         }
