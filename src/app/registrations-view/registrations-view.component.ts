@@ -9,6 +9,7 @@ import {
   NbSortRequest,
   NbInputModule,
 } from '@nebular/theme';
+import { RegistrationFormData } from '../../../shared/types';
 
 interface TreeNode<T> {
   data: T;
@@ -17,10 +18,11 @@ interface TreeNode<T> {
 }
 
 interface FSEntry {
-  name: string;
-  size: string;
-  kind: string;
-  items?: number;
+  childName: string;
+  age: string;
+  responsibleName: string;
+  phone?: number;
+  paymentConfirmed?: boolean;
 }
 
 @Component({
@@ -32,60 +34,75 @@ interface FSEntry {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegistrationsViewComponent {
-  customColumn = 'name';
-  defaultColumns = ['size', 'kind', 'items'];
-  allColumns = [this.customColumn, ...this.defaultColumns];
-  private data: TreeNode<FSEntry>[] = [
+  dataSourceBuilder = inject(NbTreeGridDataSourceBuilder<FSEntry>);
+  dataSource: NbTreeGridDataSource<FSEntry>;
+  sortColumn?: string;
+  sortDirection: NbSortDirection = NbSortDirection.NONE;
+  selectedRegistration?: RegistrationFormData;
+
+  customColumn = 'childName';
+  displayedColumns = [
+    'age',
+    'responsibleName',
+    'phone',
+    'paymentConfirmed',
+  ];
+  allColumns = [ this.customColumn, ...this.displayedColumns ];
+
+  columnDisplayNames: { [key: string]: string } = {
+    childName: 'Nome da Criança',
+    age: 'Idade',
+    responsibleName: 'Nome do Responsável',
+    phone: 'Telefone',
+    paymentConfirmed: 'Pagamento Confirmado',
+  };
+
+  registrations: RegistrationFormData[] = [
     {
-      data: { name: 'Projects', size: '1.8 MB', items: 5, kind: 'dir' },
-      children: [
-        { data: { name: 'project-1.doc', kind: 'doc', size: '240 KB' } },
-        { data: { name: 'project-2.doc', kind: 'doc', size: '290 KB' } },
-        {
-          data: { name: 'project-3', kind: 'dir', size: '466 KB', items: 3 },
-          children: [
-            { data: { name: 'project-3A.doc', kind: 'doc', size: '200 KB' } },
-            { data: { name: 'project-3B.doc', kind: 'doc', size: '266 KB' } },
-            { data: { name: 'project-3C.doc', kind: 'doc', size: '0' } },
-          ],
-        },
-        { data: { name: 'project-4.docx', kind: 'docx', size: '900 KB' } },
-      ],
-    },
-    {
-      data: { name: 'Reports', kind: 'dir', size: '400 KB', items: 2 },
-      children: [
-        {
-          data: { name: 'Report 1', kind: 'dir', size: '100 KB', items: 1 },
-          children: [
-            { data: { name: 'report-1.doc', kind: 'doc', size: '100 KB' } },
-          ],
-        },
-        {
-          data: { name: 'Report 2', kind: 'dir', size: '300 KB', items: 2 },
-          children: [
-            { data: { name: 'report-2.doc', kind: 'doc', size: '290 KB' } },
-            { data: { name: 'report-2-note.txt', kind: 'txt', size: '10 KB' } },
-          ],
-        },
-      ],
-    },
-    {
-      data: { name: 'Other', kind: 'dir', size: '109 MB', items: 2 },
-      children: [
-        { data: { name: 'backup.bkp', kind: 'bkp', size: '107 MB' } },
-        { data: { name: 'secret-note.txt', kind: 'txt', size: '2 MB' } },
-      ],
+      childName: 'Thomas Tonon',
+      birthDate: '01/05/2015',
+      age: 8,
+      gender: 'Masculino',
+      identityDocument: '39454545',
+      address: 'Rua Valéria, 421',
+      churchMembership: '',
+      churchName: '',
+      healthInsurance: '',
+      medications: '',
+      allergies: '',
+      specialNeeds: '',
+      responsibleInfo: {
+        name: 'Bel Tonon',
+        phone: '44999999999',
+        relation: 'Mãe',
+        document: '42853987884',
+        email: 'bel@hotmail.com',
+      },
+      parentalAuthorization: true,
+      payment: {
+        referenceId: 'REF-030RFK',
+        paymentConfirmed: true,
+        name: 'Bel Tonon',
+        cpf: '42853987884',
+        email: 'bel@hotmail.com',
+        phone: '44999999999',
+      },
     },
   ];
 
-  sortColumn: string | undefined;
-  sortDirection: NbSortDirection = NbSortDirection.NONE;
+  data: TreeNode<FSEntry>[] = this.registrations.map(reg => ({
+    data: {
+      childName: reg.childName,
+      age: reg.age.toString(),
+      responsibleName: reg.responsibleInfo.name,
+      phone: reg.responsibleInfo.phone ? Number(reg.responsibleInfo.phone) : undefined,
+      paymentConfirmed: reg.payment?.paymentConfirmed ?? false,
+    }
+  }));
 
-  dataSourceBuilder = inject(NbTreeGridDataSourceBuilder<FSEntry>);
-  dataSource: NbTreeGridDataSource<FSEntry> = this.dataSourceBuilder.create(
-    this.data
-  );
+  constructor() {
+    this.dataSource = this.dataSourceBuilder.create(this.data);
+  }
 
   updateSort(sortRequest: NbSortRequest): void {
     this.sortColumn = sortRequest.column;
@@ -103,5 +120,16 @@ export class RegistrationsViewComponent {
     const minWithForMultipleColumns = 400;
     const nextColumnStep = 100;
     return minWithForMultipleColumns + nextColumnStep * index;
+  }
+
+  onRowClick(row: any) {
+    const reg = this.registrations.find(
+      r => r.childName === row.data.childName
+    );
+    if (this.selectedRegistration === reg) {
+      this.selectedRegistration = undefined;
+    } else {
+      this.selectedRegistration = reg;
+    }
   }
 }

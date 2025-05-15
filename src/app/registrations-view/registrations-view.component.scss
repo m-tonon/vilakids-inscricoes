@@ -2,7 +2,7 @@
 @include nb-install-component();
 
 .container {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0.5rem auto;
   padding: 0 0.75rem;
 
@@ -54,5 +54,30 @@ button[nbTreeGridRowToggle] {
   .nb-column-kind,
   .nb-column-items {
     width: 23%;
+  }
+}
+
+.details-card {
+  margin-top: 1.5rem;
+  nb-card {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 0.75rem;
+    padding: 0;
+    position: relative;
+  }
+  .close-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #888;
+    cursor: pointer;
+    z-index: 2;
+    transition: color 0.2s;
+  }
+  .close-btn:hover {
+    color: #222;
   }
 }
