@@ -6,6 +6,7 @@ dotenv.config();
 
 const PAGBANK_TOKEN = process.env['PAGBANK_TOKEN'];
 const PAGBANK_API_URL = process.env['PAGBANK_API_URL'];
+const DOMAIN_URL = process.env['DOMAIN_URL'];
 
 if (!PAGBANK_TOKEN || !PAGBANK_API_URL) {
   throw new Error('Missing required environment variables');
@@ -69,9 +70,9 @@ module.exports = async (req: any, res: any) => {
           }
         ],
         soft_descriptor: '',
-        redirect_url: 'https://vilakids-inscricoes.vercel.app/?paymentCompleted=true',
-        return_url: 'https://vilakids-inscricoes.vercel.app/',
-        notification_urls: ['https://vilakids-inscricoes.vercel.app/api/payments/notifications'],
+        redirect_url: `https://${DOMAIN_URL}/?paymentCompleted=true`,
+        return_url: `https://${DOMAIN_URL}/`,
+        notification_urls: [`https://${DOMAIN_URL}/api/payments/notifications`],
       }
     };
     console.log('Request options to PagBank:', options);
