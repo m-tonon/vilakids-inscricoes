@@ -32,10 +32,6 @@ module.exports = async (req: any, res: any) => {
       parentalAuthorization: r.parentalAuthorization,
       paymentReferenceId: r.payment?.referenceId,
       paymentConfirmed: r.payment?.paymentConfirmed,
-      paymentName: r.payment?.name,
-      paymentCpf: r.payment?.cpf,
-      paymentEmail: r.payment?.email,
-      paymentPhone: r.payment?.phone,
       createdAt: r.createdAt,
       updatedAt: r.updatedAt,
     }));
@@ -61,10 +57,6 @@ module.exports = async (req: any, res: any) => {
       { label: 'Autorização dos Pais', value: 'parentalAuthorization' },
       { label: 'ID do Pagamento', value: 'paymentReferenceId' },
       { label: 'Pagamento Confirmado', value: 'paymentConfirmed' },
-      { label: 'Nome no Pagamento', value: 'paymentName' },
-      { label: 'CPF no Pagamento', value: 'paymentCpf' },
-      { label: 'Email no Pagamento', value: 'paymentEmail' },
-      { label: 'Telefone no Pagamento', value: 'paymentPhone' },
       { label: 'Criado em', value: 'createdAt' },
       { label: 'Atualizado em', value: 'updatedAt' },
     ];
