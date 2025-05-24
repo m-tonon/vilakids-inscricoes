@@ -8,7 +8,7 @@ export const confirmationTemplate = `
       name="viewport"
       content="width=device-width,initial-scale=1"
     />
-    <title>Confirmação de Inscrição – Acampa Teens</title>
+    <title>Confirmação de Inscrição – Acampa Vila Kids</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
       rel="stylesheet"
@@ -94,8 +94,8 @@ export const confirmationTemplate = `
             <tr>
               <td>
                 <img
-                  src="https://i.ibb.co/p6V0QvZn/Summer-Camp-Flyer.png"
-                  alt="2º Acampa Teens – 31.01 e 02 de Novembro"
+                  src="https://i.ibb.co/S4572SNh/vilakids-camp.jpg"
+                  alt="5º Acampa Kids – 03, 04 e 05 de Outubro"
                 />
               </td>
             </tr>
@@ -109,7 +109,7 @@ export const confirmationTemplate = `
                 <p>
                   Temos uma ótima notícia:
                   <strong
-                    >sua inscrição no 2º Acampa Teens foi concluída com
+                    >sua inscrição no 5º Acampa Kids foi concluída com
                     sucesso!</strong
                   >
                   🎉
@@ -119,13 +119,13 @@ export const confirmationTemplate = `
                 <h1>📍 Informações do acampamento:</h1>
                 <ul style="list-style: none; padding-left: 0">
                   <li>
-                    📅 <strong>Data:</strong> 31 de outubro a 02 de novembro
+                    📅 <strong>Data:</strong> 03 a 05 de outubro
                   </li>
                   <li>
                     📍 <strong>Local:</strong> Acampamento Evangélico Maanaim
                   </li>
-                  <li>🧑‍🤝‍🧑 <strong>Faixa etária:</strong> 12 a 16 anos</li>
-                  <li>💰 <strong>Valor pago:</strong> R$ 250</li>
+                  <li>🧑‍🤝‍🧑 <strong>Faixa etária:</strong> 06 a 11 anos</li>
+                  <li>💰 <strong>Valor pago:</strong> R$ 210</li>
                   <li>
                     ✅ <strong>Inscrição confirmada:</strong> Sim! Seu nome já
                     está na nossa lista.
@@ -145,7 +145,7 @@ export const confirmationTemplate = `
                   é só entrar em contato com a equipe do acampamento.
                 </p>
 
-                <p>Nos vemos lá!<br /><br /><strong>Equipe MovTeens</strong></p>
+                <p>Nos vemos lá!<br /><br /><strong>Equipe VilaKids</strong></p>
               </td>
             </tr>
           </table>
