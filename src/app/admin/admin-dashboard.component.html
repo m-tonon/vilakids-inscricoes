@@ -1,0 +1,17 @@
+<div class="admin-layout">
+  <app-sidenav></app-sidenav>
+  <div class="admin-container">
+    <nb-card>
+      <nb-card-header>
+        <h1>Admin Dashboard</h1>
+      </nb-card-header>
+      <nb-card-body>
+        <p>Welcome to the admin dashboard!</p>
+        <p>Here you can manage users, view reports, and configure settings.</p>
+        <ng-container>
+          <router-outlet></router-outlet>
+        </ng-container>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

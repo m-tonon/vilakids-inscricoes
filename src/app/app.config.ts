@@ -13,6 +13,8 @@ import {
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { provideHttpClient } from '@angular/common/http';
 import { NbDateFnsDateModule } from '@nebular/date-fns';
+import { providePrimeNG } from 'primeng/config';
+import Aura from '@primeng/themes/aura';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -29,5 +31,10 @@ export const appConfig: ApplicationConfig = {
       NbDateFnsDateModule.forRoot({ format: 'dd/MM/yyyy' })
     ),
     provideHttpClient(),
+    providePrimeNG({
+      theme: {
+        preset: Aura,
+      },
+    }),
   ],
 };

@@ -33,12 +33,11 @@ import {
 import { RegistrationService } from '../services/registration.service';
 import { PaymentService } from '../services/payment.service';
 import {
-  AppApiError,
-  PagBankResponse,
   PaymentData,
   RegistrationFormData,
   SaveRegistrationResponse,
-} from '../../../shared/types';
+} from '../../../shared/registration.interface';
+import { AppApiError, PagBankResponse } from '../../../shared/payment.interface';
 import { ActivatedRoute } from '@angular/router';
 import { NgxMaskDirective } from 'ngx-mask';
 import { switchMap } from 'rxjs';
@@ -105,7 +104,10 @@ export class RegistrationComponent implements OnInit {
       { name: 'Anjinho', phone: '(44) 9 9846-0089' },
     ],
     description:
-      'Está chegando o 5º ACAMPAKIDS da IPVO, uma ótima oportunidade para que seu filho(a) possa fortalecer a fé e desenvolver autonomia e comunhão.',
+      `Está chegando o 5º ACAMPAKIDS da IPVO, uma ótima oportunidade para que seu filho(a) possa fortalecer a fé e desenvolver autonomia e comunhão.<br/><br/>
+        Garanta a sua vaga e lembre-se de convidar algum amigo!<br/><br/>
+        ⚠️ <b>Importante:</b> Sua vaga só está garantida mediante pagamento.
+      `,
     paymentOptions: {
       methods: ['PIX', 'Cartão de Crédito', 'Cartão de Débito'],
       maxInstallments: 10,

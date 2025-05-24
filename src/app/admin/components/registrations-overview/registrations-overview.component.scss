@@ -1,0 +1,78 @@
+@use '@angular/material' as mat;
+
+.table-wrapper {
+  margin-top: 2rem;
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 1rem;
+  margin-top: 2rem;
+}
+
+.table th,
+.table td {
+  padding: 1rem;
+  text-align: left;
+}
+
+.table th {
+  background: #f5f6fa;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.table tr {
+  transition: background 0.2s;
+}
+
+.table tbody tr:hover {
+  background: #f0f4ff;
+}
+
+.table td {
+  border-bottom: 1px solid #f0f0f0;
+  background-color: white;
+  color: #333;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.spinner {
+  justify-items: center;
+  @include mat.progress-spinner-overrides(
+    (
+      active-indicator-color: orange,
+      size: 10,
+    )
+  );
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 20vh;
+}
+
+.refresh-button {
+  button {
+    background: none;
+  }
+}

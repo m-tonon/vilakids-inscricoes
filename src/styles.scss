@@ -24,3 +24,7 @@ body {
   font-family: var(--text-paragraph-font-family);
   background: var(--background-basic-color-1);
 }
+
+.fixed {
+  position: unset;
+}

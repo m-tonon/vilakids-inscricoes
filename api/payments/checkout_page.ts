@@ -1,6 +1,7 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
-import { AppApiError, PaymentData } from '../../shared/types';
+import { PaymentData } from '../../shared/registration.interface';
+import { AppApiError } from '../../shared/payment.interface';
 
 dotenv.config();
 

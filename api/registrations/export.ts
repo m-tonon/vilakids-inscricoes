@@ -36,6 +36,12 @@ module.exports = async (req: any, res: any) => {
       updatedAt: r.updatedAt,
     }));
 
+    if (req.query && (req.query.json === '1' || req.query.json === 1)) {
+      res.setHeader('Content-Type', 'application/json');
+      res.status(200).json(flatRegistrations);
+      return;
+    }
+
     const fields = [
       { label: 'Nome da Criança', value: 'childName' },
       { label: 'Data de Nascimento', value: 'birthDate' },
@@ -66,7 +72,7 @@ module.exports = async (req: any, res: any) => {
     res.setHeader('Content-Type', 'text/csv');
     res.setHeader(
       'Content-Disposition',
-      'attachment; filename="inscricoes2025.csv"'
+      'attachment; filename="vilakids-inscricoes2025.csv"'
     );
     res.status(200).send(csv);
   } catch (error) {
