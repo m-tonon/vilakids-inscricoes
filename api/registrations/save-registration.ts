@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { RegistrationFormData } from '../../shared/types';
+import { RegistrationFormData } from '../../shared/registration.interface';
 import { connectToDatabase } from '../mongoose-connection';
 import { RegistrationModel } from '../../shared/models/registration.model';
 

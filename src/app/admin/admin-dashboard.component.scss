@@ -1,0 +1,23 @@
+@use '@nebular/theme/styles/theming' as *;
+@include nb-install-component();
+
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f7f9fb;
+}
+
+.admin-container {
+  flex: 1 1 auto;
+  max-width: 100rem;
+  margin: 0.5rem auto;
+  padding: 0 0.75rem;
+
+  nb-card {
+    margin-bottom: 1rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    width: 100%;
+  }
+}

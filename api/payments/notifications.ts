@@ -1,9 +1,14 @@
 import dotenv from 'dotenv';
-import { PagBankCharge } from '../../shared/types';
+import { PagBankCharge } from '../../shared/payment.interface';
 import { connectToDatabase } from '../mongoose-connection';
 import { RegistrationModel } from '../../shared/models/registration.model';
+import { confirmationTemplate } from './confirmation-email-template';
+import nodemailer from 'nodemailer';
 
 dotenv.config();
+
+const GMAIL_USER = process.env['GMAIL_USER'];
+const GMAIL_APP_PASS = process.env['GMAIL_APP_PASS'];
 
 module.exports = async (req: any, res: any) => {
   try {
@@ -35,6 +40,17 @@ module.exports = async (req: any, res: any) => {
       return;
     }
 
+    const participant = {
+      name: updated.name,
+      email: updated.responsibleInfo?.email,
+    };
+
+    if (!participant.email) {
+      console.warn('No email found for participant', participant.name);
+    } else {
+      await sendConfirmationEmail(participant);
+    }
+
     console.log(`Payment confirmed and MongoDB updated for ${referenceId}`);
     res.status(200).send('Payment handled');
   } catch (error) {
@@ -42,3 +58,27 @@ module.exports = async (req: any, res: any) => {
     res.status(500).send('Error updating payment status in MongoDB');
   }
 };
+
+async function sendConfirmationEmail(participant: any) {
+  const html = confirmationTemplate.replace('{{nomeParticipante}}', participant.name);
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+      auth: {
+        user: GMAIL_USER,
+        pass: GMAIL_APP_PASS,
+      },
+    }
+  );
+
+  try {
+    await transporter.sendMail({
+      from: `"IPVO VilaKids" <${GMAIL_USER}>`,
+      to: participant.email,
+      subject: '✅ Inscrição confirmada no 5º Acampa Kids!',
+      html: html,
+    });
+    console.log('Confirmation email sent');
+  } catch (emailError) {
+    console.error('Failed to send confirmation email:', emailError);
+  }
+}

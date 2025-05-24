@@ -19,5 +19,5 @@ import { NbThemeModule, NbLayoutModule } from '@nebular/theme';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'Summer Camp Registration';
+  title = 'IPVO Vila Kids';
 }

@@ -1,0 +1,78 @@
+<div class="table-wrapper card">
+  <div class="table-header">
+    <h2>Inscrições</h2>
+    <ng-container>
+      <button
+        nbButton
+        status="success"
+        size="small"
+        (click)="exportToCSV()"
+      >
+        Exportar CSV
+      </button>
+    </ng-container>
+  </div>
+  @if (registrations$ | async; as registrations;) {
+  <p-table
+    #table
+    [value]="registrations"
+    dataKey="id"
+    sortField="name"
+    [sortOrder]="1"
+    class="table"
+  >
+    <ng-template #header>
+      <tr class="header-row">
+        @for(col of displayedColumns; track col) {
+          @if (col === 'Nome') {
+            <th
+              pSortableColumn="name"
+              style="width: 20%"
+            >
+            <p-sortIcon field="name" />
+            {{ col }}
+            </th>
+          } @else {
+            <th>
+              {{ col }}
+            </th>
+          }
+        }
+        <th style="width: 6rem"></th>
+      </tr>
+    </ng-template>
+
+    <ng-template
+      #body
+      let-reg
+    >
+      <tr>
+        <td>{{ reg.childName }}</td>
+        <td>{{ reg.age }}</td>
+        <td>{{ reg.gender }}</td>
+        <td>{{ reg.responsibleName }}</td>
+        <td>{{ reg.responsiblePhone | phoneFormat }}</td>
+        <td>{{ reg.paymentConfirmed ? 'Sim' : 'Não' }}</td>
+        <td>{{ reg.createdAt | date : 'short' }}</td>
+        <td class="refresh-btn">
+          <p-toast />
+          <p-button
+            icon="pi pi-refresh"
+            (click)="updatePaymentStatus(reg)"
+            severity="secondary"
+            rounded
+          />
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  } @else {
+  <div class="loading-container">
+    <ng-container *ngTemplateOutlet="loading"></ng-container>
+  </div>
+  }
+</div>
+
+<ng-template #loading>
+  <mat-spinner size="50"></mat-spinner>
+</ng-template>
