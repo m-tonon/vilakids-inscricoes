@@ -41,7 +41,7 @@ module.exports = async (req: any, res: any) => {
     }
 
     const participant = {
-      name: updated.name,
+      name: updated.childName,
       email: updated.responsibleInfo?.email,
     };
 
