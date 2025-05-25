@@ -18,12 +18,12 @@ nb-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: nb-theme(color-primary-500);
+  background: #fac244;
   padding: 1.25rem;
 
   h1 {
     margin: 0;
-    color: white;
+    color: #57370c;
     font-size: 1.5rem;
     font-weight: 600;
   }
@@ -34,9 +34,13 @@ nb-card-header {
     margin: 0;
     padding: 0.75rem;
     background: nb-theme(background-basic-color-1);
-    border-bottom: 1px solid nb-theme(color-primary-200);
+    border-bottom: 1px solid #57370c;
     overflow-x: auto;
     white-space: nowrap;
+
+    .connector-past {
+      background-color: #57370c;
+    }
 
     .step {
       padding: 0.5rem;
@@ -44,17 +48,17 @@ nb-card-header {
 
       &.selected {
         .label {
-          color: nb-theme(color-primary-600);
+          color: #343440;
           font-weight: 600;
         }
 
         .index {
-          background: nb-theme(color-primary-500);
+          background: #343440;
         }
       }
 
       .label {
-        color: nb-theme(text-basic-color);
+        color: #343440;
         font-size: 0.9rem;
       }
 
@@ -73,6 +77,20 @@ nb-card-header {
   }
 }
 
+::ng-deep nb-stepper .header .step.selected .label-index {
+  border-color: #fac244 !important;
+
+  span {
+    color: #343440;
+  }
+}
+
+::ng-deep nb-stepper .header .step.completed .label-index {
+  background-color: #fac244 !important;
+  border-color: #fac244 !important;
+  color: #000 !important;
+}
+
 .camp-info {
   margin-bottom: 1.5rem;
 
@@ -80,7 +98,7 @@ nb-card-header {
     font-size: 1rem;
     line-height: 1.5;
     margin: 1rem auto;
-    color: nb-theme(text-basic-color);
+    color: #343440;
     text-align: left;
   }
 
@@ -101,12 +119,12 @@ nb-card-header {
 
       nb-icon {
         font-size: 1.25rem;
-        color: nb-theme(color-primary-500);
+        color: #57370c;
       }
 
       span {
         font-size: 0.95rem;
-        color: nb-theme(text-basic-color);
+        color: #343440;
       }
     }
   }
@@ -121,7 +139,7 @@ nb-card-header {
 
   h3 {
     margin: 0 0 1rem 0;
-    color: nb-theme(text-primary-color);
+    color: #343440;
     font-size: 1.1rem;
     font-weight: 600;
     display: flex;
@@ -129,7 +147,7 @@ nb-card-header {
     gap: 0.5rem;
 
     nb-icon {
-      color: nb-theme(color-primary-500);
+      color: #57370c;
       font-size: 1.25rem;
     }
   }
@@ -145,7 +163,7 @@ nb-card-header {
 // Extending base styles with specific colors
 .preletor {
   @extend .info-card;
-  border-left-color: nb-theme(color-primary-500);
+  border-left-color: #fac244;
 
   a {
     color: nb-theme(color-primary-500);
@@ -162,12 +180,12 @@ nb-card-header {
 
 .payment-info {
   @extend .info-card;
-  border-left-color: nb-theme(color-success-500);
+  border-left-color: #fac244;
 }
 
 .contacts {
   @extend .info-card;
-  border-left-color: nb-theme(color-info-500);
+  border-left-color: #fac244;
 
   .contact-item {
     display: flex;
@@ -180,10 +198,29 @@ nb-card-header {
     min-height: 44px;
 
     nb-icon {
-      color: nb-theme(color-info-500);
+      color: #57370c;
       font-size: 1.25rem;
     }
   }
+}
+
+.button-row {
+  .next-button {
+    background: #343440;
+    border-color: #343440;
+  }
+}
+
+.button-container {
+  .next-button {
+    background: #343440;
+    border-color: #343440;
+  }
+}
+
+::ng-deep nb-checkbox.status-basic .custom-checkbox.checked {
+  background-color: #343440 !important;
+  border-color: #343440 !important;
 }
 
 .registration-form,
@@ -227,7 +264,7 @@ nb-card-header {
   padding: 1rem;
   background: nb-theme(background-basic-color-2);
   border-radius: 0.75rem;
-  border-left: 3px solid nb-theme(color-success-500);
+  border-left: 3px solid #fac244;
 
   h4 {
     margin: 0 0 1rem 0;
@@ -318,7 +355,7 @@ nb-card-header {
   padding: 1rem;
   background: nb-theme(background-basic-color-2);
   border-radius: 0.75rem;
-  border-left: 3px solid nb-theme(color-info-500);
+  border-left: 3px solid #fac244;
 
   ::ng-deep nb-checkbox {
     .text {
@@ -350,7 +387,7 @@ nb-card-header {
     border-radius: 0.75rem;
     padding: 1.25rem;
     margin: 1rem 0;
-    border-left: 4px solid nb-theme(color-info-500);
+    border-left: 4px solid #fac244;
 
     h3 {
       font-size: 1.1rem;
@@ -361,7 +398,7 @@ nb-card-header {
     .payment-amount {
       font-size: 1.75rem;
       font-weight: 700;
-      color: nb-theme(text-primary-color);
+      color: #57370c;
       margin: 0.75rem 0;
     }
 
@@ -382,12 +419,12 @@ nb-card-header {
     margin: 1rem 0;
 
     nb-card-header {
-      background: nb-theme(color-primary-500);
+      background: #fac244;
       padding: 1.25rem 1rem;
       border-radius: 0.75rem 0.75rem 0 0;
 
       h3 {
-        color: white;
+        color: #57370c;
         margin: 0;
         font-size: 1.1rem;
         font-weight: 600;

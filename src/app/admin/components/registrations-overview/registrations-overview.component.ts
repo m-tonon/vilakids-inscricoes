@@ -48,7 +48,7 @@ import { StyleClassModule } from 'primeng/styleclass';
     Button,
     Toast,
     ToastModule,
-    StyleClassModule
+    StyleClassModule,
   ],
   providers: [MessageService],
   templateUrl: './registrations-overview.component.html',
@@ -60,18 +60,35 @@ export class RegistrationsOverviewComponent implements OnInit {
   private messageService = inject(MessageService);
   registrations$?: Observable<ExportedRegistration[]>;
 
-  displayedColumns: string[] = [
-    'Nome',
-    'Idade',
-    'Gênero',
-    'Nome do responsável',
-    'Telefone',
-    'Pagamento confirmado',
-    'Criado em',
-  ];
+  allRegistrations: ExportedRegistration[] = [];
+  filteredRegistrations: ExportedRegistration[] = [];
+  paymentFilter: 'all' | 'true' | 'false' = 'all';
 
   ngOnInit(): void {
     this.registrations$ = this.registrationService.retrieveRegistrations();
+    this.registrations$.subscribe((regs) => {
+      this.allRegistrations = regs;
+      this.applyPaymentFilter();
+    });
+  }
+
+  applyPaymentFilter(): void {
+    if (this.paymentFilter === 'all') {
+      this.filteredRegistrations = this.allRegistrations;
+    } else if (this.paymentFilter === 'true') {
+      this.filteredRegistrations = this.allRegistrations.filter(
+        (r) => r.paymentConfirmed === true
+      );
+    } else {
+      this.filteredRegistrations = this.allRegistrations.filter(
+        (r) => r.paymentConfirmed === false
+      );
+    }
+  }
+
+  setPaymentFilter(filter: 'all' | 'true' | 'false') {
+    this.paymentFilter = filter;
+    this.applyPaymentFilter();
   }
 
   exportToCSV(): void {
@@ -90,14 +107,11 @@ export class RegistrationsOverviewComponent implements OnInit {
     });
   }
 
-  rowClass(reg: ExportedRegistration) {
-    console.log(reg);
-    return {
-      'payment-true': reg.paymentConfirmed === true,
-    };
-  }
-
   updatePaymentStatus(reg: ExportedRegistration): void {
-    this.messageService.add({ severity: 'info', summary: 'Product Selected', detail: reg.name });
+    this.messageService.add({
+      severity: 'info',
+      summary: 'Registration Selected',
+      detail: reg.childName,
+    });
   }
 }
