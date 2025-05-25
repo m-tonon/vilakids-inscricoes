@@ -35,7 +35,7 @@ module.exports = async (req: any, res: any) => {
 
     if (!updatedRegistration) {
       updatedRegistration = await RegistrationModel.findOneAndUpdate(
-        { 'responsibleInfo.document': formData.responsibleInfo.document },
+        { 'identityDocument': formData.identityDocument },
         { $set: formData },
         { new: true }
       );
