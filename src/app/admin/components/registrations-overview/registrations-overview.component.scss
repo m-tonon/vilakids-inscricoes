@@ -1,5 +1,18 @@
 @use '@angular/material' as mat;
 
+.table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  margin-top: 2rem;
+}
+
+.payment-toggle-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
 .table-wrapper {
   margin-top: 2rem;
 }
@@ -69,10 +82,4 @@
   justify-content: center;
   align-items: center;
   height: 20vh;
-}
-
-.refresh-button {
-  button {
-    background: none;
-  }
 }

@@ -37,7 +37,7 @@ export interface SaveRegistrationResponse {
 }
 
 export interface ExportedRegistration {
-  name: string;
+  childName: string;
   birthDate: string;
   age: number;
   gender: string;
