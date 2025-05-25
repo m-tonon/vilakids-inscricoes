@@ -27,15 +27,19 @@ module.exports = async (req: any, res: any) => {
       return;
     }
 
-    const uniqueQuery = {
-      'payment.referenceId': formData.payment.referenceId,
-    };
-
-    const updatedRegistration = await RegistrationModel.findOneAndUpdate(
-      uniqueQuery,
+    let updatedRegistration = await RegistrationModel.findOneAndUpdate(
+      { 'payment.referenceId': formData.payment.referenceId },
       { $set: formData },
       { new: true }
     );
+
+    if (!updatedRegistration) {
+      updatedRegistration = await RegistrationModel.findOneAndUpdate(
+        { 'identityDocument': formData.identityDocument },
+        { $set: formData },
+        { new: true }
+      );
+    }
 
     if (updatedRegistration) {
       res.status(200).json({
