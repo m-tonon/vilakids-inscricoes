@@ -1,7 +1,13 @@
 <div class="registration-container">
   <nb-card>
     <nb-card-header>
-      <h1>{{ campInfo.name }}</h1>
+      <img
+        alt=""
+        src="https://mcusercontent.com/1e3ede6565010c0201471308b/images/45c913de-4495-7e70-45f9-062feb9b6ff2.png"
+        width="800"
+        height="auto"
+        style="display: block; max-width: 100%; height: auto; border-radius: 20px"
+      />
     </nb-card-header>
     <nb-card-body style="padding: 1rem">
       @if(isPaymentConfirmed()) {
@@ -142,13 +148,13 @@
                   [value]="calculatedAge()"
                   readonly
                   disabled
-                  />
-                  @let age = calculatedAge();
-                  @if (age != null && (age < 6 || age > 12)) {
-                    <span class="error-message">
-                      A criança deve ter entre 6 e 11 anos de idade.
-                    </span>
-                  }
+                />
+                @let age = calculatedAge(); @if (age != null && (age < 6 || age
+                > 12)) {
+                <span class="error-message">
+                  A criança deve ter entre 6 e 11 anos de idade.
+                </span>
+                }
               </nb-form-field>
 
               <nb-form-field>
@@ -473,12 +479,12 @@
   <div class="confirmation-message">
     <nb-icon icon="checkmark-circle-2-outline" status="success"></nb-icon>
     <h2>Inscrição realizada com sucesso!</h2>
+    <p>Seu pagamento ainda está em processo de confirmação.<br /></p>
     <p>
-      Seu pagamento ainda está em processo de confirmação.<br />
-    </p>
-    <p>
-      Enviaremos um email para confirmar a sua inscrição assim que o pagamento for validado.<br /><br />
-      <strong>Lembre-se:</strong> verifique também a sua caixa de spam para garantir que não perca nossa mensagem.
+      Enviaremos um email para confirmar a sua inscrição assim que o pagamento
+      for validado.<br /><br />
+      <strong>Lembre-se:</strong> verifique também a sua caixa de spam para
+      garantir que não perca nossa mensagem.
     </p>
     <br />
     <p>Em caso de dúvidas, entre em contato com nossa equipe:</p>
