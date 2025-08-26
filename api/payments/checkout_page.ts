@@ -30,6 +30,8 @@ module.exports = async (req: any, res: any) => {
     const area = rawPhone?.slice(0, 2) ?? null;
     const number = rawPhone?.slice(2) ?? null;
 
+    const expirationDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().replace('Z', '-03:00');
+
     const options = {
       method: 'POST',
       url: `${PAGBANK_API_URL}/checkouts`,
@@ -40,7 +42,7 @@ module.exports = async (req: any, res: any) => {
       },
       data: {
         reference_id: payment.referenceId,
-        expiration_date: '2025-08-14T19:09:10-03:00',
+        expiration_date: expirationDate,
         customer: {
           name: payment.name,
           email: payment.email,
