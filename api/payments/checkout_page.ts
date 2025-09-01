@@ -30,6 +30,8 @@ module.exports = async (req: any, res: any) => {
     const area = rawPhone?.slice(0, 2) ?? null;
     const number = rawPhone?.slice(2) ?? null;
 
+    const cpfDigits = payment.cpf?.replace(/\D/g, '');
+
     const expirationDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().replace('Z', '-03:00');
 
     const options = {
@@ -46,9 +48,9 @@ module.exports = async (req: any, res: any) => {
         customer: {
           name: payment.name,
           email: payment.email,
-          tax_id: payment.cpf,
+          tax_id: cpfDigits,
           phone: {
-            country: '+55',
+            country: '55',
             area: area,
             number: number
           }
@@ -56,14 +58,14 @@ module.exports = async (req: any, res: any) => {
         customer_modifiable: true,
         items: [
           {
+            reference_id: 'ITEM01',
             name: 'AcampaKids 2025',
             quantity: 1,
             unit_amount: 21000,
           }
         ],
         payment_methods: [
-          {type: 'CREDIT_CARD' },
-          {type: 'DEBIT_CARD' },
+          {type: 'credit_card' },
           {type: 'PIX'},
         ],
         payment_methods_configs: [
