@@ -613,3 +613,16 @@ nb-card-header {
   margin: 0.5rem;
   display: block;
 }
+
+.installment-info.disabled {
+  color: #999 !important;
+  text-decoration: line-through;
+
+  .note {
+    margin-left: 0.5rem;
+    font-style: italic;
+    color: #c00;
+    text-decoration: none;
+    display: inline-block;
+  }
+}
