@@ -57,9 +57,10 @@
                 {{ campInfo.paymentOptions.methods.join(" ou ") }}
               </p>
               @if (campInfo.paymentOptions.maxInstallments > 1) {
-              <p class="installment-info">
+              <p class="installment-info disabled">
                 Parcelamento em até
                 {{ campInfo.paymentOptions.maxInstallments }}x no cartão
+                <span class="note">(indisponível)</span>
               </p>
               }
             </div>
@@ -423,9 +424,10 @@
                   {{ campInfo.paymentOptions.methods.join(" ou ") }}
                 </p>
                 @if (campInfo.paymentOptions.maxInstallments > 1) {
-                <p>
+                <p class="installment-info disabled">
                   Parcelamento em até
                   {{ campInfo.paymentOptions.maxInstallments }}x no cartão
+                  <span class="note">(indisponível)</span>
                 </p>
                 }
               </div>

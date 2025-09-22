@@ -71,7 +71,7 @@ module.exports = async (req: any, res: any) => {
         payment_methods_configs: [
           {
             type: 'credit_card',
-            config_options: [{ option: 'installments_limit', value: '10' }]
+            config_options: [{ option: 'installments_limit', value: '1' }]
           }
         ],
         soft_descriptor: '',

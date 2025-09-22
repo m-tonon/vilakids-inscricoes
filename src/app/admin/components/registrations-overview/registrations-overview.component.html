@@ -44,6 +44,7 @@
   >
     <ng-template #header>
       <tr>
+        <th style="width: 3rem">#</th>
         <th pSortableColumn="childName" style="width: 20%">
           <p-sortIcon field="childName" />
           Nome
@@ -57,8 +58,9 @@
         <th style="width: 6rem"></th>
       </tr>
     </ng-template>
-    <ng-template #body let-reg>
-      <tr>
+    <ng-template #body let-reg let-rowIndex="rowIndex">
+      <tr [ngClass]="{ 'unpaid-row': !reg.paymentConfirmed }">
+        <td>{{ rowIndex + 1 }}</td>
         <td>{{ reg.childName }}</td>
         <td>{{ reg.age }}</td>
         <td>{{ reg.gender }}</td>
