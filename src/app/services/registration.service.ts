@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ExportedRegistration, RegistrationFormData, SaveRegistrationResponse } from '../../../shared/registration.interface';
+import { ExportedRegistration, GenderCount, RegistrationFormData, SaveRegistrationResponse } from '../../../shared/registration.interface';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -27,5 +27,10 @@ export class RegistrationService {
   exportRegistrations(): Observable<Blob> {
     const url = `${this.apiUrl}/export?json=0`;
     return this.http.get(url, { responseType: 'blob', withCredentials: true });
+  }
+
+  getGenderCount(): Observable<GenderCount> {
+    const url = `${this.apiUrl}/gender-count`;
+    return this.http.get<GenderCount>(url, { withCredentials: true });
   }
 }

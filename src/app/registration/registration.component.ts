@@ -33,6 +33,7 @@ import {
 import { RegistrationService } from '../services/registration.service';
 import { PaymentService } from '../services/payment.service';
 import {
+  GenderCount,
   PaymentData,
   RegistrationFormData,
   SaveRegistrationResponse,
@@ -84,6 +85,9 @@ export class RegistrationComponent implements OnInit {
   isPaymentConfirmed = signal(false);
   isLoading = signal(false);
   calculatedAge = signal<number | null>(null);
+  genderCounts = signal<GenderCount>({ masculino: 0, feminino: 0 });
+  selectedGenderLimitReached = signal(false);
+
   checkoutUrl: string = '';
   referenceId: string = this.generateReferenceId();
 
@@ -123,6 +127,8 @@ export class RegistrationComponent implements OnInit {
         this.isPaymentConfirmed.set(true);
       }
     });
+
+    this.loadGenderCounts();
 
     this.acknowledgmentForm = this.fb.group({
       hasReadInfo: [false, Validators.requiredTrue],
@@ -166,6 +172,20 @@ export class RegistrationComponent implements OnInit {
         this.calculatedAge.set(null);
       }
     });
+
+    this.registrationForm.get('gender')?.valueChanges.subscribe((selectedGender) => {
+      this.checkGenderLimit(selectedGender);
+      if (this.selectedGenderLimitReached()) {
+        this.toastrService.warning('Infelizmente as inscrições para este grupo já se esgotaram.', 'Inscrições encerradas', {
+          duration: 10000,
+          hasIcon: true,
+          icon: 'alert-circle',
+          status: 'warning',
+        });
+        this.registrationForm.get('gender')?.setValue('');
+        this.selectedGenderLimitReached.set(true);
+      }
+    });
   }
 
   canProceedToRegistration(): boolean {
@@ -173,7 +193,7 @@ export class RegistrationComponent implements OnInit {
   }
 
   canProceedToPayment(): boolean {
-    return this.registrationForm.valid;
+    return this.registrationForm.valid && !this.selectedGenderLimitReached();
   }
 
   onSubmit(): void {
@@ -324,5 +344,35 @@ export class RegistrationComponent implements OnInit {
     }
 
     return age;
+  }
+
+  private loadGenderCounts(): void {
+    this.registrationService.getGenderCount().subscribe({
+      next: (counts) => {
+        this.genderCounts.set(counts);
+      },
+      error: (error) => {
+        console.error('Error loading gender counts:', error);
+        this.genderCounts.set({ masculino: 0, feminino: 0 });
+      }
+    });
+  }
+  
+  private checkGenderLimit(selectedGender: string): void {
+    if (!selectedGender) {
+      this.selectedGenderLimitReached.set(false);
+      return;
+    }
+  
+    const counts = this.genderCounts();
+    const maxPerGender = 50;
+    
+    if (selectedGender === 'Masculino' && counts.masculino >= maxPerGender) {
+      this.selectedGenderLimitReached.set(true);
+    } else if (selectedGender === 'Feminino' && counts.feminino >= maxPerGender) {
+      this.selectedGenderLimitReached.set(true);
+    } else {
+      this.selectedGenderLimitReached.set(false);
+    }
   }
 }

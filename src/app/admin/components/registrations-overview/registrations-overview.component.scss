@@ -92,3 +92,9 @@
 .unpaid-row td {
   color: #999;
 }
+
+.gender-column {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

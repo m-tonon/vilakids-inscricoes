@@ -7,6 +7,11 @@ export interface PaymentData {
   phone?: string;
 }
 
+export interface GenderCount {
+  masculino: number;
+  feminino: number;
+}
+
 export interface RegistrationFormData {
   childName: string;
   birthDate: string;

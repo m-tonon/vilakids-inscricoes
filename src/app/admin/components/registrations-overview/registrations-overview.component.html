@@ -50,7 +50,36 @@
           Nome
         </th>
         <th>Idade</th>
-        <th>Gênero</th>
+        <th class="gender-column">
+          <ng-container>
+            Gênero
+          </ng-container>
+          <ng-container>
+            <p-columnFilter
+              field="gender"
+              display="menu"
+              matchMode="equals"
+              [showOperator]="false"
+              [showMatchModes]="false"
+              [showAddButton]="false"
+              [showApplyButton]="false"
+            >
+              <ng-template #filter let-value let-filter="filterCallback">
+                <p-select
+                  [ngModel]="value"
+                  [options]="genders"
+                  (onChange)="filter($event.value)"
+                  placeholder="Selecionar gênero"
+                  [showClear]="false"
+                >
+                  <ng-template #item let-option>
+                    <span>{{ option.label }}</span>
+                  </ng-template>
+                </p-select>
+              </ng-template>
+            </p-columnFilter>
+          </ng-container>
+        </th>
         <th>Nome do responsável</th>
         <th>Telefone</th>
         <th>Pagamento confirmado</th>
