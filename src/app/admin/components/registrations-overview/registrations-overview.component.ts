@@ -5,7 +5,7 @@ import {
   inject,
   OnInit,
 } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TableModule } from 'primeng/table';
 import { NbDateFnsDateModule } from '@nebular/date-fns';
@@ -27,11 +27,14 @@ import { Toast } from 'primeng/toast';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { StyleClassModule } from 'primeng/styleclass';
+import { SelectModule } from 'primeng/select';
+import { TagModule } from 'primeng/tag';
 
 @Component({
   selector: 'app-registrations-overview',
   standalone: true,
   imports: [
+    FormsModule,
     CommonModule,
     ReactiveFormsModule,
     NbCardModule,
@@ -49,6 +52,8 @@ import { StyleClassModule } from 'primeng/styleclass';
     Toast,
     ToastModule,
     StyleClassModule,
+    SelectModule,
+    TagModule,
   ],
   providers: [MessageService],
   templateUrl: './registrations-overview.component.html',
@@ -63,6 +68,10 @@ export class RegistrationsOverviewComponent implements OnInit {
   allRegistrations: ExportedRegistration[] = [];
   filteredRegistrations: ExportedRegistration[] = [];
   paymentFilter: 'all' | 'true' | 'false' = 'all';
+  genders: any[] = [
+    { label: 'Masculino', value: 'Masculino' },
+    { label: 'Feminino', value: 'Feminino' }
+  ];
 
   ngOnInit(): void {
     this.registrations$ = this.registrationService.retrieveRegistrations();
