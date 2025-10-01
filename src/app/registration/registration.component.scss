@@ -325,19 +325,35 @@ nb-card-header {
   }
 }
 
-.confirmation-message {
+.message-box {
   text-align: center;
   padding: 2rem 1rem;
   margin: 0 auto;
+  
+  .completed-title {
+    h2 {
+      color: nb-theme(color-success-600);
+    }
+    nb-icon {
+      color: nb-theme(color-success-500);
+    }
+  }
+
+  .ended-title {
+    h2 {
+      color: nb-theme(color-danger-600);
+    }
+    nb-icon {
+      color: nb-theme(color-danger-500);
+    }
+  }
 
   nb-icon {
     font-size: 3rem;
-    color: nb-theme(color-success-500);
     margin-bottom: 1rem;
   }
 
   h2 {
-    color: nb-theme(color-success-600);
     margin-bottom: 1rem;
     font-size: 1.5rem;
     font-weight: 600;
