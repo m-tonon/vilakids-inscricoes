@@ -22,7 +22,7 @@ export const confirmationTemplate = `
       name="viewport"
       content="width=device-width, initial-scale=1"
     />
-    <title>Vila Kids Acampa 2025</title>
+    <title>Vila Kids Acampa 2026</title>
     <link
       rel="preconnect"
       href="https://fonts.googleapis.com"
@@ -1244,7 +1244,7 @@ export const confirmationTemplate = `
                                                                                         255
                                                                                       );
                                                                                     "
-                                                                                    >&nbsp;03&nbsp;a&nbsp;05&nbsp;de&nbsp;outubro</span
+                                                                                    >&nbsp;30&nbsp;de&nbsp;outubro&nbsp;a&nbsp;01&nbsp;de&nbsp;novembro</span
                                                                                   ></span
                                                                                 ></span
                                                                               >
@@ -2235,4 +2235,4 @@ export const confirmationTemplate = `
     ></script>
   </body>
 </html>
-`
+`;

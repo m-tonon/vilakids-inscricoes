@@ -32,7 +32,9 @@ module.exports = async (req: any, res: any) => {
 
     const cpfDigits = payment.cpf?.replace(/\D/g, '');
 
-    const expirationDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().replace('Z', '-03:00');
+    const expirationDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+      .toISOString()
+      .replace('Z', '-03:00');
 
     const options = {
       method: 'POST',
@@ -52,33 +54,30 @@ module.exports = async (req: any, res: any) => {
           phone: {
             country: '55',
             area: area,
-            number: number
-          }
+            number: number,
+          },
         },
         customer_modifiable: true,
         items: [
           {
             reference_id: 'ITEM01',
-            name: 'AcampaKids 2025',
+            name: 'AcampaKids 2026',
             quantity: 1,
-            unit_amount: 21000,
-          }
+            unit_amount: 28000,
+          },
         ],
-        payment_methods: [
-          {type: 'credit_card' },
-          {type: 'PIX'},
-        ],
+        payment_methods: [{ type: 'credit_card' }, { type: 'PIX' }],
         payment_methods_configs: [
           {
             type: 'credit_card',
-            config_options: [{ option: 'installments_limit', value: '1' }]
-          }
+            config_options: [{ option: 'installments_limit', value: '10' }],
+          },
         ],
         soft_descriptor: '',
         redirect_url: `https://${DOMAIN_URL}/?paymentCompleted=true`,
         return_url: `https://${DOMAIN_URL}/`,
         notification_urls: [`https://${DOMAIN_URL}/api/payments/notifications`],
-      }
+      },
     };
     console.log('Request options to PagBank:', options);
 
@@ -96,7 +95,11 @@ module.exports = async (req: any, res: any) => {
     const pagBankErrors = axiosError.response?.data?.error_messages;
 
     const customError: AppApiError = {
-      source: pagBankErrors ? 'PagBank' : axiosError.code === 'ECONNABORTED' ? 'Network' : 'App',
+      source: pagBankErrors
+        ? 'PagBank'
+        : axiosError.code === 'ECONNABORTED'
+          ? 'Network'
+          : 'App',
       code: axiosError.code || 'APP_ERROR',
       message: axiosError.message || 'Erro inesperado no servidor.',
     };

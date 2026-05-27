@@ -106,7 +106,7 @@ export class RegistrationsOverviewComponent implements OnInit {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'inscricoes2025.csv';
+        a.download = 'inscricoes2026.csv';
         a.click();
         window.URL.revokeObjectURL(url);
       },

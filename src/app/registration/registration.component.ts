@@ -38,7 +38,10 @@ import {
   RegistrationFormData,
   SaveRegistrationResponse,
 } from '../../../shared/registration.interface';
-import { AppApiError, PagBankResponse } from '../../../shared/payment.interface';
+import {
+  AppApiError,
+  PagBankResponse,
+} from '../../../shared/payment.interface';
 import { ActivatedRoute } from '@angular/router';
 import { NgxMaskDirective } from 'ngx-mask';
 import { switchMap } from 'rxjs';
@@ -63,7 +66,7 @@ import { NbDateFnsDateModule } from '@nebular/date-fns';
     NbSpinnerModule,
     NgxMaskDirective,
     NbDateFnsDateModule,
-    NbTooltipModule
+    NbTooltipModule,
   ],
   templateUrl: './registration.component.html',
   styleUrl: './registration.component.scss',
@@ -82,6 +85,7 @@ export class RegistrationComponent implements OnInit {
   acknowledgmentForm!: FormGroup;
 
   registrationsEnded = signal(false);
+  installmentAvailable = signal(true);
   isRegistrationComplete = signal(false);
   isPaymentConfirmed = signal(false);
   isLoading = signal(false);
@@ -93,23 +97,22 @@ export class RegistrationComponent implements OnInit {
   referenceId: string = this.generateReferenceId();
 
   campInfo = {
-    name: '5º Acampa Kids',
-    dates: '03, 04 e 05 de outubro de 2025',
+    name: '6º Acampa Kids',
+    dates: '30 de outubro a 01 de novembro de 2026',
     location: 'Acampamento Evangélico Maanaim',
-    price: 210.0,
+    price: 280.0,
     minAge: 6,
     maxAge: 11,
     preletor: {
-      name: 'Marcus Nati',
+      name: 'Projeto Cantando o Catecismo',
       description:
-        'Teólogo, pregador, presbítero, desenhista, designer e criador do perfil <a href="https://www.instagram.com/brother_biblia" target="_blank">@brother_biblia</a>',
+        'Criado pelo casal Eliel e Drielle Espíndola, o Projeto Cantando o Catecismo tem transformado o aprendizado do Breve Catecismo de Westminster em uma experiência musical e envolvente.<br/><br/>Desde 2020, o projeto tem musicado as 107 perguntas do catecismo, ajudando famílias e igrejas a ensinar doutrina sólida de forma memorável — especialmente para as crianças. Com Eliel (bacharel em Música e educador musical) e Drielle à frente, o trabalho já alcança diversas partes do Brasil e do mundo, com canções sendo traduzidas para missões internacionais.<br/><br/>Durante o acampamento, você terá a oportunidade de aprender e cantar as verdades da fé reformada de maneira única, divertida e edificante.<br/><br/>📱 <b>Instagram:</b> <a href="https://www.instagram.com/cantando.catecismo" target="_blank">@cantando.catecismo</a><br/>🎥 <b>YouTube:</b> <a href="https://www.youtube.com/@cantandoocatecismo" target="_blank">Cantando o Catecismo</a>',
     },
     contacts: [
       { name: 'Secretaria IPVO', phone: '(44) 3226-4473' },
       { name: 'Anjinho', phone: '(44) 9 9846-0089' },
     ],
-    description:
-      `Está chegando o 5º ACAMPAKIDS da IPVO, uma ótima oportunidade para que seu filho(a) possa fortalecer a fé e desenvolver autonomia e comunhão.<br/><br/>
+    description: `Está chegando o <strong>6º ACAMPAKIDS</strong> da IPVO, uma ótima oportunidade para que seu filho(a) possa fortalecer a fé e desenvolver autonomia e comunhão.<br/><br/>
         Garanta a sua vaga e lembre-se de convidar algum amigo!<br/><br/>
         ⚠️ <b>Importante:</b> Sua vaga só está garantida mediante pagamento.
       `,
@@ -139,7 +142,14 @@ export class RegistrationComponent implements OnInit {
     this.registrationForm = this.fb.group({
       childName: ['', Validators.required],
       birthDate: ['', Validators.required],
-      age: ['', [Validators.required, Validators.min(this.campInfo.minAge), Validators.max(12)]],
+      age: [
+        '',
+        [
+          Validators.required,
+          Validators.min(this.campInfo.minAge),
+          Validators.max(12),
+        ],
+      ],
       gender: ['', Validators.required],
       identityDocument: ['', Validators.required],
       address: [''],
@@ -156,7 +166,7 @@ export class RegistrationComponent implements OnInit {
         email: ['', [Validators.required, Validators.email]],
         relation: [''],
       }),
-      parentalAuthorization: [false, Validators.requiredTrue]
+      parentalAuthorization: [false, Validators.requiredTrue],
     });
 
     this.registrationForm.get('birthDate')?.valueChanges.subscribe((value) => {
@@ -174,19 +184,25 @@ export class RegistrationComponent implements OnInit {
       }
     });
 
-    this.registrationForm.get('gender')?.valueChanges.subscribe((selectedGender) => {
-      this.checkGenderLimit(selectedGender);
-      if (this.selectedGenderLimitReached()) {
-        this.toastrService.warning('Infelizmente as inscrições para este grupo já se esgotaram.', 'Inscrições encerradas', {
-          duration: 10000,
-          hasIcon: true,
-          icon: 'alert-circle',
-          status: 'warning',
-        });
-        this.registrationForm.get('gender')?.setValue('');
-        this.selectedGenderLimitReached.set(true);
-      }
-    });
+    this.registrationForm
+      .get('gender')
+      ?.valueChanges.subscribe((selectedGender) => {
+        this.checkGenderLimit(selectedGender);
+        if (this.selectedGenderLimitReached()) {
+          this.toastrService.warning(
+            'Infelizmente as inscrições para este grupo já se esgotaram.',
+            'Inscrições encerradas',
+            {
+              duration: 10000,
+              hasIcon: true,
+              icon: 'alert-circle',
+              status: 'warning',
+            },
+          );
+          this.registrationForm.get('gender')?.setValue('');
+          this.selectedGenderLimitReached.set(true);
+        }
+      });
   }
 
   canProceedToRegistration(): boolean {
@@ -235,7 +251,7 @@ export class RegistrationComponent implements OnInit {
             } else {
               throw new Error('PAY link not found in response.');
             }
-          })
+          }),
         )
         .subscribe({
           next: (response: SaveRegistrationResponse) => {
@@ -247,7 +263,7 @@ export class RegistrationComponent implements OnInit {
                 hasIcon: true,
                 icon: 'checkmark-circle',
                 status: 'success',
-              }
+              },
             );
 
             this.isRegistrationComplete.set(true);
@@ -259,9 +275,11 @@ export class RegistrationComponent implements OnInit {
             const apiError = error?.error?.error as AppApiError;
             const source = apiError?.source;
 
-            let errorMsg = 'Ocorreu um erro inesperado. Entre em contato com a secretaria';
+            let errorMsg =
+              'Ocorreu um erro inesperado. Entre em contato com a secretaria';
             if (source === 'PagBank') {
-              errorMsg = 'Erro ao processar o pagamento. Alguns dados do responsável podem estar incorretos.';
+              errorMsg =
+                'Erro ao processar o pagamento. Alguns dados do responsável podem estar incorretos.';
             }
 
             this.toastrService.danger(errorMsg, 'Erro', {
@@ -290,14 +308,15 @@ export class RegistrationComponent implements OnInit {
           hasIcon: true,
           icon: 'close-circle',
           status: 'danger',
-        }
+        },
       );
     }
   }
 
   getFieldStatus(fieldName: string): string {
     const field =
-      this.registrationForm.get(fieldName) || this.acknowledgmentForm.get(fieldName);
+      this.registrationForm.get(fieldName) ||
+      this.acknowledgmentForm.get(fieldName);
 
     if (!field) {
       console.warn(`Field '${fieldName}' not found in any form.`);
@@ -339,7 +358,7 @@ export class RegistrationComponent implements OnInit {
     const today = new Date();
     let age = today.getFullYear() - birthDate.getFullYear();
     const m = today.getMonth() - birthDate.getMonth();
-  
+
     if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
       age--;
     }
@@ -355,22 +374,25 @@ export class RegistrationComponent implements OnInit {
       error: (error) => {
         console.error('Error loading gender counts:', error);
         this.genderCounts.set({ masculino: 0, feminino: 0 });
-      }
+      },
     });
   }
-  
+
   private checkGenderLimit(selectedGender: string): void {
     if (!selectedGender) {
       this.selectedGenderLimitReached.set(false);
       return;
     }
-  
+
     const counts = this.genderCounts();
     const maxPerGender = 50;
-    
+
     if (selectedGender === 'Masculino' && counts.masculino >= maxPerGender) {
       this.selectedGenderLimitReached.set(true);
-    } else if (selectedGender === 'Feminino' && counts.feminino >= maxPerGender) {
+    } else if (
+      selectedGender === 'Feminino' &&
+      counts.feminino >= maxPerGender
+    ) {
       this.selectedGenderLimitReached.set(true);
     } else {
       this.selectedGenderLimitReached.set(false);
