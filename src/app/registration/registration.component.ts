@@ -43,9 +43,11 @@ import {
   PagBankResponse,
 } from '../../../shared/payment.interface';
 import { ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import { NgxMaskDirective } from 'ngx-mask';
 import { switchMap } from 'rxjs';
 import { NbDateFnsDateModule } from '@nebular/date-fns';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-registration',
@@ -80,12 +82,14 @@ export class RegistrationComponent implements OnInit {
   private toastrService = inject(NbToastrService);
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
+  private http = inject(HttpClient);
 
   registrationForm!: FormGroup;
   acknowledgmentForm!: FormGroup;
 
   registrationsEnded = signal(false);
   installmentAvailable = signal(true);
+  whatsappGroupUrl = signal('');
   isRegistrationComplete = signal(false);
   isPaymentConfirmed = signal(false);
   isLoading = signal(false);
@@ -142,6 +146,7 @@ export class RegistrationComponent implements OnInit {
     });
 
     this.loadGenderCounts();
+    this.loadWhatsappGroupUrl();
 
     this.acknowledgmentForm = this.fb.group({
       hasReadInfo: [false, Validators.requiredTrue],
@@ -386,6 +391,21 @@ export class RegistrationComponent implements OnInit {
         this.genderCounts.set({ masculino: 0, feminino: 0 });
       },
     });
+  }
+
+  private loadWhatsappGroupUrl(): void {
+    if (environment.whatsappGroupUrl) {
+      this.whatsappGroupUrl.set(environment.whatsappGroupUrl);
+      return;
+    }
+
+    this.http
+      .get<{ whatsappGroupUrl: string }>(`${environment.apiBaseUrl}/config/public`)
+      .subscribe({
+        next: (config) =>
+          this.whatsappGroupUrl.set(config.whatsappGroupUrl || ''),
+        error: () => {},
+      });
   }
 
   private checkGenderLimit(selectedGender: string): void {
