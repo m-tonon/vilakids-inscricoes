@@ -1,4 +1,5 @@
 <div class="table-wrapper card">
+  <p-toast />
   <h2>Inscrições</h2>
   @if (registrations$ | async; as registrations;) {
   <div class="table-header">
@@ -84,7 +85,7 @@
         <th>Telefone</th>
         <th>Pagamento confirmado</th>
         <th>Criado em</th>
-        <th style="width: 6rem"></th>
+        <th style="width: 9rem">Ações</th>
       </tr>
     </ng-template>
     <ng-template #body let-reg let-rowIndex="rowIndex">
@@ -97,14 +98,30 @@
         <td>{{ reg.responsiblePhone | phoneFormat }}</td>
         <td>{{ reg.paymentConfirmed ? "Sim" : "Não" }}</td>
         <td>{{ reg.createdAt | date : "short" }}</td>
-        <td class="refresh-btn">
-          <p-toast />
-          <p-button
-            icon="pi pi-refresh"
-            (click)="updatePaymentStatus(reg)"
-            severity="secondary"
-            rounded
-          />
+        <td class="actions-cell">
+          <div class="action-buttons">
+            <p-button
+              [icon]="reg.paymentConfirmed ? 'pi pi-times-circle' : 'pi pi-check-circle'"
+              (click)="togglePaymentStatus(reg)"
+              [severity]="reg.paymentConfirmed ? 'warn' : 'success'"
+              [loading]="isUpdating(reg)"
+              [disabled]="!reg.paymentReferenceId"
+              rounded
+              text
+              [pTooltip]="reg.paymentConfirmed ? 'Marcar como pendente' : 'Marcar como pago'"
+              tooltipPosition="top"
+            />
+            <p-button
+              icon="pi pi-copy"
+              (click)="copyPaymentUrl(reg)"
+              severity="secondary"
+              [disabled]="!reg.checkoutUrl"
+              rounded
+              text
+              pTooltip="Copiar link de pagamento"
+              tooltipPosition="top"
+            />
+          </div>
         </td>
       </tr>
     </ng-template>

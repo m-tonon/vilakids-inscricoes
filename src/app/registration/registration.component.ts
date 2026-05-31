@@ -247,6 +247,7 @@ export class RegistrationComponent implements OnInit {
             const payLink = response.links.find((r) => r.rel === 'PAY');
             if (payLink && payLink.href) {
               this.checkoutUrl = payLink.href;
+              formData.payment.checkoutUrl = payLink.href;
               return this.registrationService.saveRegistration(formData);
             } else {
               throw new Error('PAY link not found in response.');

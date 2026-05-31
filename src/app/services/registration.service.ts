@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ExportedRegistration, GenderCount, RegistrationFormData, SaveRegistrationResponse } from '../../../shared/registration.interface';
+import { ExportedRegistration, GenderCount, RegistrationFormData, SaveRegistrationResponse, UpdatePaymentStatusRequest, UpdatePaymentStatusResponse } from '../../../shared/registration.interface';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -32,5 +32,16 @@ export class RegistrationService {
   getGenderCount(): Observable<GenderCount> {
     const url = `${this.apiUrl}/gender-count`;
     return this.http.get<GenderCount>(url, { withCredentials: true });
+  }
+
+  updatePaymentStatus(
+    request: UpdatePaymentStatusRequest,
+  ): Observable<UpdatePaymentStatusResponse> {
+    const url = `${this.apiUrl}/update-payment-status`;
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post<UpdatePaymentStatusResponse>(url, request, {
+      headers,
+      withCredentials: true,
+    });
   }
 }

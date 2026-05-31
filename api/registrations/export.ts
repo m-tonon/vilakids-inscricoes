@@ -12,6 +12,7 @@ module.exports = async (req: any, res: any) => {
     const registrations = await RegistrationModel.find({}).lean();
 
     const flatRegistrations = registrations.map((r: any) => ({
+      id: r._id?.toString(),
       childName: r.childName,
       birthDate: r.birthDate,
       age: r.age,
@@ -32,6 +33,7 @@ module.exports = async (req: any, res: any) => {
       parentalAuthorization: r.parentalAuthorization,
       paymentReferenceId: r.payment?.referenceId,
       paymentConfirmed: r.payment?.paymentConfirmed,
+      checkoutUrl: r.payment?.checkoutUrl,
       createdAt: r.createdAt,
       updatedAt: r.updatedAt,
     }));

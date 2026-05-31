@@ -32,7 +32,9 @@ module.exports = async (req: any, res: any) => {
 
     const cpfDigits = payment.cpf?.replace(/\D/g, '');
 
-    const expirationDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+    const expirationDate = new Date(
+      Date.now() + 30 * 24 * 60 * 60 * 1000,
+    ) // 30 dias
       .toISOString()
       .replace('Z', '-03:00');
 

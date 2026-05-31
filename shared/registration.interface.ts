@@ -1,6 +1,7 @@
 export interface PaymentData {
   referenceId: string;
   paymentConfirmed: boolean;
+  checkoutUrl?: string;
   name: string;
   cpf: string;
   email?: string;
@@ -41,7 +42,19 @@ export interface SaveRegistrationResponse {
   error?: string;
 }
 
+export interface UpdatePaymentStatusRequest {
+  paymentReferenceId: string;
+  paymentConfirmed: boolean;
+}
+
+export interface UpdatePaymentStatusResponse {
+  message?: string;
+  error?: string;
+  paymentConfirmed?: boolean;
+}
+
 export interface ExportedRegistration {
+  id?: string;
   childName: string;
   birthDate: string;
   age: number;
@@ -62,6 +75,7 @@ export interface ExportedRegistration {
   parentalAuthorization: boolean;
   paymentReferenceId?: string;
   paymentConfirmed?: boolean;
+  checkoutUrl?: string;
   createdAt: string | Date;
   updatedAt: string | Date;
 }

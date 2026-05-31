@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 const PaymentDataSchema = new mongoose.Schema({
   referenceId: String,
   paymentConfirmed: Boolean,
+  checkoutUrl: String,
   name: String,
   cpf: String,
   email: String,

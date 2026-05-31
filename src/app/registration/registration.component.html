@@ -3,7 +3,7 @@
     <nb-card-header>
       <img
         alt=""
-        src="https://mcusercontent.com/1e3ede6565010c0201471308b/images/45c913de-4495-7e70-45f9-062feb9b6ff2.png"
+        src="https://mcusercontent.com/7431ecec0175e179b64e6e523/images/fa7cbd74-382d-fd91-29d4-d4cc5bc78d4c.png"
         width="900"
         height="auto"
         style="display: block; max-width: 100%; height: auto"
@@ -451,10 +451,15 @@
                       {{ campInfo.paymentOptions.methods.join(" ou ") }}
                     </p>
                     @if (campInfo.paymentOptions.maxInstallments > 1) {
-                      <p class="installment-info disabled">
+                      <p
+                        class="installment-info"
+                        [class.disabled]="!installmentAvailable()"
+                      >
                         Parcelamento em até
                         {{ campInfo.paymentOptions.maxInstallments }}x no cartão
-                        <span class="note">(indisponível)</span>
+                        @if (!installmentAvailable()) {
+                          <span class="note">(indisponível)</span>
+                        }
                       </p>
                     }
                   </div>
