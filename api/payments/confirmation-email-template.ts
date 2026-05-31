@@ -22,7 +22,7 @@ export const confirmationTemplate = `
       name="viewport"
       content="width=device-width, initial-scale=1"
     />
-    <title>Vila Kids Acampa 2025</title>
+    <title>Vila Kids Acampa 2026</title>
     <link
       rel="preconnect"
       href="https://fonts.googleapis.com"
@@ -715,7 +715,7 @@ export const confirmationTemplate = `
                                                             >
                                                               <img
                                                                 alt=""
-                                                                src="https://mcusercontent.com/1e3ede6565010c0201471308b/images/c729b8f3-53f0-8386-3b7a-4ccee2601469.jpeg"
+                                                                src="https://mcusercontent.com/7431ecec0175e179b64e6e523/images/fa7cbd74-382d-fd91-29d4-d4cc5bc78d4c.png"
                                                                 width="561"
                                                                 height="auto"
                                                                 style="
@@ -746,7 +746,7 @@ export const confirmationTemplate = `
                                                             ><img
                                                               role="presentation"
                                                               class="imageDropZone mceImage"
-                                                              src="https://mcusercontent.com/1e3ede6565010c0201471308b/images/c729b8f3-53f0-8386-3b7a-4ccee2601469.jpeg"
+                                                              src="https://mcusercontent.com/7431ecec0175e179b64e6e523/images/fa7cbd74-382d-fd91-29d4-d4cc5bc78d4c.png"
                                                               alt=""
                                                               width="561"
                                                               height="auto"
@@ -1244,7 +1244,7 @@ export const confirmationTemplate = `
                                                                                         255
                                                                                       );
                                                                                     "
-                                                                                    >&nbsp;03&nbsp;a&nbsp;05&nbsp;de&nbsp;outubro</span
+                                                                                    >&nbsp;30&nbsp;de&nbsp;outubro&nbsp;a&nbsp;01&nbsp;de&nbsp;novembro</span
                                                                                   ></span
                                                                                 ></span
                                                                               >
@@ -2235,4 +2235,4 @@ export const confirmationTemplate = `
     ></script>
   </body>
 </html>
-`
+`;

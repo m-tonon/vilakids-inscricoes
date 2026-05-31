@@ -98,3 +98,13 @@
   align-items: center;
   justify-content: space-between;
 }
+
+.actions-cell {
+  white-space: nowrap;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+}

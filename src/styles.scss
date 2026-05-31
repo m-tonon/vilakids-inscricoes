@@ -1,6 +1,18 @@
 @use '@nebular/theme/styles/theming' as *;
 @use '@nebular/theme/styles/themes/default';
 
+$nb-themes: nb-register-theme((
+  color-primary-100: #d4dde0,
+  color-primary-200: #a9bbc1,
+  color-primary-300: #7e99a2,
+  color-primary-400: #537783,
+  color-primary-500: #37545f,
+  color-primary-600: #2c434c,
+  color-primary-700: #213239,
+  color-primary-800: #162126,
+  color-primary-900: #0b1013,
+), default, default);
+
 // Global styles
 @use '@nebular/theme/styles/globals' as *;
 

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   inject,
   OnInit,
@@ -29,6 +30,7 @@ import { MessageService } from 'primeng/api';
 import { StyleClassModule } from 'primeng/styleclass';
 import { SelectModule } from 'primeng/select';
 import { TagModule } from 'primeng/tag';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-registrations-overview',
@@ -54,6 +56,7 @@ import { TagModule } from 'primeng/tag';
     StyleClassModule,
     SelectModule,
     TagModule,
+    TooltipModule,
   ],
   providers: [MessageService],
   templateUrl: './registrations-overview.component.html',
@@ -63,21 +66,28 @@ import { TagModule } from 'primeng/tag';
 export class RegistrationsOverviewComponent implements OnInit {
   private registrationService = inject(RegistrationService);
   private messageService = inject(MessageService);
+  private cdr = inject(ChangeDetectorRef);
   registrations$?: Observable<ExportedRegistration[]>;
 
   allRegistrations: ExportedRegistration[] = [];
   filteredRegistrations: ExportedRegistration[] = [];
   paymentFilter: 'all' | 'true' | 'false' = 'all';
+  updatingReferenceIds = new Set<string>();
   genders: any[] = [
     { label: 'Masculino', value: 'Masculino' },
-    { label: 'Feminino', value: 'Feminino' }
+    { label: 'Feminino', value: 'Feminino' },
   ];
 
   ngOnInit(): void {
+    this.loadRegistrations();
+  }
+
+  loadRegistrations(): void {
     this.registrations$ = this.registrationService.retrieveRegistrations();
     this.registrations$.subscribe((regs) => {
       this.allRegistrations = regs;
       this.applyPaymentFilter();
+      this.cdr.markForCheck();
     });
   }
 
@@ -86,11 +96,11 @@ export class RegistrationsOverviewComponent implements OnInit {
       this.filteredRegistrations = this.allRegistrations;
     } else if (this.paymentFilter === 'true') {
       this.filteredRegistrations = this.allRegistrations.filter(
-        (r) => r.paymentConfirmed === true
+        (r) => r.paymentConfirmed === true,
       );
     } else {
       this.filteredRegistrations = this.allRegistrations.filter(
-        (r) => r.paymentConfirmed === false
+        (r) => r.paymentConfirmed === false,
       );
     }
   }
@@ -98,6 +108,7 @@ export class RegistrationsOverviewComponent implements OnInit {
   setPaymentFilter(filter: 'all' | 'true' | 'false') {
     this.paymentFilter = filter;
     this.applyPaymentFilter();
+    this.cdr.markForCheck();
   }
 
   exportToCSV(): void {
@@ -106,7 +117,7 @@ export class RegistrationsOverviewComponent implements OnInit {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'inscricoes2025.csv';
+        a.download = 'inscricoes2026.csv';
         a.click();
         window.URL.revokeObjectURL(url);
       },
@@ -116,11 +127,75 @@ export class RegistrationsOverviewComponent implements OnInit {
     });
   }
 
-  updatePaymentStatus(reg: ExportedRegistration): void {
-    this.messageService.add({
-      severity: 'info',
-      summary: 'Registration Selected',
-      detail: reg.childName,
-    });
+  togglePaymentStatus(reg: ExportedRegistration): void {
+    const referenceId = reg.paymentReferenceId;
+    if (!referenceId || this.updatingReferenceIds.has(referenceId)) {
+      return;
+    }
+
+    const nextStatus = !reg.paymentConfirmed;
+    this.updatingReferenceIds.add(referenceId);
+
+    this.registrationService
+      .updatePaymentStatus({
+        paymentReferenceId: referenceId,
+        paymentConfirmed: nextStatus,
+      })
+      .subscribe({
+        next: () => {
+          reg.paymentConfirmed = nextStatus;
+          this.applyPaymentFilter();
+          this.messageService.add({
+            severity: 'success',
+            summary: nextStatus ? 'Marcado como pago' : 'Marcado como pendente',
+            detail: reg.childName,
+          });
+          this.updatingReferenceIds.delete(referenceId);
+          this.cdr.markForCheck();
+        },
+        error: (err) => {
+          console.error('Failed to update payment status', err);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Erro ao atualizar pagamento',
+            detail: reg.childName,
+          });
+          this.updatingReferenceIds.delete(referenceId);
+          this.cdr.markForCheck();
+        },
+      });
+  }
+
+  copyPaymentUrl(reg: ExportedRegistration): void {
+    if (!reg.checkoutUrl) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Link indisponível',
+        detail: 'Esta inscrição não possui URL de pagamento salva.',
+      });
+      return;
+    }
+
+    navigator.clipboard.writeText(reg.checkoutUrl).then(
+      () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Link copiado',
+          detail: reg.childName,
+        });
+      },
+      () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro ao copiar',
+          detail: 'Não foi possível copiar o link de pagamento.',
+        });
+      },
+    );
+  }
+
+  isUpdating(reg: ExportedRegistration): boolean {
+    return !!reg.paymentReferenceId &&
+      this.updatingReferenceIds.has(reg.paymentReferenceId);
   }
 }
