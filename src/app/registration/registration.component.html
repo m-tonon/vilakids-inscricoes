@@ -44,6 +44,35 @@
                     <strong>{{ campInfo.preletor.name }}</strong>
                   </p>
                   <p [innerHTML]="campInfo.preletor.description"></p>
+                  <div class="preletor-media">
+                    @if (campInfo.preletor.imageUrl) {
+                      <img
+                        class="preletor-photo"
+                        [src]="campInfo.preletor.imageUrl"
+                        [alt]="campInfo.preletor.name"
+                      />
+                    }
+                    <div class="preletor-social">
+                      <p>
+                        📱 <b>Instagram:</b>
+                        <a
+                          [href]="campInfo.preletor.instagram.url"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          >{{ campInfo.preletor.instagram.handle }}</a
+                        >
+                      </p>
+                      <p>
+                        🎥 <b>YouTube:</b>
+                        <a
+                          [href]="campInfo.preletor.youtube.url"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          >{{ campInfo.preletor.youtube.label }}</a
+                        >
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
                 <div class="payment-info">

@@ -105,8 +105,17 @@ export class RegistrationComponent implements OnInit {
     maxAge: 11,
     preletor: {
       name: 'Projeto Cantando o Catecismo',
+      imageUrl: 'https://i.scdn.co/image/ab67616100005174f62fb5fe2200138e198c134d',
       description:
-        'Criado pelo casal Eliel e Drielle Espíndola, o Projeto Cantando o Catecismo tem transformado o aprendizado do Breve Catecismo de Westminster em uma experiência musical e envolvente.<br/><br/>Desde 2020, o projeto tem musicado as 107 perguntas do catecismo, ajudando famílias e igrejas a ensinar doutrina sólida de forma memorável — especialmente para as crianças. Com Eliel (bacharel em Música e educador musical) e Drielle à frente, o trabalho já alcança diversas partes do Brasil e do mundo, com canções sendo traduzidas para missões internacionais.<br/><br/>Durante o acampamento, você terá a oportunidade de aprender e cantar as verdades da fé reformada de maneira única, divertida e edificante.<br/><br/>📱 <b>Instagram:</b> <a href="https://www.instagram.com/cantando.catecismo" target="_blank">@cantando.catecismo</a><br/>🎥 <b>YouTube:</b> <a href="https://www.youtube.com/@cantandoocatecismo" target="_blank">Cantando o Catecismo</a>',
+        'Criado pelo casal Eliel e Drielle Espíndola, o Projeto Cantando o Catecismo tem transformado o aprendizado do Breve Catecismo de Westminster em uma experiência musical e envolvente.<br/><br/>Desde 2020, o projeto tem musicado as 107 perguntas do catecismo, ajudando famílias e igrejas a ensinar doutrina sólida de forma memorável — especialmente para as crianças. Com Eliel (bacharel em Música e educador musical) e Drielle à frente, o trabalho já alcança diversas partes do Brasil e do mundo, com canções sendo traduzidas para missões internacionais.<br/><br/>Durante o acampamento, você terá a oportunidade de aprender e cantar as verdades da fé reformada de maneira única, divertida e edificante.',
+      instagram: {
+        url: 'https://www.instagram.com/cantando.catecismo',
+        handle: '@cantando.catecismo',
+      },
+      youtube: {
+        url: 'https://www.youtube.com/@cantandoocatecismo',
+        label: 'Cantando o Catecismo',
+      },
     },
     contacts: [
       { name: 'Secretaria IPVO', phone: '(44) 3226-4473' },
