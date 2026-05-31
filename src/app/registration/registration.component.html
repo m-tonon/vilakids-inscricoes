@@ -112,6 +112,29 @@
                   }
                 </div>
 
+                @if (whatsappGroupUrl()) {
+                  <div class="whatsapp-group">
+                    <div class="whatsapp-group-content">
+                      <nb-icon icon="message-circle-outline"></nb-icon>
+                      <div>
+                        <p class="whatsapp-group-text">
+                          Quer ficar por dentro de tudo? Entre no nosso grupo do
+                          WhatsApp para receber novidades, avisos e tirar suas
+                          dúvidas sobre o acampamento!
+                        </p>
+                        <a
+                          class="whatsapp-group-link"
+                          [href]="whatsappGroupUrl()"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Entrar no grupo do WhatsApp
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                }
+
                 <form
                   [formGroup]="acknowledgmentForm"
                   class="acknowledgment-form"

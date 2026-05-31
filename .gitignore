@@ -43,3 +43,4 @@ Thumbs.db
 .vercel
 /api-dist
 .env*
+!.env.example
