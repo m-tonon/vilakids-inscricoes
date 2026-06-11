@@ -715,7 +715,7 @@ export const confirmationTemplate = `
                                                             >
                                                               <img
                                                                 alt=""
-                                                                src="https://mcusercontent.com/7431ecec0175e179b64e6e523/images/fa7cbd74-382d-fd91-29d4-d4cc5bc78d4c.png"
+                                                                src="https://mcusercontent.com/7431ecec0175e179b64e6e523/images/888c83e3-e504-4449-6321-4fda575157e9.png"
                                                                 width="561"
                                                                 height="auto"
                                                                 style="
@@ -746,7 +746,7 @@ export const confirmationTemplate = `
                                                             ><img
                                                               role="presentation"
                                                               class="imageDropZone mceImage"
-                                                              src="https://mcusercontent.com/7431ecec0175e179b64e6e523/images/fa7cbd74-382d-fd91-29d4-d4cc5bc78d4c.png"
+                                                              src="https://mcusercontent.com/7431ecec0175e179b64e6e523/images/888c83e3-e504-4449-6321-4fda575157e9.png"
                                                               alt=""
                                                               width="561"
                                                               height="auto"
@@ -1457,7 +1457,7 @@ export const confirmationTemplate = `
                                                                                         255
                                                                                       );
                                                                                     "
-                                                                                    >&nbsp;R$&nbsp;210</span
+                                                                                    >&nbsp;R$&nbsp;{{price}}</span
                                                                                   ></span
                                                                                 ></span
                                                                               >
