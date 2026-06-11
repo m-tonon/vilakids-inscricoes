@@ -1457,7 +1457,7 @@ export const confirmationTemplate = `
                                                                                         255
                                                                                       );
                                                                                     "
-                                                                                    >&nbsp;R$&nbsp;210</span
+                                                                                    >&nbsp;R$&nbsp;{{price}}</span
                                                                                   ></span
                                                                                 ></span
                                                                               >

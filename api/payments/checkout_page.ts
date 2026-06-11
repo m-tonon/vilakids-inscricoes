@@ -2,6 +2,7 @@ import axios from 'axios';
 import dotenv from 'dotenv';
 import { PaymentData } from '../../shared/registration.interface';
 import { AppApiError } from '../../shared/payment.interface';
+import { REGISTRATION_PRICE_CENTS } from '../../shared/registration-config';
 
 dotenv.config();
 
@@ -32,9 +33,7 @@ module.exports = async (req: any, res: any) => {
 
     const cpfDigits = payment.cpf?.replace(/\D/g, '');
 
-    const expirationDate = new Date(
-      Date.now() + 30 * 24 * 60 * 60 * 1000,
-    ) // 30 dias
+    const expirationDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 dias
       .toISOString()
       .replace('Z', '-03:00');
 
@@ -65,7 +64,7 @@ module.exports = async (req: any, res: any) => {
             reference_id: 'ITEM01',
             name: 'AcampaKids 2026',
             quantity: 1,
-            unit_amount: 28000,
+            unit_amount: REGISTRATION_PRICE_CENTS,
           },
         ],
         payment_methods: [{ type: 'credit_card' }, { type: 'PIX' }],

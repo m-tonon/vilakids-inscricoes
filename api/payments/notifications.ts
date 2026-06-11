@@ -3,6 +3,7 @@ import { PagBankCharge } from '../../shared/payment.interface';
 import { connectToDatabase } from '../mongoose-connection';
 import { RegistrationModel } from '../../shared/models/registration.model';
 import { confirmationTemplate } from './confirmation-email-template';
+import { REGISTRATION_PRICE_BRL } from '../../shared/registration-config';
 import nodemailer from 'nodemailer';
 
 dotenv.config();
@@ -32,7 +33,7 @@ module.exports = async (req: any, res: any) => {
     const updated = await RegistrationModel.findOneAndUpdate(
       { 'payment.referenceId': referenceId },
       { $set: { 'payment.paymentConfirmed': true } },
-      { new: true }
+      { new: true },
     );
 
     if (!updated) {
@@ -60,15 +61,16 @@ module.exports = async (req: any, res: any) => {
 };
 
 async function sendConfirmationEmail(participant: any) {
-  const html = confirmationTemplate.replace('{{nomeParticipante}}', participant.name);
+  const html = confirmationTemplate
+    .replace('{{nomeParticipante}}', participant.name)
+    .replace('{{price}}', REGISTRATION_PRICE_BRL.toFixed(2).replace('.', ','));
   const transporter = nodemailer.createTransport({
     service: 'gmail',
-      auth: {
-        user: GMAIL_USER,
-        pass: GMAIL_APP_PASS,
-      },
-    }
-  );
+    auth: {
+      user: GMAIL_USER,
+      pass: GMAIL_APP_PASS,
+    },
+  });
 
   try {
     await transporter.sendMail({
