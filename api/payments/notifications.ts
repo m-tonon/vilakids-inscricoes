@@ -76,7 +76,7 @@ async function sendConfirmationEmail(participant: any) {
     await transporter.sendMail({
       from: `"IPVO VilaKids" <${GMAIL_USER}>`,
       to: participant.email,
-      subject: '✅ Inscrição confirmada no 5º Acampa Kids!',
+      subject: '✅ Inscrição confirmada no 6º Acampa Kids!',
       html: html,
     });
     console.log('Confirmation email sent');
