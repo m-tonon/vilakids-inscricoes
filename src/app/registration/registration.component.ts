@@ -89,7 +89,7 @@ export class RegistrationComponent implements OnInit {
   acknowledgmentForm!: FormGroup;
 
   registrationsEnded = signal(false);
-  installmentAvailable = signal(false);
+  installmentAvailable = signal(true);
   whatsappGroupUrl = signal('');
   isRegistrationComplete = signal(false);
   isPaymentConfirmed = signal(false);
