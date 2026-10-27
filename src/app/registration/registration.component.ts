@@ -140,6 +140,8 @@ export class RegistrationComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
+    this.registrationsEnded.set(true);
+
     this.route.queryParamMap.subscribe((params) => {
       const paymentConfirmed = params.get('paymentCompleted');
       if (paymentConfirmed) {
